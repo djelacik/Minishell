@@ -1,6 +1,6 @@
 NAME = minishell
 
-SOURCES = main.c \
+SOURCES = src/main.c \
 
 OBJECTS = $(SOURCES:.c=.o)
 
