@@ -1,6 +1,7 @@
 NAME = minishell
 
 SOURCES = src/main.c \
+		src/parsing.c
 
 OBJECTS = $(SOURCES:.c=.o)
 
@@ -18,7 +19,7 @@ $(LIBFT):
 	$(MAKE) -C ./libft
 
 $(NAME): $(OBJECTS) $(LIBFT)
-	$(CC) $(OBJECTS) $(LIBFT) -o $(NAME)
+	$(CC) $(OBJECTS) $(LIBFT) -o $(NAME) -lreadline
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@
