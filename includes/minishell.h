@@ -29,6 +29,16 @@ typedef struct s_tokens
 	int		token_type;
 }	t_tokens;
 
+/* handling_env_var.c */
+char *environment_variable(char *input, int *index);
+
+/* handling_quotes.c */
+int	calculate_single_len(char *input, int start_index, char quote_type);
+char *single_quotes(char *input, int *index);
+int	calculate_double_len(char *input, int start_index, char quote_type);
+char *double_quotes(char *input, int *index);
+char *handling_quotes(char *input, int *index);
+
 /* main.c */
 int	main(int argc, char **argv);
 
@@ -36,3 +46,4 @@ int	main(int argc, char **argv);
 t_tokens	*tokenize_input(char *input);
 
 #endif
+
