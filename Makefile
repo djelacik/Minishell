@@ -1,9 +1,12 @@
 NAME = minishell
 
-SOURCES = src/main.c \
+SOURCES = #src/main.c \#
 		src/handling_env_var.c \
 		src/handling_quotes.c \
-		src/parsing.c
+		src/parsing.c \
+
+		src/builtins/exec_builtin.c \
+		src/builtins/test_main.c 
 
 OBJECTS = $(SOURCES:.c=.o)
 
