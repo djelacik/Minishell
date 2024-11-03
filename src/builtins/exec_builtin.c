@@ -6,18 +6,18 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:02:00 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/02 19:32:43 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/03 12:20:02 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	execute_echo(char **args)
+int	exec_echo(char **args)
 {
 	int		i;
 	int		new_line;
 
-	i = 1;
+	i = 2;
 	new_line = 1;
 	if (args[i] && ft_strcmp(args[i], "-n") == 0)
 	{
@@ -33,5 +33,14 @@ int	execute_echo(char **args)
 	}
 	if (new_line)
 		printf("\n");
+	return (EXIT_SUCCESS);
+}
+
+int	exec_pwd()
+{
+	const char	*current_d;
+	
+	current_d = getenv("PWD");
+	printf("%s", current_d);
 	return (EXIT_SUCCESS);
 }

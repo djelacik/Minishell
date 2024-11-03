@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 18:23:55 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/02 19:34:20 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/03 12:07:05 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int main(int argc, char **argv)
 	if (argc < 2)
 		return (EXIT_FAILURE);
 	if (ft_strcmp(argv[1], "echo") == 0)
-		execute_echo(argv);
+		exec_echo(argv);
+	if (ft_strcmp(argv[1], "pwd") == 0)
+		exec_pwd(argv[1]);
 	return (EXIT_SUCCESS);
 }
