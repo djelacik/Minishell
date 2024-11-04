@@ -6,13 +6,14 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 15:44:43 by djelacik          #+#    #+#             */
-/*   Updated: 2024/10/30 16:06:11 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/02 19:36:25 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "execution.h"
 # include "../libft/libft.h"
 # include <stdio.h> // printf
 # include <stdlib.h> // malloc
@@ -23,11 +24,29 @@
 # define COMMAND 1
 # define ARGUMENT 2
 
+typedef enum e_builtin
+{
+	BUILTIN_NONE,
+	BUILTIN_ECHO,
+	BUILTIN_CD,
+	BUILTIN_PWD,
+	BUILTIN_EXPORT,
+	BUILTIN_UNSET,
+	BUILTIN_ENV,
+	BUILTIN_EXIT
+}	t_builtin;
+
 typedef struct s_tokens
 {
-	char	*token_string;
-	int		token_type;
+	char		*token_string;
+	int			token_type;
+	t_builtin	builtin_type; // builtin commands are executed differently, so we use a enum for type.
 }	t_tokens;
+
+typedef struct s_cmnds // test struct
+{
+	t_tokens	**commands;
+}	t_cmnds;
 
 /* handling_env_var.c */
 char *environment_variable(char *input, int *index);
