@@ -64,7 +64,7 @@ static int	count_tokens(char *input)
 	return (count);
 }
 
-static char *ft_strndup(const char *src, size_t n)
+char *ft_strndup(const char *src, size_t n)
 {
 	char	*dst;
 	size_t	i;
@@ -102,7 +102,13 @@ t_tokens	*tokenize_input(char *input)
 			i++;
 		if (!input[i])
 			break;
-		if (input[i] == '\'' || input[i] == '"')
+		if (input[i] == '>' || input[i] == '<')
+		{
+			tokens[j].token_string = redir_symb(input, &i, &tokens[j]);
+			j++;
+			continue ;
+		}
+		else if (input[i] == '\'' || input[i] == '"')
 			tokens[j].token_string = handling_quotes(input, &i);
 		else if (input[i] == '$')
 			tokens[j].token_string = environment_variable(input, &i);
@@ -125,7 +131,7 @@ t_tokens	*tokenize_input(char *input)
 		}
 		if (j == 0)
 			tokens[j].token_type = COMMAND;
-		else
+		else if (tokens[j].token_type == 0)
 			tokens[j].token_type = ARGUMENT;
 		j++;
 	}

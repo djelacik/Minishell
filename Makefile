@@ -3,6 +3,7 @@ NAME = minishell
 SOURCES = \
 		src/handling_env_var.c \
 		src/handling_quotes.c \
+		src/handling_redir.c \
 		src/parsing.c \
 		src/tokens_to_array.c \
 		src/builtins/exec_builtin.c \
