@@ -23,6 +23,12 @@
 # define EMPTY 0
 # define COMMAND 1
 # define ARGUMENT 2
+# define REDIR_INPUT 3
+# define REDIR_OUTPUT 4
+# define REDIR_APPEND 5
+# define REDIR_HERE_DOC
+# define PIPES 7
+# define SPECIAL_SYMB 8
 
 typedef enum e_builtin
 {
@@ -59,11 +65,15 @@ int	calculate_double_len(char *input, int start_index, char quote_type);
 char *double_quotes(char *input, int *index);
 char *handling_quotes(char *input, int *index);
 
+/* handling_redir.c */
+char *redir_symb(char *input, int *index, t_tokens *tokens);
+
 /* main.c */
 int	main(int argc, char **argv);
 
 /* parsing.c */
 t_tokens	*tokenize_input(char *input);
+char *ft_strndup(const char *src, size_t n);
 
 #endif
 
