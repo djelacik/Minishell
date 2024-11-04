@@ -4,6 +4,7 @@ SOURCES = \
 		src/handling_env_var.c \
 		src/handling_quotes.c \
 		src/parsing.c \
+		src/tokens_to_array.c \
 		src/builtins/exec_builtin.c \
 		src/execution/test_main.c 
 # src/main.c 

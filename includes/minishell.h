@@ -43,10 +43,11 @@ typedef struct s_tokens
 	t_builtin	builtin_type; // builtin commands are executed differently, so we use a enum for type.
 }	t_tokens;
 
-typedef struct s_cmnds // test struct
+typedef struct s_tarray // test struct
 {
-	t_tokens	**commands;
-}	t_cmnds;
+	t_tokens	**token_array;
+	int			token_count;
+}	t_tarray;
 
 /* handling_env_var.c */
 char *environment_variable(char *input, int *index);
