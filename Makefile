@@ -6,9 +6,9 @@ SOURCES = \
 		src/handling_redir.c \
 		src/parsing.c \
 		src/tokens_to_array.c \
-		src/builtins/exec_builtin.c \
-		src/execution/test_main.c 
-# src/main.c 
+		src/main.c
+		#src/builtins/exec_builtin.c \
+		#src/execution/test_main.c 
 
 OBJECTS = $(SOURCES:.c=.o)
 
