@@ -15,10 +15,12 @@
 
 # include "execution.h"
 # include "../libft/libft.h"
-# include <stdio.h> // printf
+# include <stdio.h> // printf, perror
 # include <stdlib.h> // malloc
 # include <readline/readline.h> //readline
 # include <readline/history.h> //readline, add_history
+# include <unistd.h> //dup2
+# include <fcntl.h> //open
 
 # define EMPTY 0
 # define COMMAND 1
@@ -67,6 +69,10 @@ char *handling_quotes(char *input, int *index);
 
 /* handling_redir.c */
 char *redir_symb(char *input, int *index, t_tokens *tokens);
+int	handle_redir_input(const char *file);
+int	handle_redir_output(const char *file);
+int	handle_redir_append(const char *file);
+int	handle_redir_here_doc(const char *delimiter);
 
 /* main.c */
 int	main(int argc, char **argv);

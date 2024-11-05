@@ -47,6 +47,7 @@ static t_command	*init_command(t_tokens *token)
 		{
 			printf("Token string: %s, toke typen: %d, in index %d\n", token[i].token_string, token[i].token_type, i);
 		}
+
 		count++;
 		i++;
 	}
