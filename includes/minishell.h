@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 15:44:43 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/02 19:36:25 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/05 14:32:40 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define PIPES 7
 # define SPECIAL_SYMB 8
 
+
 typedef enum e_builtin
 {
 	BUILTIN_NONE,
@@ -49,6 +50,35 @@ typedef struct s_tokens
 	t_builtin	builtin_type; // builtin commands are executed differently, so we use a enum for type.
 }	t_tokens;
 
+typedef struct s_redirect {
+	char			*file;
+	t_token_type	type; 
+}	t_redirect;
+				
+					//token[0]	token[1]  token[2]   token[3]
+					//echo		hello 		<		outfile
+					
+					// LATER tokens[0] tokens[1] 	| tokens[0] tokens[1]
+/* typedef struct s_tokens2 //echo		hello	|	grep		"h"
+{
+	char			*token_string;
+	t_token_type	token_type;
+	t_builtin		builtin_type;
+}	t_tokens2; */
+						//commands[0] | commands[1]
+typedef struct s_command //echo hello | grep "h"
+{
+	t_tokens		*tokens;			// Taulukko tokeneita
+	int				token_count;		// Tokenien määrä
+	t_redirect		*redirects;			// Taulukko uudelleenohjauksia
+	int				redirect_count;		// Uudelleenohjausten määrä
+}	t_command;
+
+typedef struct s_cmnds
+{
+	t_command	*commands;			// Taulukko `t_command`-rakenteita
+	int			command_count;		// Komentojen määrä
+} t_cmnds;
 typedef struct s_tarray // test struct
 {
 	t_tokens	**token_array;
