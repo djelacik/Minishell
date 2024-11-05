@@ -26,7 +26,7 @@
 # define REDIR_INPUT 3
 # define REDIR_OUTPUT 4
 # define REDIR_APPEND 5
-# define REDIR_HERE_DOC
+# define REDIR_HERE_DOC 6
 # define PIPES 7
 # define SPECIAL_SYMB 8
 
