@@ -1,5 +1,24 @@
 #include "../includes/minishell.h"
 
+static t_builtin	builtin_type(char *command)
+{
+	if (ft_strcmp(command, "echo") == 0)
+		return (BUILTIN_ECHO);
+	else if (ft_strcmp(command, "cd") == 0)
+		return (BUILTIN_CD);
+	else if (ft_strcmp(command, "pwd") == 0)
+		return (BUILTIN_PWD);
+	else if (ft_strcmp(command, "export") == 0)
+		return (BUILTIN_EXPORT);
+	else if (ft_strcmp(command, "unset") == 0)
+		return (BUILTIN_UNSET);
+	else if (ft_strcmp(command, "env") == 0)
+		return (BUILTIN_ENV);
+	else if (ft_strcmp(command, "exit") == 0)
+		return (BUILTIN_EXIT);
+	return (BUILTIN_NONE);
+}
+
 static int	count_tokens(char *input)
 {
 	char	quote_type;
@@ -130,9 +149,15 @@ t_tokens	*tokenize_input(char *input)
 			return (NULL);
 		}
 		if (j == 0)
+		{
 			tokens[j].token_type = COMMAND;
+			tokens[j].builtin_type = builtin_type(tokens[j].token_string);
+		}
 		else if (tokens[j].token_type == 0)
+		{
 			tokens[j].token_type = ARGUMENT;
+			tokens[j].builtin_type = BUILTIN_NONE;
+		}
 		j++;
 	}
 	tokens[j].token_string = NULL;
