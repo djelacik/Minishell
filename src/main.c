@@ -9,9 +9,17 @@ static void	print_tokens(t_tokens *tokens)
 	{
 		printf("%s ", tokens[i].token_string);
 		if (tokens[i].token_type == COMMAND)
-			printf("%d\n", tokens[i].token_type);
+			printf("token type: %d, builtin type: %d\n", tokens[i].token_type, tokens[i].builtin_type);
 		else if (tokens[i].token_type == ARGUMENT)
-			printf("%d\n", tokens[i].token_type);
+			printf("token type: %d, builtin type: %d\n", tokens[i].token_type, tokens[i].builtin_type);
+		else if (tokens[i].token_type == REDIR_INPUT)
+			printf("token type: %d, builtin type: %d\n", tokens[i].token_type, tokens[i].builtin_type);
+		else if (tokens[i].token_type == REDIR_OUTPUT)
+			printf("token type: %d, builtin type: %d\n", tokens[i].token_type, tokens[i].builtin_type);
+		else if (tokens[i].token_type == REDIR_APPEND)
+			printf("token type: %d, builtin type: %d\n", tokens[i].token_type, tokens[i].builtin_type);
+		else if (tokens[i].token_type == REDIR_HERE_DOC)
+			printf("token type: %d, builtin type: %d\n", tokens[i].token_type, tokens[i].builtin_type);
 		i++;
 	}
 }
