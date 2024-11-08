@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 15:44:43 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/05 14:32:40 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/08 12:24:09 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@
 # define PIPES 7
 # define SPECIAL_SYMB 8
 
-
 typedef enum e_builtin
 {
 	BUILTIN_NONE,
@@ -54,19 +53,14 @@ typedef struct s_tokens
 
 typedef struct s_redirect {
 	char			*file;
-	t_token_type	type; 
+	//t_token_type	type; 
 }	t_redirect;
 				
 					//token[0]	token[1]  token[2]   token[3]
 					//echo		hello 		<		outfile
 					
 					// LATER tokens[0] tokens[1] 	| tokens[0] tokens[1]
-/* typedef struct s_tokens2 //echo		hello	|	grep		"h"
-{
-	char			*token_string;
-	t_token_type	token_type;
-	t_builtin		builtin_type;
-}	t_tokens2; */
+					
 						//commands[0] | commands[1]
 typedef struct s_command //echo hello | grep "h"
 {
@@ -81,11 +75,7 @@ typedef struct s_cmnds
 	t_command	*commands;			// Taulukko `t_command`-rakenteita
 	int			command_count;		// Komentojen määrä
 } t_cmnds;
-typedef struct s_tarray // test struct
-{
-	t_tokens	**token_array;
-	int			token_count;
-}	t_tarray;
+
 
 /* handling_env_var.c */
 char *environment_variable(char *input, int *index);
