@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 15:44:43 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/02 19:36:25 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/08 13:34:14 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,34 @@ typedef struct s_tokens
 	t_builtin	builtin_type; // builtin commands are executed differently, so we use a enum for type.
 }	t_tokens;
 
-typedef struct s_tarray // test struct
+typedef struct s_redirect {
+	char			*file;
+	//t_token_type	type; 
+}	t_redirect;
+				
+					//token[0]	token[1]  token[2]   token[3]
+					//echo		hello 		<		outfile
+					
+					// LATER tokens[0] tokens[1] 	| tokens[0] tokens[1]
+					
+						//commands[0] | commands[1]
+typedef struct s_command //echo hello | grep "h"
 {
-	t_tokens	**token_array;
-	int			token_count;
-}	t_tarray;
+	t_tokens		*tokens;			// Taulukko tokeneita
+	int				token_count;		// Tokenien määrä
+	t_redirect		*redirects;			// Taulukko uudelleenohjauksia
+
+	t_tokens		*redirects;
+	
+	
+	int				redirect_count;		// Uudelleenohjausten määrä
+}	t_command;
+
+typedef struct s_cmnds
+{
+	t_command	*commands;			// Taulukko `t_command`-rakenteita
+	int			command_count;		// Komentojen määrä
+} t_cmnds;
 
 /* handling_env_var.c */
 char *environment_variable(char *input, int *index);
