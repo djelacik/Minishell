@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 15:44:43 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/08 13:34:14 by djelacik         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -68,9 +57,8 @@ typedef struct s_command //echo hello | grep "h"
 	int				token_count;		// Tokenien määrä
 	t_redirect		*redirects;			// Taulukko uudelleenohjauksia
 
-	//t_tokens		*redirects;
-	
-	
+	t_tokens		*redirects;
+
 	int				redirect_count;		// Uudelleenohjausten määrä
 }	t_command;
 
@@ -98,7 +86,7 @@ int	handle_redir_append(const char *file);
 int	handle_redir_here_doc(const char *delimiter);
 
 /* main.c */
-int	main(int argc, char **argv);
+//int	main(int argc, char **argv);
 
 /* parsing.c */
 t_tokens	*tokenize_input(char *input);
