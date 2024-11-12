@@ -68,7 +68,7 @@ typedef struct s_command //echo hello | grep "h"
 	int				token_count;		// Tokenien määrä
 	t_redirect		*redirects;			// Taulukko uudelleenohjauksia
 
-	t_tokens		*redirects;
+	//t_tokens		*redirects;
 	
 	
 	int				redirect_count;		// Uudelleenohjausten määrä

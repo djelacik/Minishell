@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+/*#include "../includes/minishell.h"
 
 t_tarray	*tokens_to_array(t_tokens *tokens)
 {
@@ -43,4 +43,4 @@ t_tarray	*tokens_to_array(t_tokens *tokens)
 	}
 	array->token_array[count_of_tokens] = NULL;
 	return (array);
-}	
+}*/	
