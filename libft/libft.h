@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:19:56 by djelacik          #+#    #+#             */
-/*   Updated: 2024/10/05 15:47:52 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/10 18:47:41 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,6 @@ int			ft_lstsize(t_list *lst);
 int			ft_min(int a, int b);
 int			ft_max(int a, int b);
 int			ft_atoi_base(char *str, char *base);
+char		*ft_strndup(const char *s, size_t n);
+
 #endif
