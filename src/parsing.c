@@ -153,13 +153,13 @@ t_tokens	*tokenize_input(char *input)
 			tokens[j].token_type = COMMAND;
 			tokens[j].builtin_type = builtin_type(tokens[j].token_string);
 		}
-		else if (tokens[j - 1].token_type == REDIR_INPUT)
+		else if (ft_strcmp(tokens[j - 1].token_string, "<") == 0)
+			tokens[j].token_type = REDIR_INPUT;
+		else if (ft_strcmp(tokens[j - 1].token_string, ">") == 0)
 			tokens[j].token_type = REDIR_OUTPUT;
-		else if (tokens[j - 1].token_type == REDIR_OUTPUT)
-			tokens[j].token_type = REDIR_OUTPUT;
-		else if (tokens[j - 1].token_type == REDIR_APPEND)
+		else if (ft_strcmp(tokens[j - 1].token_string, ">>") == 0)
 			tokens[j].token_type = REDIR_APPEND;
-		else if (tokens[j - 1].token_type == REDIR_HERE_DOC)
+		else if (ft_strcmp(tokens[j - 1].token_string, "<<") == 0)
 			tokens[j].token_type = REDIR_HERE_DOC;
 		else if (tokens[j].token_type == 0)
 		{
