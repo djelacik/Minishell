@@ -63,6 +63,8 @@ typedef struct s_cmnds
 {
 	t_command	*commands;			// Taulukko `t_command`-rakenteita
 	int			command_count;		// Komentojen määrä
+	int			**pipes;
+	int			pipe_count;
 } t_cmnds;
 
 /* handling_env_var.c */
