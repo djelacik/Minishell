@@ -27,12 +27,14 @@ void		ft_exit(t_command *command);
 
 //env func prototypes
 void		init_list(t_env **head, char **envp);
-void		lst_add_back(t_env **head, const char *key, const char *value);
-void		rotate_add(t_env **head, t_env *new_node);
+void		add_node(t_env **head, const char *key, const char *value);
+void		lst_add_back(t_env **head, t_env *new_node);
+char		*save_pairs(char *token_string, char **value_p);
 
 void		ft_env(t_env *head);
 //void		export_add(t_env **head, const char *line);
 void		export_add(t_env **head, t_command *command);
+void		export_print(t_env *head);
 void		ft_unset(t_env **head, const char *key);
 void		free_env_list(t_env **head);
 
