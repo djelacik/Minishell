@@ -19,7 +19,7 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-int			exec_echo(char **args);
+int			exec_echo(t_command *command);
 int			exec_pwd(void);
 void		update_pwd(void);
 void		ft_cd(t_command *command);
@@ -35,7 +35,8 @@ void		ft_env(t_env *head);
 //void		export_add(t_env **head, const char *line);
 void		export_add(t_env **head, t_command *command);
 void		export_print(t_env *head);
-void		ft_unset(t_env **head, const char *key);
+void		single_unset(t_env **head, const char *key);
+void		ft_unset(t_env **head, t_command *command);
 void		free_env_list(t_env **head);
 
 #endif

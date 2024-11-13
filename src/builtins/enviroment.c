@@ -22,7 +22,7 @@ void	export_add(t_env **head, t_command *command)
 	char		*value;
 	int			i;
 	
-	i = 0;
+	i = 1;
 	while (i < command->token_count)
 	{
 		key = save_pairs(command->tokens[i].token_string, &value);
@@ -42,7 +42,7 @@ void	export_add(t_env **head, t_command *command)
 	}
 }
 
-void	ft_unset(t_env **head, const char *key)
+void	single_unset(t_env **head, char *key)
 {
 	t_env	*current;
 	t_env	*prev;
@@ -50,7 +50,7 @@ void	ft_unset(t_env **head, const char *key)
 	current = *head;
 	while (current)
 	{
-		if (ft_strcmp((char *)current->key, (char *)key) == 0)
+		if (ft_strcmp(current->key, key) == 0)
 		{
 			if (prev)
 				prev->next = current->next;
@@ -62,6 +62,24 @@ void	ft_unset(t_env **head, const char *key)
 		}
 		prev = current;
 		current = current->next;
+	}
+}
+
+void	ft_unset(t_env **head, t_command *command)
+{
+	int		i;
+	char	*value;
+
+	if (command->token_count > 2)
+	{
+		printf("unset: not enough arguments\n");
+		return ;
+	}
+	i = 1;
+	while (i < command->token_count)
+	{
+		single_unset(head, command->tokens[i].token_string);
+		i++;
 	}
 }
 
