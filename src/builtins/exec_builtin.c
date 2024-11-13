@@ -6,30 +6,30 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:02:00 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/10 15:56:21 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/13 12:33:52 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	exec_echo(char **args)
+int	exec_echo(t_command *command)
 {
 	int		i;
 	int		new_line;
 
-	i = 2;
+	//token[0] is echo
+	i = 1;
 	new_line = 1;
-	if (args[i] && ft_strcmp(args[i], "-n") == 0)
+	if (command->token_count > 1 && ft_strcmp(command->tokens[i].token_string, "-n") == 0)
 	{
 		new_line = 0;
-		i++;
+		i++; //skip the "-n"
 	}
-	while (args[i])
+	while (i < command->token_count)
 	{
-		printf("%s", args[i]);
-		if (args[i + 1])
+		printf("%s", command->tokens[i].token_string);
+		if (i + 1 < command->token_count) // " " between strings
 			printf(" ");
-		i++;
 	}
 	if (new_line)
 		printf("\n");
@@ -71,6 +71,7 @@ void	ft_cd(t_command *command)
 {
 	char	*path;
 
+	// path = /home/projects/minishell
 	if (command->token_count > 1)
 		path = command->tokens[1].token_string;
 	else
@@ -89,6 +90,7 @@ void	ft_cd(t_command *command)
 	}
 	update_pwd();
 }
+
 void	ft_exit(t_command *command)
 {
 	if (command->token_count > 1)
