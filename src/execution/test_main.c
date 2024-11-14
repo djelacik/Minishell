@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 18:23:55 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/13 12:17:59 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/13 12:46:03 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ int	main(int argc, char **argv, char **envp)
 	command = malloc(sizeof(t_command));
 	command->token_count = 3;
 	command->tokens = malloc(sizeof(t_tokens) * command->token_count);
-	command->tokens[0].token_string = ft_strdup("TEST1");
-	command->tokens[1].token_string = ft_strdup("TEST2=");
-	command->tokens[2].token_string = ft_strdup("TEST3=3");
+	command->tokens[1].token_string = ft_strdup("TEST1");
+	command->tokens[2].token_string = ft_strdup("TEST2=");
+	command->tokens[3].token_string = ft_strdup("TEST3=3");
 	
 	if (argc < 2)
 		return (EXIT_FAILURE);
