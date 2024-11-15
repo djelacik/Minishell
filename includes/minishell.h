@@ -65,6 +65,8 @@ typedef struct s_cmnds
 	int			command_count;		// Komentojen määrä
 	int			**pipes;
 	int			pipe_count;
+	pid_t		*pid;
+	char		**argv_cpy;
 } t_cmnds;
 
 /* handling_env_var.c */
