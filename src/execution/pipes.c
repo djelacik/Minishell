@@ -21,7 +21,7 @@ void	create_pipes(t_cmnds *cmnds)
 		}
 		if (pipe(cmnds->pipes[i] < 0))
 		{
-			//error
+			//error_func
 			return ;
 		}
 	}

@@ -100,3 +100,36 @@ void	free_env_list(t_env **head)
 	}
 	*head = NULL;
 }
+
+int	get_lst_size(t_env *lst)
+{
+	unsigned int	i;
+
+	if (!lst)
+		return (0);
+	i = 0;
+	while (lst)
+	{
+		lst = lst->next;
+		i++;
+	}
+	return (i);
+}
+
+void	lst_to_arr(t_env *head, t_cmnds *cmnds)
+{
+	int		i;
+	t_env	*cur;
+	
+	i = get_lst_size(head);
+	cmnds->argv_cpy = ft_calloc(sizeof(char *), i + 1);
+	cur = head;
+	i = 0;
+	while (cur)
+	{
+		cmnds->argv_cpy[i] = ft_strjoin(cur->key, "=");
+		cmnds->argv_cpy[i] = ft_strjoin(cmnds->argv_cpy[i],cur->value);
+		cur = cur->next;
+		i++;
+	}
+}

@@ -6,11 +6,23 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 18:23:55 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/13 12:46:03 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/15 17:06:44 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static void	print_arr(char **argv)
+{
+	int		i;
+
+	i = 0;
+	while (argv[i])
+	{
+		printf("%s\n", argv[i]);
+		i++;
+	}
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -45,5 +57,6 @@ int	main(int argc, char **argv, char **envp)
 	{
 		ft_env(head);
 	}
+	print_arr();
 	return (EXIT_SUCCESS);
 }
