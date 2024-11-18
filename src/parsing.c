@@ -119,7 +119,7 @@ t_tokens	*tokenize_input(char *input)
 	{
 		while (input[i] == ' ')
 			i++;
-		if (input[i] == '|' || input[0] == '|')
+		if (input[0] == '|')
 		{
 			printf("parse error\n");
 			return (NULL);
