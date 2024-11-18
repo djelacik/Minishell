@@ -56,9 +56,6 @@ typedef struct s_command //echo hello | grep "h"
 	t_tokens		*tokens;			// Taulukko tokeneita
 	int				token_count;		// Tokenien määrä
 	t_redirect		*redirects;			// Taulukko uudelleenohjauksia
-
-	t_tokens		*redirects;
-
 	int				redirect_count;		// Uudelleenohjausten määrä
 }	t_command;
 
@@ -77,6 +74,9 @@ char *single_quotes(char *input, int *index);
 int	calculate_double_len(char *input, int start_index, char quote_type);
 char *double_quotes(char *input, int *index);
 char *handling_quotes(char *input, int *index);
+
+/* handling_pipes.c */
+char	*handle_pipes(char *input, int *index, t_tokens *tokens);
 
 /* handling_redir.c */
 char *redir_symb(char *input, int *index, t_tokens *tokens);

@@ -127,6 +127,12 @@ t_tokens	*tokenize_input(char *input)
 			j++;
 			continue ;
 		}
+		else if (input[i] == '|')
+		{
+			tokens[j].token_string = handle_pipes(input, &i, &tokens[j]);
+			j++;
+			continue ;
+		}
 		else if (input[i] == '\'' || input[i] == '"')
 			tokens[j].token_string = handling_quotes(input, &i);
 		else if (input[i] == '$')
@@ -148,7 +154,12 @@ t_tokens	*tokenize_input(char *input)
 			free(tokens);
 			return (NULL);
 		}
-		if (j == 0)
+		/*if (j == 0)
+		{
+			tokens[j].token_type = COMMAND;
+			tokens[j].builtin_type = builtin_type(tokens[j].token_string);
+		}*/
+		if (j == 0 || ft_strcmp(tokens[j - 1].token_string, "|") == 0)
 		{
 			tokens[j].token_type = COMMAND;
 			tokens[j].builtin_type = builtin_type(tokens[j].token_string);

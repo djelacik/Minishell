@@ -20,6 +20,8 @@ static void	print_tokens(t_tokens *tokens)
 			printf("token type: %d, builtin type: %d\n", tokens[i].token_type, tokens[i].builtin_type);
 		else if (tokens[i].token_type == REDIR_HERE_DOC)
 			printf("token type: %d, builtin type: %d\n", tokens[i].token_type, tokens[i].builtin_type);
+		else if (tokens[i].token_type == PIPES)
+			printf("token type: %d, builtin type %d\n", tokens[i].token_type, tokens[i].builtin_type);
 		i++;
 	}
 }
