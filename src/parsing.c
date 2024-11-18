@@ -119,9 +119,14 @@ t_tokens	*tokenize_input(char *input)
 	{
 		while (input[i] == ' ')
 			i++;
+		if (input[i] == '|' || input[0] == '|')
+		{
+			printf("parse error\n");
+			return (NULL);
+		}
 		if (!input[i])
 			break;
-		if (input[i] == '>' || input[i] == '<')
+		else if (input[i] == '>' || input[i] == '<')
 		{
 			tokens[j].token_string = redir_symb(input, &i, &tokens[j]);
 			j++;
