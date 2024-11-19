@@ -31,7 +31,34 @@ void	start_process(t_cmnds *cmnds, char **argv)
 
 }
 
-void    child_read(int i, t_cmnds *cmnds, char **argv);
+void	child_first(int i, t_cmnds *cmnds)
 {
-    
+	//dup2(new_fd, old_fd)
+	if (dup2(cmnds->pipes[i][1], STDOUT_FILENO) < 0)
+	{
+		perror(CHILD_FIRST_ERR);
+		exit(EXIT_FAILURE);
+	}
+	close_pipes();
+	execute_command();
+	perror(EXEC_ERR);
+	exit(EXIT_FAILURE);
+}
+
+void	child_middle(int i, t_cmnds *cmnds)
+{
+	if (dup2(cmnds->pipes[i - 1][0], STDIN_FILENO) < 0)
+	{
+		perror(CHILD_MID_ERR);
+		exit(EXIT_FAILURE);
+	}
+	if (dup2(cmnds->pipes[i][1], STDOUT_FILENO) < 0)
+	{
+		perror(CHILD_MID_ERR);
+		exit(EXIT_FAILURE);
+	}
+	close_pipes();
+	exexute_command();
+	perror(EXEC_ERR);
+	exit(EXIT_FAILURE);
 }
