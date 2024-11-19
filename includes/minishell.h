@@ -18,7 +18,7 @@
 # define REDIR_OUTPUT 4
 # define REDIR_APPEND 5
 # define REDIR_HERE_DOC 6
-# define PIPES 7
+# define PIPE 7
 # define SPECIAL_SYMB 8
 
 typedef enum e_builtin
@@ -53,10 +53,10 @@ typedef struct s_redirect {
 						//commands[0] | commands[1]
 typedef struct s_command //echo hello | grep "h"
 {
-	t_tokens		*tokens;			// Taulukko tokeneita
+	t_tokens		*args;			// Taulukko tokeneita
 	int				token_count;		// Tokenien määrä
-	t_redirect		*redirects;			// Taulukko uudelleenohjauksia
-	int				redirect_count;		// Uudelleenohjausten määrä
+	t_redirect		*redirs;			// Taulukko uudelleenohjauksia
+	int				redir_count;		// Uudelleenohjausten määrä
 }	t_command;
 
 typedef struct s_cmnds
@@ -77,7 +77,6 @@ int	calculate_single_len(char *input, int start_index, char quote_type);
 char *single_quotes(char *input, int *index);
 int	calculate_double_len(char *input, int start_index, char quote_type);
 char *double_quotes(char *input, int *index);
-char *handling_quotes(char *input, int *index);
 
 /* handling_pipes.c */
 char	*handle_pipes(char *input, int *index, t_tokens *tokens);

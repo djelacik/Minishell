@@ -33,7 +33,9 @@ char	*single_quotes(char *input, int *index)
 		(*index)++;
 	}
 	quoted_input[i] = '\0';
-	if (input[*index] == '\'')
+	if (input[*index] != '\'')
+		return (NULL);
+	else if (input[*index] == '\'')
 		(*index)++;
 	return (quoted_input);
 }
@@ -94,26 +96,14 @@ char	*double_quotes(char *input, int *index)
 				continue ;
 			}
 		}
-		/*else if (input[*index] == '\\' && (input[*index + 1] == '$' || input[*index + 1] == '"'))
-		{
-			(*index)++;
-			quoted_input[i++] = input[*index];
-		}*/
 		else
 			quoted_input[i++] = input[*index];
 		(*index)++;
 	}
 	quoted_input[i] = '\0';
-	if (input[*index] == '"')
+	if (input[*index] != '"')
+		return (NULL);
+	else if (input[*index] == '"')
 		(*index)++;
 	return (quoted_input);
-}
-
-char	*handling_quotes(char *input, int *index)
-{
-	if (input[*index] == '\'')
-		return (single_quotes(input, index));
-	else if (input[*index] == '"')
-		return (double_quotes(input, index));
-	return (NULL);
 }
