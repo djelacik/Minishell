@@ -101,12 +101,26 @@ char *ft_strndup(const char *src, size_t n)
 	return (dst);
 }
 
+static void	free_exist_tokens(t_tokens *tokens, int	index)
+{
+	int	i;
+
+	i = 0;
+	while (i < index)
+	{
+		free(tokens[i].token_string);
+		i++;
+	}
+	free(tokens);
+}
+
 t_tokens	*tokenize_input(char *input)
 {
 	t_tokens	*tokens;
 	int		token_count;
 	int		i;
 	int		j;
+	int		k;
 	int		start;
 
 	token_count = count_tokens(input);
@@ -119,9 +133,17 @@ t_tokens	*tokenize_input(char *input)
 	{
 		while (input[i] == ' ')
 			i++;
-		if (input[0] == '|' || (input [i] == '|' && j == 0))
+		if (input[0] == '|' || (input[i] == '|' && j == 0))
 		{
 			printf("parse error near `|'\n");
+			free_exist_tokens(tokens, j);
+			return (NULL);
+		}
+		if (ft_isalpha(input[0]) == 0 || (ft_isalpha(input[i]) == 0 && j == 0))
+		{
+			tokens[j].token_string = ft_strdup(&input[i]);
+			printf("command not found: %s\n", tokens[j].token_string);
+			free_exist_tokens(tokens, j);
 			return (NULL);
 		}
 		if (!input[i])
@@ -132,11 +154,13 @@ t_tokens	*tokenize_input(char *input)
 			if (tokens[j].token_string == NULL)
 			{
 				printf("parse error near `newline'\n");
+				free_exist_tokens(tokens, j);
 				return (NULL);
 			}
 			if (tokens[j].token_type == EMPTY)
 			{
 				printf("parse error near `%s'\n", tokens[j].token_string);
+				free_exist_tokens(tokens, j);
 				return (NULL);
 			}
 			j++;
@@ -144,6 +168,15 @@ t_tokens	*tokenize_input(char *input)
 		}
 		else if (input[i] == '|')
 		{
+			k = i + 1;
+			while (input[k] == ' ')
+				k++;
+			if (input[k] == '\0')
+			{
+				printf("parse error `newline'\n");
+				free_exist_tokens(tokens, j);
+				return (NULL);
+			}
 			tokens[j].token_string = handle_pipes(input, &i, &tokens[j]);
 			j++;
 			continue ;
@@ -156,6 +189,7 @@ t_tokens	*tokenize_input(char *input)
 				if (tokens[j].token_string == NULL)
 				{
 					printf("syntax error: unexpected EOF while looking for matching `\''\n");
+					free_exist_tokens(tokens, j);
 					return (NULL);
 				}
 			}
@@ -165,6 +199,7 @@ t_tokens	*tokenize_input(char *input)
 				if (tokens[j].token_string == NULL)
 				{
 					printf("syntax error: unexpected EOF while looking for matching `\"'\n");
+					free_exist_tokens(tokens, j);
 					return (NULL);
 				}
 			}
@@ -176,9 +211,10 @@ t_tokens	*tokenize_input(char *input)
 			start = i;
 			while (input[i] && input[i] != ' ' && input[i] != '\'' && input[i] != '"')
 			{
-				if ((input[i] == '<' || input[i] == '>') && (input[i + 1] == '\0'))
+				if ((input[i] == '<' || input[i] == '>' || input[i] == '|') && (input[i + 1] == '\0'))
 				{
 					printf("parse error near `newline'\n");
+					free_exist_tokens(tokens, j);
 					return (NULL);
 				}
 				i++;
