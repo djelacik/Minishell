@@ -161,7 +161,8 @@ t_tokens	*tokenize_input(char *input)
 			}
 			else
 			{
-				tokens[j].token_string = double_quotes(input, &i)	if (tokens[j].token_string == NULL)
+				tokens[j].token_string = double_quotes(input, &i);
+				if (tokens[j].token_string == NULL)
 				{
 					printf("syntax error: unexpected EOF while looking for matching `\"'\n");
 					return (NULL);
