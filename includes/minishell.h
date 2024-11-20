@@ -11,11 +11,13 @@
 # include <unistd.h> //dup2
 # include <fcntl.h> //open
 
+#define MALLOC_ERR "malloc error\n"
 #define CHILD_FIRST_ERR "Error in child first\n"
 #define CHILD_MID_ERR "Error in child middle\n"
 #define CHILD_LAST_ERR "Error in child last\n"
 #define DUP_2_ERR "Error in dup2\n"
-#define EXEC_ERR "Exec error\n"
+#define EXEC_ERR "Execution error\n"
+#define EXECVE_ERR "execve error\n"
 
 # define EMPTY 0
 # define COMMAND 1

@@ -62,3 +62,16 @@ void	child_middle(int i, t_cmnds *cmnds)
 	perror(EXEC_ERR);
 	exit(EXIT_FAILURE);
 }
+
+void	child_last(int i, t_cmnds *cmnds)
+{
+	if (dup2(cmnds->pipes[i - 1][0], STDIN_FILENO) < 0)
+	{
+		perror(CHILD_LAST_ERR);
+		exit(EXIT_FAILURE);
+	}
+	close_pipes();
+	execute_command();
+	perror(EXEC_ERR);
+	exit(EXIT_FAILURE);
+}
