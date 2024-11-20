@@ -26,3 +26,4 @@ void	create_pipes(t_cmnds *cmnds)
 		}
 	}
 }
+
