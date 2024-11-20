@@ -24,7 +24,7 @@
 # define REDIR_OUTPUT 4
 # define REDIR_APPEND 5
 # define REDIR_HERE_DOC 6
-# define PIPES 7
+# define PIPE 7
 # define SPECIAL_SYMB 8
 
 typedef enum e_builtin
@@ -47,8 +47,8 @@ typedef struct s_tokens
 }	t_tokens;
 
 typedef struct s_redirect {
-	char			*file;
-	//t_token_type	type; 
+	char			*arg;
+	int				type;
 }	t_redirect;
 				
 					//token[0]	token[1]  token[2]   token[3]
@@ -57,17 +57,17 @@ typedef struct s_redirect {
 					// LATER tokens[0] tokens[1] 	| tokens[0] tokens[1]
 					
 						//commands[0] | commands[1]
-typedef struct s_command //echo hello | grep "h"
+typedef struct s_data //echo hello | grep "h"
 {
-	t_tokens		*tokens;			// Taulukko tokeneita
+	t_tokens		*args;			// Taulukko tokeneita
 	int				token_count;		// Tokenien määrä
-	t_redirect		*redirects;			// Taulukko uudelleenohjauksia
-	int				redirect_count;		// Uudelleenohjausten määrä
-}	t_command;
+	t_redirect		*redirs;			// Taulukko uudelleenohjauksia
+	int				redir_count;		// Uudelleenohjausten määrä
+}	t_data;
 
 typedef struct s_cmnds
 {
-	t_command	*commands;			// Taulukko `t_command`-rakenteita
+	t_data		*commands;			// Taulukko `t_command`-rakenteita
 	int			command_count;		// Komentojen määrä
 	int			**pipes;
 	int			pipe_count;
@@ -83,7 +83,6 @@ int	calculate_single_len(char *input, int start_index, char quote_type);
 char *single_quotes(char *input, int *index);
 int	calculate_double_len(char *input, int start_index, char quote_type);
 char *double_quotes(char *input, int *index);
-char *handling_quotes(char *input, int *index);
 
 /* handling_pipes.c */
 char	*handle_pipes(char *input, int *index, t_tokens *tokens);
@@ -94,6 +93,9 @@ int	handle_redir_input(const char *file);
 int	handle_redir_output(const char *file);
 int	handle_redir_append(const char *file);
 int	handle_redir_here_doc(const char *delimiter);
+
+/* init_data.c */
+t_data	*init_data(t_tokens *tokens);
 
 /* main.c */
 //int	main(int argc, char **argv);

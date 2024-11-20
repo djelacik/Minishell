@@ -119,9 +119,9 @@ t_tokens	*tokenize_input(char *input)
 	{
 		while (input[i] == ' ')
 			i++;
-		if (input[0] == '|')
+		if (input[0] == '|' || (input [i] == '|' && j == 0))
 		{
-			printf("parse error\n");
+			printf("parse error near `|'\n");
 			return (NULL);
 		}
 		if (!input[i])
@@ -129,6 +129,16 @@ t_tokens	*tokenize_input(char *input)
 		else if (input[i] == '>' || input[i] == '<')
 		{
 			tokens[j].token_string = redir_symb(input, &i, &tokens[j]);
+			if (tokens[j].token_string == NULL)
+			{
+				printf("parse error near `newline'\n");
+				return (NULL);
+			}
+			if (tokens[j].token_type == EMPTY)
+			{
+				printf("parse error near `%s'\n", tokens[j].token_string);
+				return (NULL);
+			}
 			j++;
 			continue ;
 		}
@@ -139,14 +149,40 @@ t_tokens	*tokenize_input(char *input)
 			continue ;
 		}
 		else if (input[i] == '\'' || input[i] == '"')
-			tokens[j].token_string = handling_quotes(input, &i);
+		{
+			if (input[i] == '\'')
+			{
+				tokens[j].token_string = single_quotes(input, &i);
+				if (tokens[j].token_string == NULL)
+				{
+					printf("syntax error: unexpected EOF while looking for matching `\''\n");
+					return (NULL);
+				}
+			}
+			else
+			{
+				tokens[j].token_string = double_quotes(input, &i);
+				if (tokens[j].token_string == NULL)
+				{
+					printf("syntax error: unexpected EOF while looking for matching `\"'\n");
+					return (NULL);
+				}
+			}
+		}
 		else if (input[i] == '$')
 			tokens[j].token_string = environment_variable(input, &i);
 		else
 		{
 			start = i;
 			while (input[i] && input[i] != ' ' && input[i] != '\'' && input[i] != '"')
+			{
+				if ((input[i] == '<' || input[i] == '>') && (input[i + 1] == '\0'))
+				{
+					printf("parse error near `newline'\n");
+					return (NULL);
+				}
 				i++;
+			}
 			tokens[j].token_string = ft_strndup(&input[start], i - start);
 		}
 		if (!tokens[j].token_string)
