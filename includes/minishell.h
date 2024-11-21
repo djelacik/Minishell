@@ -12,12 +12,12 @@
 # include <fcntl.h> //open
 
 #define MALLOC_ERR "malloc error\n"
-#define CHILD_FIRST_ERR "Error in child first\n"
-#define CHILD_MID_ERR "Error in child middle\n"
-#define CHILD_LAST_ERR "Error in child last\n"
-#define DUP_2_ERR "Error in dup2\n"
-#define EXEC_ERR "Execution error\n"
+#define PIPE_ERR "pipe error\n"
+#define DUP2_ERR "dup2 error\n"
+#define EXEC_ERR "execution error\n"
 #define EXECVE_ERR "execve error\n"
+#define FORK_ERR "fork error\n"
+#define OPEN_ERR "open error\n"
 
 # define EMPTY 0
 # define COMMAND 1
@@ -49,8 +49,9 @@ typedef struct s_tokens
 }	t_tokens;
 
 typedef struct s_redirect {
-	char			*arg;
+	char			*file;
 	int				type;
+	t_redir_type	type;
 }	t_redirect;
 				
 					//token[0]	token[1]  token[2]   token[3]
@@ -69,12 +70,13 @@ typedef struct s_data //echo hello | grep "h"
 
 typedef struct s_cmnds
 {
-	t_data		*commands;			// Taulukko `t_command`-rakenteita
+	t_data		*data;			// Taulukko `t_command`-rakenteita
 	int			command_count;		// Komentojen määrä
 	int			**pipes;
 	int			pipe_count;
-	pid_t		*pid;
-	char		**argv_cpy;
+	pid_t		*pids;
+	char		**env_cpy;
+	t_env		*env_list;
 } t_cmnds;
 
 /* handling_env_var.c */

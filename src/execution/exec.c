@@ -1,28 +1,33 @@
 #include "../../includes/minishell.h"
 
-void    execute_command(t_command *command, t_cmnds *cmnds)
+char	*find_path(char *command, t_pipex *pp)
 {
-    char    *cmd;
-    char    **args;
-    int     i;
+	int		i;
+	char	*single_path;
+	char	*full_path;
 
-    cmd = command->tokens[0].token_string;
-    args = malloc(sizeof(char *) * (command->token_count + 1));
-    if (!args)
-    {
-        perror(MALLOC_ERR);
-        exit(EXIT_FAILURE);
-    }
-    i = 0;
-    while (i < command->token_count)
-    {
-        args[i] = command->tokens[i].token_string;
-        i++;
-    }
-    args[i] = NULL;
-    if (execve(cmd, args, cmnds->argv_cpy) == -1)
-    {
-        perror(EXECVE_ERR);
-        exit(EXIT_FAILURE);
-    }
+	i = 0;
+	while (pp->envp[i] != NULL && ft_strncmp(pp->envp[i], "PATH=", 5) != 0)
+		i++;
+	if (pp->envp[i] == NULL)
+	{
+	//	perror(ERR_PATH);
+	//command not found
+		exit(127);
+	}
+	pp->paths = ft_split(pp->envp[i] + 5, ':');
+	i = 0;
+	while (pp->paths[i])
+	{
+		single_path = ft_strjoin(pp->paths[i++], "/");
+		full_path = ft_strjoin(single_path, command);
+		free(single_path);
+		if (access(full_path, X_OK) == 0)
+			return (full_path);
+		free(full_path);
+	}
+	ft_free_strarray(pp->paths);
+	return (NULL);
 }
+
+

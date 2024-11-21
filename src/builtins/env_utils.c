@@ -122,14 +122,28 @@ void	lst_to_arr(t_env *head, t_cmnds *cmnds)
 	t_env	*cur;
 	
 	i = get_lst_size(head);
-	cmnds->argv_cpy = ft_calloc(sizeof(char *), i + 1);
+	cmnds->env_cpy = ft_calloc(sizeof(char *), i + 1);
 	cur = head;
 	i = 0;
 	while (cur)
 	{
-		cmnds->argv_cpy[i] = ft_strjoin(cur->key, "=");
-		cmnds->argv_cpy[i] = ft_strjoin(cmnds->argv_cpy[i],cur->value);
+		cmnds->env_cpy[i] = ft_strjoin(cur->key, "=");
+		cmnds->env_cpy[i] = ft_strjoin(cmnds->env_cpy[i],cur->value);
 		cur = cur->next;
 		i++;
 	}
+}
+
+char	*get_value(char *key, t_env *head)
+{
+	t_env	*current;
+
+	current = head;
+	while (current)
+	{
+		if (ft_strcmp(current->key, key) == 0)
+			return (current->value);
+		current = current->next;
+	}
+	return (NULL);
 }
