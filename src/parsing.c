@@ -139,7 +139,7 @@ t_tokens	*tokenize_input(char *input)
 			free_exist_tokens(tokens, j);
 			return (NULL);
 		}
-		if (ft_isalpha(input[0]) == 0 || (ft_isalpha(input[i]) == 0 && j == 0))
+		if ((ft_isalpha(input[0]) == 0 && input[0] != '/') || (ft_isalpha(input[i]) == 0 && input[i] != '/' && j == 0))
 		{
 			tokens[j].token_string = ft_strdup(&input[i]);
 			printf("command not found: %s\n", tokens[j].token_string);
@@ -148,6 +148,17 @@ t_tokens	*tokenize_input(char *input)
 		}
 		if (!input[i])
 			break;
+		if (input[0] == '/' && (input[i] == '/' && j == 0))
+		{
+			start = i;
+			while (input[i] && input[i] != ' ' && input[i] != '\'' && input[i] != '"')
+				i++;
+			tokens[j].token_string = ft_strndup(&input[start], i - start);
+			tokens[j].token_type = COMMAND;
+			tokens[j].builtin_type = BUILTIN_NONE;
+			j++;
+			continue ;
+		}
 		else if (input[i] == '>' || input[i] == '<')
 		{
 			tokens[j].token_string = redir_symb(input, &i, &tokens[j]);
