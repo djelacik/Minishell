@@ -135,14 +135,14 @@ t_tokens	*tokenize_input(char *input)
 			i++;
 		if (input[0] == '|' || (input[i] == '|' && j == 0))
 		{
-			printf("parse error near `|'\n");
+			printf("syntax error near unexpected token `|'\n");
 			free_exist_tokens(tokens, j);
 			return (NULL);
 		}
-		if ((ft_isalpha(input[0]) == 0 && input[0] != '/') || (ft_isalpha(input[i]) == 0 && input[i] != '/' && j == 0))
+		if ((ft_isalpha(input[0]) == 0 && input[0] != '/' && input[0] != '\'' && input[0] != '"') || ft_isspace(input[0] == 1) || (ft_isalpha(input[i]) == 0 && input[i] != '/' && input[i] != '\'' && input[i] != '"' && j == 0) || ft_isspace(input[i]) == 1)
 		{
 			tokens[j].token_string = ft_strdup(&input[i]);
-			printf("command not found: %s\n", tokens[j].token_string);
+			printf("%s: command not found\n", tokens[j].token_string);
 			free_exist_tokens(tokens, j);
 			return (NULL);
 		}
@@ -164,13 +164,13 @@ t_tokens	*tokenize_input(char *input)
 			tokens[j].token_string = redir_symb(input, &i, &tokens[j]);
 			if (tokens[j].token_string == NULL)
 			{
-				printf("parse error near `newline'\n");
+				printf("syntax error near unexpected token `newline'\n");
 				free_exist_tokens(tokens, j);
 				return (NULL);
 			}
 			if (tokens[j].token_type == EMPTY)
 			{
-				printf("parse error near `%s'\n", tokens[j].token_string);
+				printf("syntax error near unexpected token `%s'\n", tokens[j].token_string);
 				free_exist_tokens(tokens, j);
 				return (NULL);
 			}
@@ -184,7 +184,7 @@ t_tokens	*tokenize_input(char *input)
 				k++;
 			if (input[k] == '\0')
 			{
-				printf("parse error `newline'\n");
+				printf("syntax error near unexpected token `newline'\n");
 				free_exist_tokens(tokens, j);
 				return (NULL);
 			}
@@ -206,6 +206,12 @@ t_tokens	*tokenize_input(char *input)
 			}
 			else
 			{
+				if (calculate_quotes_double(input) == 0)
+				{
+					printf("syntax error: unexpected EOF while looking for matching `\"'\n");
+					free_exist_tokens(tokens, j);
+					return (NULL);
+				}
 				tokens[j].token_string = double_quotes(input, &i);
 				if (tokens[j].token_string == NULL)
 				{
@@ -224,7 +230,7 @@ t_tokens	*tokenize_input(char *input)
 			{
 				if ((input[i] == '<' || input[i] == '>' || input[i] == '|') && (input[i + 1] == '\0'))
 				{
-					printf("parse error near `newline'\n");
+					printf("syntax error near unexpected token `newline'\n");
 					free_exist_tokens(tokens, j);
 					return (NULL);
 				}
