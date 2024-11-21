@@ -1,12 +1,50 @@
 #include "../includes/minishell.h"
 
+int	calculate_quotes_double(char *input)
+{
+	int	i;
+	int quote_count;
+
+	i = 0;
+	quote_count = 0;
+	while (input[i])
+	{
+		if (input[i] == '"')
+			quote_count++;
+		i++;
+	}
+	if (quote_count % 2 != 0)
+		return (0);
+	return (1);
+}
+
+int	calculate_quotes_single(char *input)
+{
+	int	i;
+	int	quote_count;
+
+	i = 0;
+	quote_count = 0;
+	while (input[i])
+	{
+		if (input[i] == '\'')
+			quote_count++;
+		i++;
+	}
+	if (quote_count % 2 != 0)
+		return (0);
+	return (1);
+}
+
 int	calculate_single_len(char *input, int start_index, char quote_type)
 {
 	int	len;
 	int	i;
 
 	len = 0;
-	i = start_index + 1;
+	i = start_index;
+	while (input[i] && input[i] == quote_type)
+		i++;
 	while (input[i] && input[i] != quote_type)
 	{
 		len++;
@@ -25,7 +63,10 @@ char	*single_quotes(char *input, int *index)
 	quoted_input = malloc((quoted_len + 1) * sizeof(char));
 	if (!quoted_input)
 		return (NULL);
-	(*index)++;
+	if (calculate_quotes_single(input) == 0)
+		return (NULL);
+	if (input[*index] && input[*index] == '\'')
+		(*index)++;
 	i = 0;
 	while (input[*index] && input[*index] != '\'')
 	{
@@ -35,7 +76,7 @@ char	*single_quotes(char *input, int *index)
 	quoted_input[i] = '\0';
 	if (input[*index] != '\'')
 		return (NULL);
-	else if (input[*index] == '\'')
+	while (input[*index] == '\'')
 		(*index)++;
 	return (quoted_input);
 }
@@ -47,7 +88,9 @@ int calculate_double_len(char *input, int start_index, char quote_type)
 	int	i;
 
 	len = 0;
-	i = start_index + 1;
+	i = start_index;
+	while (input[i] && input[i] == quote_type)
+		i++;
 	while (input[i] && input[i] != quote_type)
 	{
 		if (input[i] == '$')
@@ -80,7 +123,10 @@ char	*double_quotes(char *input, int *index)
 	quoted_input = malloc((quoted_len + 1) * sizeof(char));
 	if (!quoted_input)
 		return (NULL);
-	(*index)++;
+	/*if (calculate_quotes_double(input) == 0)
+		return (NULL);*/
+	if (input[*index] && input[*index] == '"')
+		(*index)++;
 	i = 0;
 	while (input[*index] && input[*index] != '"')
 	{
@@ -101,9 +147,9 @@ char	*double_quotes(char *input, int *index)
 		(*index)++;
 	}
 	quoted_input[i] = '\0';
-	if (input[*index] != '"')
-		return (NULL);
-	else if (input[*index] == '"')
+	/*if (input[*index] != '"')
+		return (NULL);*/
+	while (input[*index] == '"')
 		(*index)++;
 	return (quoted_input);
 }

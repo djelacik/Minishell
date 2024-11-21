@@ -46,6 +46,40 @@ static void	print_data(t_data *data)
 	}
 }
 
+static void	free_data(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->token_count)
+	{
+		free(data->args[i].token_string);
+		i++;
+	}
+	free(data->args);
+	i = 0;
+	while (i < data->redir_count)
+	{
+		free(data->redirs[i].arg);
+		i++;
+	}
+	free(data->redirs);
+	free(data);
+}
+
+static void	free_tokens(t_tokens *tokens)
+{
+	int	i;
+
+	i = 0;
+	while(tokens[i].token_string)
+	{
+		free(tokens[i].token_string);
+		i++;
+	}
+	free(tokens);
+}
+
 int	main(int argc, char **argv)
 {
 	(void)argc;
@@ -53,7 +87,6 @@ int	main(int argc, char **argv)
 	char		*input;
 	t_tokens	*tokens;
 	t_data		*data;
-	int i;
 
 	while (1)
 	{
@@ -62,15 +95,16 @@ int	main(int argc, char **argv)
 			break ;
 		add_history(input);
 		tokens = tokenize_input(input);
-		data = init_data(tokens);
-		i = 0;
 		if (tokens)
 		{
 			print_tokens(tokens);
-			print_data(data);
-			while (tokens[i].token_string)
-				free(tokens[i++].token_string);
-			free(tokens);
+			data = init_data(tokens);
+			if (data)
+			{
+				print_data(data);
+				free_data(data);
+			}
+			free_tokens(tokens);
 		}
 		free(input);
 	}

@@ -85,6 +85,8 @@ int	calculate_single_len(char *input, int start_index, char quote_type);
 char *single_quotes(char *input, int *index);
 int	calculate_double_len(char *input, int start_index, char quote_type);
 char *double_quotes(char *input, int *index);
+int	calculate_quotes_double(char *input);
+int	calculate_quotes_single(char *input);
 
 /* handling_pipes.c */
 char	*handle_pipes(char *input, int *index, t_tokens *tokens);
