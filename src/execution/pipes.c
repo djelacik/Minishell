@@ -1,29 +1,19 @@
 #include "../../includes/minishell.h"
 
-void	create_pipes(t_cmnds *cmnds)
+void	setup_pipes(int i, int command_count, int pipefd[2])
 {
-	int		i;
-
-	cmnds->pipes = malloc((cmnds->command_count - 1) * sizeof(int *));
-	if (!cmnds->pipes)
+	if (i < command_count - 1)
 	{
-		//error_func;
-		return ;
+		if (pipe(pipefd) == -1)
+		{
+			perror(PIPE_ERR);
+			exit(EXIT_FAILURE);
+		}
 	}
-	i = 0;
-	while (i < cmnds->command_count - 1)
+	else
 	{
-		cmnds->pipes[i] = malloc(sizeof(int) * 2);
-		if (!cmnds->pipes[i])
-		{
-			//error_func;
-			return ;
-		}
-		if (pipe(cmnds->pipes[i] < 0))
-		{
-			//error_func
-			return ;
-		}
+		pipefd[0] = -1;
+		pipefd[1] = -1;
 	}
 }
 
