@@ -139,13 +139,13 @@ t_tokens	*tokenize_input(char *input)
 			free_exist_tokens(tokens, j);
 			return (NULL);
 		}
-		if ((ft_isalpha(input[0]) == 0 && input[0] != '/' && input[0] != '\'' && input[0] != '"') || ft_isspace(input[0] == 1) || (ft_isalpha(input[i]) == 0 && input[i] != '/' && input[i] != '\'' && input[i] != '"' && j == 0) || ft_isspace(input[i]) == 1)
+		/*if ((ft_isalpha(input[0]) == 0 && input[0] != '/' && input[0] != '\'' && input[0] != '"') || ft_isspace(input[0] == 1) || (ft_isalpha(input[i]) == 0 && input[i] != '/' && input[i] != '\'' && input[i] != '"' && j == 0) || ft_isspace(input[i]) == 1)
 		{
 			tokens[j].token_string = ft_strdup(&input[i]);
 			printf("%s: command not found\n", tokens[j].token_string);
 			free_exist_tokens(tokens, j);
 			return (NULL);
-		}
+		}*/
 		if (!input[i])
 			break;
 		if (input[0] == '/' && (input[i] == '/' && j == 0))

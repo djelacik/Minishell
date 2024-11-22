@@ -1,5 +1,17 @@
 #include "../includes/minishell.h"
 
+static void	print_cmnd_args(t_data *data, int index)
+{
+	int	i;
+
+	i = 0;
+	while (data[index].args[i].token_string)
+	{
+		printf("args[%d]: %s type: %d builtin: %d\n", i, data[index].args[i].token_string, data[index].args[i].token_type, data[index].args[i].builtin_type);
+		i++;
+	}
+}
+
 static void	print_tokens(t_tokens *tokens)
 {
 	int i;
@@ -32,38 +44,49 @@ static void	print_data(t_data *data)
 
 	i = 0;
 	printf("redir count: %d\n", data->redir_count);
-	while (i < data->redir_count)
+	/*while (i < data->redir_count)
 	{
 		printf("redir[%d]: %s type: %d\n", i, data->redirs[i].arg, data->redirs[i].type);
 		i++;
-	}
+	}*/
 	i = 0;
+	printf("command count: %d\n", data->cmnd_count);
 	printf("token count : %d\n", data->token_count);
-	while (i < data->token_count)
+	/*while (i < data->token_count)
 	{
 		printf("args[%d]: %s type: %d builtin: %d\n", i, data->args[i].token_string, data->args[i].token_type, data->args[i].builtin_type);
 		i++;
+	}*/
+	while (i < data->cmnd_count)
+	{
+		print_cmnd_args(data, i);
+		i++;
 	}
+
 }
 
 static void	free_data(t_data *data)
 {
 	int	i;
+	int	j;
 
 	i = 0;
-	while (i < data->token_count)
+	if (!data)
+		return ;
+	while (i < data->cmnd_count)
 	{
-		free(data->args[i].token_string);
+		if (data[i].args)
+		{
+			j = 0;
+			while (data[i].args[j].token_string)
+			{
+				free(data[i].args[j].token_string);
+				j++;
+			}
+			free(data[i].args);
+		}
 		i++;
 	}
-	free(data->args);
-	i = 0;
-	while (i < data->redir_count)
-	{
-		free(data->redirs[i].arg);
-		i++;
-	}
-	free(data->redirs);
 	free(data);
 }
 
