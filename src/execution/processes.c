@@ -75,7 +75,7 @@ void	child_process(int i, int fd_in, int pipe_fd[2], t_cmnds *cmnds)
 		close(pipe_fd[1]);
 	}
 	handle_redirections(&cmnds->data[i]);
-	execute_command(cmnds->data[i], cmnds->argv_cpy);
+	execute_command(cmnds->data[i], cmnds->env_cpy);
 	perror(EXEC_ERR);
 	exit(EXIT_FAILURE);
 }
@@ -90,33 +90,11 @@ void	handle_redirection(t_data *cmnd_data)
 	{
 		if (cmnd_data->redirs[i].type == REDIRECT_INPUT)// this part is for infile
 		{
-			fd = open(cmnd_data->redirs[i].file, O_RDONLY);
-			if (fd == -1)
-			{
-				perror(OPEN_ERR);
-				exit(EXIT_FAILURE);
-			}
-			if (dup2(fd, STDIN_FILENO) == -1)
-			{
-				perror(DUP2_ERR);
-				exit(EXIT_FAILURE);
-			}
-			close(fd);
+			handle_input(cmnd_data->redirs[i].file);
 		}
 		else if (cmnd_data->redirs[i].type == REDIRECT_OUTPUT)// this is for outfile
 		{
-			fd = open(cmnd_data->redirs[i].file, O_WRONLY | O_CREAT | O_TRUNC, 0644); //flags for appending
-			if (fd == -1)
-			{
-				perror(OPEN_ERR);
-				exit(EXIT_FAILURE);
-			}
-			if (dup2(fd, STDOUT_FILENO) == -1)
-			{
-				perror(DUP2_ERR);
-				exit(EXIT_FAILURE);
-			}
-			close(fd);
+			handle_output(cmnd_data->redirs[i].file);
 		}
 		else if (cmnd_data->redirs[i].type == REDIRECT_HEREDOC)
 		{
@@ -124,6 +102,42 @@ void	handle_redirection(t_data *cmnd_data)
 		}
 		i++;
 	}
+}
+
+static void	handle_input(char *filename)
+{
+	int		fd;
+
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+	{
+		perror(OPEN_ERR);
+		exit(EXIT_FAILURE);
+	}
+	if (dup2(fd, STDIN_FILENO) == -1)
+	{
+		perror(DUP2_ERR);
+		exit(EXIT_FAILURE);
+	}
+	close(fd);	
+}
+
+static void handle_output(char *filename)
+{
+	int		fd;
+
+	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644); //flags for appending
+	if (fd == -1)
+	{
+		perror(OPEN_ERR);
+		exit(EXIT_FAILURE);
+	}
+	if (dup2(fd, STDOUT_FILENO) == -1)
+	{
+		perror(DUP2_ERR);
+		exit(EXIT_FAILURE);
+	}
+	close(fd);
 }
 
 void	handle_heredoc(char *delimiter)
