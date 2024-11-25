@@ -104,7 +104,10 @@ int	main(int argc, char **argv)
 	{
 		input = readline("minishell % ");
 		if (!input) // when user exit with Ctrl+D, readline returns NULL
+		{
+			printf("exit\n");
 			break ;
+		}
 		add_history(input);
 		tokens = tokenize_input(input);
 		if (tokens)

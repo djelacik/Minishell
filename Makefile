@@ -7,7 +7,8 @@ SOURCES = \
 		src/handling_redir.c \
 		src/init_data.c \
 		src/parsing.c \
-		src/main.c
+		src/main.c \
+		src/signals.c \
 		#src/builtins/exec_builtin.c \
 		#src/builtins/enviroment.c \
 		#src/builtins/env_utils.c \

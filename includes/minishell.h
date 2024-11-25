@@ -10,6 +10,7 @@
 # include <readline/history.h> //readline, add_history
 # include <unistd.h> //dup2
 # include <fcntl.h> //open
+# include <signal.h> //signal
 
 #define MALLOC_ERR "malloc error\n"
 #define PIPE_ERR "pipe error\n"
@@ -79,6 +80,9 @@ typedef struct s_cmnds
 	char		**env_cpy;
 	//t_env		*env_list;
 } t_cmnds;
+
+/* signals.c */
+void	handle_sigint(int sig);
 
 /* handling_env_var.c */
 char *environment_variable(char *input, int *index);
