@@ -2,7 +2,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "execution.h"
+/*# include "execution.h"*/
 # include "../libft/libft.h"
 # include <stdio.h> // printf, perror
 # include <stdlib.h> // malloc
@@ -51,7 +51,7 @@ typedef struct s_tokens
 typedef struct s_redirect {
 	char			*file;
 	int				type;
-	t_redir_type	type;
+	//t_redir_type	type;
 }	t_redirect;
 				
 					//token[0]	token[1]  token[2]   token[3]
@@ -77,7 +77,7 @@ typedef struct s_cmnds
 	int			pipe_count;
 	pid_t		*pids;
 	char		**env_cpy;
-	t_env		*env_list;
+	//t_env		*env_list;
 } t_cmnds;
 
 /* handling_env_var.c */

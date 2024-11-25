@@ -56,9 +56,11 @@ int	calculate_single_len(char *input, int start_index, char quote_type)
 char	*single_quotes(char *input, int *index)
 {
 	char	*quoted_input;
+	char	*parsed;
 	int		quoted_len;
 	int		i;
 
+	parsed = NULL;
 	quoted_len = calculate_single_len(input, *index, '\'');
 	quoted_input = malloc((quoted_len + 1) * sizeof(char));
 	if (!quoted_input)
@@ -74,11 +76,13 @@ char	*single_quotes(char *input, int *index)
 		(*index)++;
 	}
 	quoted_input[i] = '\0';
+	parsed = ft_strdup(quoted_input);
+	free(quoted_input);
 	if (input[*index] != '\'')
 		return (NULL);
 	while (input[*index] == '\'')
 		(*index)++;
-	return (quoted_input);
+	return (parsed);
 }
 
 int calculate_double_len(char *input, int start_index, char quote_type)
@@ -115,10 +119,12 @@ char	*double_quotes(char *input, int *index)
 {
 	char	*quoted_input;
 	char	*env_var;
+	char	*parsed;
 	int		quoted_len;
 	int		i;
 	int		j;
 
+	parsed = NULL;
 	quoted_len = calculate_double_len(input, *index, '"');
 	quoted_input = malloc((quoted_len + 1) * sizeof(char));
 	if (!quoted_input)
@@ -147,9 +153,11 @@ char	*double_quotes(char *input, int *index)
 		(*index)++;
 	}
 	quoted_input[i] = '\0';
+	parsed = ft_strdup(quoted_input);
+	free(quoted_input);
 	/*if (input[*index] != '"')
 		return (NULL);*/
 	while (input[*index] == '"')
 		(*index)++;
-	return (quoted_input);
+	return (parsed);
 }
