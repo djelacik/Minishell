@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 18:23:55 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/15 17:06:44 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:32:04 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ static void	print_arr(char **argv)
 int	main(int argc, char **argv, char **envp)
 {
 	t_env		*head;
-	t_command	*command;
+	t_data		*data;
 	
-	command = malloc(sizeof(t_command));
-	command->token_count = 3;
-	command->tokens = malloc(sizeof(t_tokens) * command->token_count);
-	command->tokens[1].token_string = ft_strdup("TEST1");
-	command->tokens[2].token_string = ft_strdup("TEST2=");
-	command->tokens[3].token_string = ft_strdup("TEST3=3");
+	data = malloc(sizeof(t_data));
+	data->token_count = 3;
+	data->args = malloc(sizeof(t_tokens) * data->token_count);
+	data->args[1].token_string = ft_strdup("TEST1");
+	data->args[2].token_string = ft_strdup("TEST2=");
+	data->args[3].token_string = ft_strdup("TEST3=3");
 	
 	if (argc < 2)
 		return (EXIT_FAILURE);
@@ -48,7 +48,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_unset(&head, argv[2]);
 		ft_env(head);
 	}
-	export_add(&head, command);
+	export_add(&head, data);
 	if (ft_strcmp(argv[1], "export") == 0)
 	{
 		export_print(head);
@@ -57,6 +57,5 @@ int	main(int argc, char **argv, char **envp)
 	{
 		ft_env(head);
 	}
-	print_arr();
 	return (EXIT_SUCCESS);
 }
