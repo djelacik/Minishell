@@ -6,13 +6,13 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:02:00 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/13 12:33:52 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/23 19:13:38 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	exec_echo(t_command *command)
+int	exec_echo(t_data *data)
 {
 	int		i;
 	int		new_line;
@@ -20,15 +20,15 @@ int	exec_echo(t_command *command)
 	//token[0] is echo
 	i = 1;
 	new_line = 1;
-	if (command->token_count > 1 && ft_strcmp(command->tokens[i].token_string, "-n") == 0)
+	if (data->token_count > 1 && ft_strcmp(data->args[i].token_string, "-n") == 0)
 	{
 		new_line = 0;
 		i++; //skip the "-n"
 	}
-	while (i < command->token_count)
+	while (i < data->token_count)
 	{
-		printf("%s", command->tokens[i].token_string);
-		if (i + 1 < command->token_count) // " " between strings
+		printf("%s", data->args[i].token_string);
+		if (i + 1 < data->token_count) // " " between strings
 			printf(" ");
 	}
 	if (new_line)
@@ -38,48 +38,52 @@ int	exec_echo(t_command *command)
 
 int	exec_pwd(void)
 {
-	const char	*current_d;
-	
-	current_d = getenv("PWD");
-	printf("%s", current_d);
+	char	*current_dir;
+
+	if (getcwd(current_dir, sizeof(current_dir)) != NULL)
+	{
+		printf("%s\n", current_dir);
+	}
+	else
+	{
+		perror("getcwd error");
+		return (EXIT_FAILURE);
+	}
 	return (EXIT_SUCCESS);
 }
 
-void	update_pwd(void)
+void	update_pwd(t_env **head)
 {
 	char	pwd[PATH_MAX];
 	char	*old_pwd;
 
-	old_pwd = getenv("PWD");
-	
+	old_pwd = ft_getenv("PWD", *head);
 	if (getcwd(pwd, sizeof(pwd)) != NULL)
 	{
 		if (old_pwd != NULL)
 		{
-			setenv("OLDPWD", old_pwd, 1); // Update OLDPWD
+			ft_setenv("OLDPWD", old_pwd, head);
 		}
-		setenv("PWD", pwd, 1); // Update PWD
+		ft_setenv("PWD", pwd, head);
 	}
 	else
 	{
-		perror("Error updating pwd\n");
+		perror("getcwd error");
 	}
 }
 
-// if command->tokens[0].token_string == "cd"
-void	ft_cd(t_command *command)
+void	ft_cd(t_data *data, t_env **head)
 {
 	char	*path;
 
-	// path = /home/projects/minishell
-	if (command->token_count > 1)
-		path = command->tokens[1].token_string;
+	if (data->token_count > 1)
+		path = data->args[1].token_string;
 	else
 	{
-		path = getenv("HOME");
+		path = ft_getenv("HOME", *head);
 		if (!path)
 		{
-			printf("HOME not set\n");
+			ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO);
 			return ;
 		}
 	}
@@ -88,12 +92,11 @@ void	ft_cd(t_command *command)
 		perror("cd");
 		return ;
 	}
-	update_pwd();
 }
 
-void	ft_exit(t_command *command)
+void	ft_exit(t_data *data)
 {
-	if (command->token_count > 1)
+	if (data->token_count > 1)
 	{
 		printf("Too many arguments for exit\n");
 		return ;

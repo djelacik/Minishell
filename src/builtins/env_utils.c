@@ -134,7 +134,7 @@ void	lst_to_arr(t_env *head, t_cmnds *cmnds)
 	}
 }
 
-char	*get_value(char *key, t_env *head)
+char	*ft_getenv(char *key, t_env *head)
 {
 	t_env	*current;
 
@@ -146,4 +146,21 @@ char	*get_value(char *key, t_env *head)
 		current = current->next;
 	}
 	return (NULL);
+}
+
+void	ft_setenv(char *key, char *value, t_env **head)
+{
+	t_env	*current;
+
+	current = *head;
+	while (current)
+	{
+		if (ft_strcmp(current->key, key) == 0)
+		{
+			free(current->value);
+			current->value = ft_strdup((const char *)value);
+			return ;
+		}
+		current = current->next;
+	}
 }

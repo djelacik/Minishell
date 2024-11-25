@@ -1,33 +1,60 @@
 #include "../../includes/minishell.h"
 
-char	*find_path(char *command, t_pipex *pp)
+static char	*join_cmd_path(char *dir, char *cmd)
 {
-	int		i;
 	char	*single_path;
 	char	*full_path;
 
+	single_path = ft_strjoin(dir, "/");
+	if (!single_path)
+		return (NULL);
+	full_path = ft_strjoin(single_path, cmd);
+	free(single_path);
+	return (full_path);
+}
+
+void	*find_path(char *command, t_cmnds *cmnds)
+{
+	char	*path_value;
+	char	*full_path;
+	char	**paths;
+	int		i;
+
+	path_value = get_value("PATH", cmnds->env_list);
+	if (!path_value)
+		return (NULL);
+	paths = ft_split((const char *)path_value, ":");
 	i = 0;
-	while (pp->envp[i] != NULL && ft_strncmp(pp->envp[i], "PATH=", 5) != 0)
-		i++;
-	if (pp->envp[i] == NULL)
+	while (paths[i])
 	{
-	//	perror(ERR_PATH);
-	//command not found
-		exit(127);
-	}
-	pp->paths = ft_split(pp->envp[i] + 5, ':');
-	i = 0;
-	while (pp->paths[i])
-	{
-		single_path = ft_strjoin(pp->paths[i++], "/");
-		full_path = ft_strjoin(single_path, command);
-		free(single_path);
+		full_path = join_cmd_path(paths[i], command);
+		if (!full_path)
+			return (NULL);
 		if (access(full_path, X_OK) == 0)
+		{
+			free_array(paths);
 			return (full_path);
+		}
 		free(full_path);
+		i++;
 	}
-	ft_free_strarray(pp->paths);
+	free_array(paths);
 	return (NULL);
 }
 
+void	free_array(char **array)
+{
+	int	i;
 
+	i = 0;
+	if (array == NULL)
+		return ;
+	while (array[i] != NULL)
+	{
+		free(array[i]);
+		array[i] = NULL;
+		i++;
+	}
+	free(array);
+	array = NULL;
+}

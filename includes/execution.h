@@ -29,7 +29,7 @@ typedef struct s_env
 
 int			exec_echo(t_command *command);
 int			exec_pwd(void);
-void		update_pwd(void);
+void		update_pwd(t_env **head);
 void		ft_cd(t_command *command);
 void		ft_exit(t_command *command);
 
@@ -45,6 +45,8 @@ void		export_print(t_env *head);
 void		single_unset(t_env **head, const char *key);
 void		ft_unset(t_env **head, t_command *command);
 void		free_env_list(t_env **head);
+char		*ft_getenv(char *key, t_env *head);
+void		ft_setenv(char *key, char *value, t_env **head);
 
 //pipe func prototypes
 void		setup_pipes(int i, int command_count, int pipefd[2]);
@@ -57,5 +59,9 @@ void		child_process(int i, int fd_in, int pipe_fd[2], t_cmnds *cmnds);
 void		execute_command(t_data *data, t_cmnds *cmnds);
 void		wait_for_children(t_cmnds *cmnds);
 void		handle_heredoc(char *delimiter);
+
+//execution func protoypes
+void		*find_path(char *command, t_cmnds *cmnds);
+void		free_array(char **array);
 
 #endif
