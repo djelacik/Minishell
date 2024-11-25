@@ -182,6 +182,12 @@ t_tokens	*tokenize_input(char *input)
 			k = i + 1;
 			while (input[k] == ' ')
 				k++;
+			if (input[k] == '|')
+			{
+				printf("syntax error near unexpected token `|'\n");
+				free_exist_tokens(tokens, j);
+				return (NULL);
+			}
 			if (input[k] == '\0')
 			{
 				printf("syntax error near unexpected token `newline'\n");
