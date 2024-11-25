@@ -63,7 +63,8 @@ typedef struct s_redirect {
 typedef struct s_data //echo hello | grep "h"
 {
 	t_tokens		*args;			// Taulukko tokeneita
-	int				token_count;		// Tokenien määrä
+	int				token_count;	// Tokenien määrä
+	int				cmnd_count;
 	t_redirect		*redirs;			// Taulukko uudelleenohjauksia
 	int				redir_count;		// Uudelleenohjausten määrä
 }	t_data;

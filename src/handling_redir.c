@@ -1,53 +1,5 @@
 #include "../includes/minishell.h"
 
-int	handle_redir_input(const char *file)
-{
-	int	fd;
-
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-	{
-		perror("error");
-		return (-1);
-	}
-	close(fd);
-	return (1);
-}
-
-int	handle_redir_output(const char *file)
-{
-	int	fd;
-
-	fd = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	if (fd < 0)
-	{
-		perror("error");
-		return (-1);
-	}
-	close(fd);
-	return (1);
-}
-
-int	handle_redir_append(const char *file)
-{
-	int	fd;
-
-	fd = open(file, O_WRONLY | O_APPEND | O_CREAT, 0644);
-	if (fd < 0)
-	{
-		perror("error");
-		return (-1);
-	}
-	close(fd);
-	return (1);
-}
-
-
-/*int	handle_redir_here_doc(const char *delimiter)
-{
-
-}*/
-
 char	*redir_symb(char *input, int *index, t_tokens *tokens)
 {
 	char	*symbol;
