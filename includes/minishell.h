@@ -2,7 +2,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-/*# include "execution.h"*/
+# include "execution.h"
 # include "../libft/libft.h"
 # include <stdio.h> // printf, perror
 # include <stdlib.h> // malloc
@@ -18,6 +18,8 @@
 #define EXECVE_ERR "execve error\n"
 #define FORK_ERR "fork error\n"
 #define OPEN_ERR "open error\n"
+
+#define OPEN_MAX 1024
 
 # define EMPTY 0
 # define COMMAND 1
@@ -64,7 +66,7 @@ typedef struct s_data //echo hello | grep "h"
 {
 	t_tokens		*args;			// Taulukko tokeneita
 	int				token_count;	// Tokenien määrä
-	int				cmnd_count;
+	int				cmnd_count;// this has to be removed
 	t_redirect		*redirs;			// Taulukko uudelleenohjauksia
 	int				redir_count;		// Uudelleenohjausten määrä
 }	t_data;
@@ -77,7 +79,7 @@ typedef struct s_cmnds
 	int			pipe_count;
 	pid_t		*pids;
 	char		**env_cpy;
-	//t_env		*env_list;
+	t_env		*env_list;
 } t_cmnds;
 
 /* handling_env_var.c */

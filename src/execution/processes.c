@@ -1,5 +1,17 @@
 #include "../../includes/minishell.h"
 
+void	close_unused_fds(void)
+{
+	int		fd;
+
+	fd = 3;
+	while (fd < OPEN_MAX)
+	{
+		close(fd);
+		fd++;
+	}
+}
+
 int	fork_process(int i, int fd_in, int pipefd[2], t_cmnds *cmnds)
 {
 	cmnds->pids[i] = fork();
@@ -29,23 +41,13 @@ void	start_process(t_cmnds *cmnds)
 {
 	int		i;
 	int		fd_in;
-	int		pipe_fd[2];
 
-	i = 0;
 	fd_in = STDIN_FILENO;
 	setup_pids(cmnds);
+	i = 0;
 	while (i < cmnds->command_count)
 	{
-		setup_pipes(i, cmnds->command_count, pipe_fd);
-		if (fork_process(i, fd_in, pipe_fd, cmnds) == -1)
-		{
-			perror(FORK_ERR);
-			exit(EXIT_FAILURE);
-		}
-		if (fd_in != STDIN_FILENO)
-			close(fd_in);
-		if (i < cmnds->command_count - 1)
-			fd_in = pipe_fd[0];
+		fd_in = execute_process(i, fd_in, cmnds);
 		i++;
 	}
 	if (fd_in != STDIN_FILENO)
@@ -53,9 +55,61 @@ void	start_process(t_cmnds *cmnds)
 	wait_for_children(cmnds);
 }
 
+int	execute_process(int i, int fd_in, t_cmnds *cmnds)
+{
+	int		pipe_fd[2];
+
+	setup_pipes(i, cmnds->command_count, pipe_fd);
+	if (fork_process(i, fd_in, pipe_fd, cmnds) == -1)
+	{
+		perror(FORK_ERR);
+		exit(EXIT_FAILURE);
+	}
+	if (fd_in != STDIN_FILENO)
+		close(fd_in);
+	if (i < cmnds->command_count - 1)
+		return (pipe_fd[0]);
+	return (STDIN_FILENO);
+
+}
+
+// void	child_process(int i, int fd_in, int pipe_fd[2], t_cmnds *cmnds)
+// {
+// 	if (fd_in != STDIN_FILENO) //if fd_in already reading from pipe
+// 	{
+// 		if (dup2(fd_in, STDIN_FILENO) == -1)
+// 		{
+// 			perror(DUP2_ERR);
+// 			exit(EXIT_FAILURE);
+// 		}
+// 		close(fd_in);
+// 	}
+// 	if (pipe_fd[1] != -1) // if this is not the last child process
+// 	{
+// 		close(pipe_fd[0]);
+// 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+// 		{
+// 			perror(DUP2_ERR);
+// 			exit(EXIT_FAILURE);
+// 		}
+// 		close(pipe_fd[1]);
+// 	}
+// 	handle_redirections(&cmnds->data[i]);
+// 	close_unused_fds();
+// 	execute_command(cmnds->data[i], cmnds->env_cpy);
+// 	perror(EXEC_ERR);
+// 	exit(EXIT_FAILURE);
+// }
+
 void	child_process(int i, int fd_in, int pipe_fd[2], t_cmnds *cmnds)
 {
-	if (fd_in != STDIN_FILENO) //if fd_in already reading from pipe
+	setup_input_output(fd_in, pipe_fd);
+	execute_child_command(i, cmnds);
+}
+
+void	setup_input_output(int fd_in, int pipe_fd[2])
+{
+	if (fd_in != STDIN_FILENO)
 	{
 		if (dup2(fd_in, STDIN_FILENO) == -1)
 		{
@@ -64,7 +118,7 @@ void	child_process(int i, int fd_in, int pipe_fd[2], t_cmnds *cmnds)
 		}
 		close(fd_in);
 	}
-	if (pipe_fd[1] != -1) // if this is not the last child process
+	if (pipe_fd[1] != -1)
 	{
 		close(pipe_fd[0]);
 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
@@ -74,7 +128,17 @@ void	child_process(int i, int fd_in, int pipe_fd[2], t_cmnds *cmnds)
 		}
 		close(pipe_fd[1]);
 	}
+	else
+	{
+		if (pipe_fd[0] != -1)
+			close(pipe_fd[0]);
+	}
+}
+
+void	execute_child_command(int i, t_cmnds *cmnds)
+{
 	handle_redirections(&cmnds->data[i]);
+	close_unused_fds();
 	execute_command(cmnds->data[i], cmnds->env_cpy);
 	perror(EXEC_ERR);
 	exit(EXIT_FAILURE);
@@ -140,30 +204,75 @@ static void handle_output(char *filename)
 	close(fd);
 }
 
+// void	handle_heredoc(char *delimiter)
+// {
+// 	int		pipe_fd[2];
+// 	int		*line;
+
+// 	if (pipe(pipe_fd) == -1)
+// 	{
+// 		perror(PIPE_ERR);
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	while (1)
+// 	{
+// 		line = readline("> ");
+// 		if (!line)
+// 			break;
+// 		if (ft_strcmp(line, delimiter) == 0)//not sure about '\n'
+// 		{
+// 			free(line);
+// 			break;
+// 		}
+// 		write(pipe_fd[1], line, ft_strlen(line));
+// 		write(pipe_fd[1], "\n", 1);
+// 		free(line);
+// 	}
+// 	close(pipe_fd[1]);
+// 	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+// 	{
+// 		perror(DUP2_ERR);
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	close(pipe_fd[0]);
+// }
+
 void	handle_heredoc(char *delimiter)
 {
 	int		pipe_fd[2];
-	int		*line;
 
 	if (pipe(pipe_fd) == -1)
 	{
 		perror(PIPE_ERR);
 		exit(EXIT_FAILURE);
 	}
+	read_heredoc_input(pipe_fd, delimiter);
+	setup_heredoc_pipe(pipe_fd);
+}
+
+void	read_heredoc_input(int pipe_fd[2], char *delimiter)
+{
+	char	*line;
+
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
 			break;
-		if (ft_strcmp(line, delimiter) == 0)//not sure about '\n'
+		if (ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
 			break;
 		}
 		write(pipe_fd[1], line, ft_strlen(line));
 		write(pipe_fd[1], "\n", 1);
+		free(line);
 	}
 	close(pipe_fd[1]);
+}
+
+void	setup_heredoc_pipe(int pipe_fd[2])
+{
 	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
 	{
 		perror(DUP2_ERR);
@@ -183,5 +292,5 @@ void	wait_for_children(t_cmnds *cmnds)
 		waitpid(cmnds->pids[i], &status, 0);
 		i++;
 	}
-	free(cmnds->pids);
+	//free(cmnds->pids);
 }

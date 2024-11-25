@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 18:23:55 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/25 13:32:04 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/25 18:57:39 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,38 +24,51 @@ static void	print_arr(char **argv)
 	}
 }
 
+void	init_data(t_data *data)
+{
+	//allocate memory for t_tokens;
+	//allocate memory for t_redirect;
+	//rest of your functions for saving info
+}
+
+void	init_structs(t_cmnds *commands, int cmd_count, char **envp)
+{
+	int		i;
+	
+	commands->data = malloc(sizeof(t_data) * cmd_count);
+	if (!commands->data)
+	{
+		perror(MALLOC_ERR);
+		exit(EXIT_FAILURE);
+	}
+	init_list(&commands->env_list, envp);
+	commands->command_count = cmd_count;
+	i = 0;
+	while (i < cmd_count)
+	{
+		init_data(&commands->data[i]);
+		i++;
+	}
+	//rest of your functions
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	t_env		*head;
-	t_data		*data;
+	char		*input;
+	t_cmnds		cmnds;
+	int			cmd_count;
 	
-	data = malloc(sizeof(t_data));
-	data->token_count = 3;
-	data->args = malloc(sizeof(t_tokens) * data->token_count);
-	data->args[1].token_string = ft_strdup("TEST1");
-	data->args[2].token_string = ft_strdup("TEST2=");
-	data->args[3].token_string = ft_strdup("TEST3=3");
-	
-	if (argc < 2)
-		return (EXIT_FAILURE);
-	if (ft_strcmp(argv[1], "echo") == 0)
-		exec_echo(argv);
-	if (ft_strcmp(argv[1], "pwd") == 0)
-		exec_pwd();
-	init_list(&head, envp);
-	if (ft_strcmp(argv[1], "unset") == 0)
+	cmd_count = calculate_cmd_count();
+	init_structs(&cmnds, cmd_count, envp);
+	while (1)
 	{
-		ft_unset(&head, argv[2]);
-		ft_env(head);
+		input = readline("minishell % ");
+		if (!input) // when user exit with Ctrl+D, readline returns NULL
+			break ;
+		add_history(input);
+		save_info(input);//we should save everything trough one function
+		execution(&cmnds);
+		free(input);
 	}
-	export_add(&head, data);
-	if (ft_strcmp(argv[1], "export") == 0)
-	{
-		export_print(head);
-	}
-	if (ft_strcmp(argv[1], "env") == 0)
-	{
-		ft_env(head);
-	}
-	return (EXIT_SUCCESS);
+	return(0);
 }
