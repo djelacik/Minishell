@@ -15,7 +15,7 @@ void	ft_env(t_env *head)
 	}
 }
 
-void	export_add(t_env **head, t_command *command)
+void	export_add(t_env **head, t_data *data)
 {
 	t_env		*new_node;
 	char		*key;
@@ -23,9 +23,9 @@ void	export_add(t_env **head, t_command *command)
 	int			i;
 	
 	i = 1;
-	while (i < command->token_count)
+	while (i < data->token_count)
 	{
-		key = save_pairs(command->tokens[i].token_string, &value);
+		key = save_pairs(data->args[i].token_string, &value);
 		new_node = malloc(sizeof(t_env));
 		if (!new_node)
 			return ;
@@ -65,20 +65,20 @@ void	single_unset(t_env **head, char *key)
 	}
 }
 
-void	ft_unset(t_env **head, t_command *command)
+void	ft_unset(t_env **head, t_data *data)
 {
 	int		i;
 	char	*value;
 
-	if (command->token_count > 2)
+	if (data->token_count > 2)
 	{
 		printf("unset: not enough arguments\n");
 		return ;
 	}
 	i = 1;
-	while (i < command->token_count)
+	while (i < data->token_count)
 	{
-		single_unset(head, command->tokens[i].token_string);
+		single_unset(head, data->args[i].token_string);
 		i++;
 	}
 }

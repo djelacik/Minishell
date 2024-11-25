@@ -27,11 +27,11 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-int			exec_echo(t_command *command);
+int			exec_echo(t_data *data);
 int			exec_pwd(void);
 void		update_pwd(t_env **head);
-void		ft_cd(t_command *command);
-void		ft_exit(t_command *command);
+void		ft_cd(t_data *data, t_env **head);
+void		ft_exit(t_data *data);
 
 //env func prototypes
 void		init_list(t_env **head, char **envp);
@@ -40,10 +40,10 @@ void		lst_add_back(t_env **head, t_env *new_node);
 char		*save_pairs(char *token_string, char **value_p);
 
 void		ft_env(t_env *head);
-void		export_add(t_env **head, t_command *command);
+void		export_add(t_env **head, t_data *data);
 void		export_print(t_env *head);
 void		single_unset(t_env **head, const char *key);
-void		ft_unset(t_env **head, t_command *command);
+void		ft_unset(t_env **head, t_data *data);
 void		free_env_list(t_env **head);
 char		*ft_getenv(char *key, t_env *head);
 void		ft_setenv(char *key, char *value, t_env **head);
