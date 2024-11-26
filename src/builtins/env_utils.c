@@ -84,23 +84,6 @@ char	*save_pairs(char *token_string, char **value_p)
 	return (key);
 }
 
-void	free_env_list(t_env **head)
-{
-	t_env	*current;
-	t_env	*next_node;
-	
-	current = *head;
-	while (current)
-	{
-		next_node = current->next;
-		free(current->key);
-		free(current->value);
-		free(current);
-		current = next_node;
-	}
-	*head = NULL;
-}
-
 int	get_lst_size(t_env *lst)
 {
 	unsigned int	i;

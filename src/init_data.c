@@ -33,6 +33,8 @@ t_data	*init_data(t_tokens *tokens)
 			i++;
 			data->redir_count++;
 			data->token_count++;
+			i++;
+			continue ;
 		}
 		if (tokens[i].token_type == PIPE)
 			data->cmnd_count++;

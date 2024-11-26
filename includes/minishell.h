@@ -2,7 +2,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-/*# include "execution.h"*/
+# include "execution.h"
 # include "../libft/libft.h"
 # include <stdio.h> // printf, perror
 # include <stdlib.h> // malloc
@@ -19,6 +19,8 @@
 #define EXECVE_ERR "execve error\n"
 #define FORK_ERR "fork error\n"
 #define OPEN_ERR "open error\n"
+
+#define OPEN_MAX 1024
 
 # define EMPTY 0
 # define COMMAND 1
@@ -78,7 +80,7 @@ typedef struct s_cmnds
 	int			pipe_count;
 	pid_t		*pids;
 	char		**env_cpy;
-	//t_env		*env_list;
+	t_env		*env_list;
 } t_cmnds;
 
 /* signals.c */
@@ -114,6 +116,10 @@ t_data	*init_data(t_tokens *tokens);
 /* parsing.c */
 t_tokens	*tokenize_input(char *input);
 char *ft_strndup(const char *src, size_t n);
+
+/* signals.c */
+void	handle_sigint(int sig);
+void	handle_sigquit(int sig);
 
 #endif
 
