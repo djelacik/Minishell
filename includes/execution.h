@@ -48,7 +48,7 @@ char		*save_pairs(char *token_string, char **value_p);
 void		ft_env(t_env *head);
 void		export_add(t_env **head, t_data *data);
 void		export_print(t_env *head);
-void		single_unset(t_env **head, const char *key);
+void		single_unset(t_env **head, char *key);
 void		ft_unset(t_env **head, t_data *data);
 void		free_env_list(t_env **head);
 char		*ft_getenv(char *key, t_env *head);

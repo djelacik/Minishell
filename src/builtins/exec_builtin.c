@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:02:00 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/23 19:13:38 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:47:29 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	exec_pwd(void)
 {
 	char	*current_dir;
 
+	current_dir = NULL;
 	if (getcwd(current_dir, sizeof(current_dir)) != NULL)
 	{
 		printf("%s\n", current_dir);
@@ -54,7 +55,7 @@ int	exec_pwd(void)
 
 void	update_pwd(t_env **head)
 {
-	char	pwd[PATH_MAX];
+	char	pwd[1024];
 	char	*old_pwd;
 
 	old_pwd = ft_getenv("PWD", *head);
