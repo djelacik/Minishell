@@ -27,7 +27,7 @@ t_data	*init_data(t_tokens *tokens)
 	i = 0;
 	while (tokens[i].token_string)
 	{
-		if (tokens[i].token_type == REDIR_INPUT || tokens[i].token_type == REDIR_OUTPUT || tokens[i].token_type == REDIR_APPEND || tokens[i].token_type == REDIR_HERE_DOC)
+		/*if (tokens[i].token_type == REDIR_INPUT || tokens[i].token_type == REDIR_OUTPUT || tokens[i].token_type == REDIR_APPEND || tokens[i].token_type == REDIR_HERE_DOC)
 		{
 			//data->token_count++;
 			i++;
@@ -35,11 +35,11 @@ t_data	*init_data(t_tokens *tokens)
 			data->token_count++;
 			i++;
 			continue ;
-		}
+		}*/
 		if (tokens[i].token_type == PIPE)
 			data->cmnd_count++;
-		else
-			data->token_count++;
+		/*else
+			data->token_count++;*/
 		i++;
 	}
 	i = 0;
@@ -76,12 +76,15 @@ t_data	*init_data(t_tokens *tokens)
 			if (tokens[i].token_type == REDIR_INPUT || tokens[i].token_type == REDIR_OUTPUT || tokens[i].token_type == REDIR_APPEND || tokens[i].token_type == REDIR_HERE_DOC)
 			{
 				i++;
+				data[j].redir_count++;
+				data[j].token_count++;
 				data[j].args[args_index].token_string = ft_strdup(tokens[i].token_string);
 				data[j].args[args_index].token_type = tokens[i].token_type;
 				data[j].args[args_index].builtin_type = tokens[i].builtin_type;
 			}
 			else
-			{	
+			{
+				data[j].token_count++;
 				data[j].args[args_index].token_string = ft_strdup(tokens[i].token_string);
 				data[j].args[args_index].token_type = tokens[i].token_type;
 				data[j].args[args_index].builtin_type = tokens[i].builtin_type;
