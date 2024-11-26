@@ -83,6 +83,9 @@ typedef struct s_cmnds
 	t_env		*env_list;
 } t_cmnds;
 
+/* signals.c */
+void	handle_sigint(int sig);
+
 /* handling_env_var.c */
 char *environment_variable(char *input, int *index);
 

@@ -7,11 +7,19 @@ SOURCES = \
 		src/handling_redir.c \
 		src/init_data.c \
 		src/parsing.c \
+<<<<<<< HEAD
+		src/main.c \
+		src/signals.c \
+		#src/builtins/exec_builtin.c \
+		#src/builtins/enviroment.c \
+		#src/builtins/env_utils.c \
+=======
 		src/signals.c \
 		src/builtins/exec_builtin.c \
 		src/builtins/enviroment.c \
 		src/builtins/env_utils.c \
 		src/main.c
+>>>>>>> origin
 		#src/execution/test_main.c 
 		#src/main.c 
 
