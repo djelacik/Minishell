@@ -96,6 +96,7 @@ int	main(int argc, char **argv)
 {
 	(void)argc;
 	(void)argv;
+	t_cmnds		cmnds;
 	char		*input;
 	t_tokens	*tokens;
 	t_data		*data;
@@ -120,6 +121,7 @@ int	main(int argc, char **argv)
 			data = init_data(tokens);
 			if (data)
 			{
+				cmnds.data = data;
 				print_data(data);
 				free_data(data);
 			}
