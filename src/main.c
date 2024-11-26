@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-static void	print_cmnd_args(t_data *data, int index)
+/*static void	print_cmnd_args(t_data *data, int index)
 {
 	int	i;
 
@@ -52,7 +52,7 @@ static void	print_data(t_data *data)
 		i++;
 	}
 
-}
+}*/
 
 static void	free_data(t_data *data)
 {
@@ -117,12 +117,13 @@ int	main(int argc, char **argv)
 		tokens = tokenize_input(input);
 		if (tokens)
 		{
-			print_tokens(tokens);
+			//print_tokens(tokens);
 			data = init_data(tokens);
 			if (data)
 			{
 				cmnds.data = data;
-				print_data(data);
+				print_cmnds(&cmnds);
+				//print_data(data);
 				free_data(data);
 			}
 			free_tokens(tokens);

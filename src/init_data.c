@@ -5,10 +5,12 @@ t_data	*init_data(t_tokens *tokens)
 	t_data		*data;
 	int			i;
 	int			arg_count;
+	int			redir_count;
 	int			j;
 	int			k;
 	int			count;
 	int			args_index;
+	int			redir_index;
 
 	i = 0;
 	count = 0;
@@ -25,29 +27,39 @@ t_data	*init_data(t_tokens *tokens)
 	data->redir_count = 0;
 	data->cmnd_count = 1;
 	i = 0;
+	redir_count = 0;
 	while (tokens[i].token_string)
 	{
 		if (tokens[i].token_type == REDIR_INPUT || tokens[i].token_type == REDIR_OUTPUT || tokens[i].token_type == REDIR_APPEND || tokens[i].token_type == REDIR_HERE_DOC)
 		{
 			//data->token_count++;
 			i++;
-			data->redir_count++;
-			data->token_count++;
-			i++;
-			continue ;
+			redir_count++;
+			//data->token_count++;
+			//i++;
+			//continue ;
 		}
 		if (tokens[i].token_type == PIPE)
 			data->cmnd_count++;
-		else
-			data->token_count++;
+		/*else
+			data->token_count++;*/
 		i++;
+	}
+	data->redirs = malloc((redir_count + 1) * sizeof(t_redirect));
+	if (!data->redirs)
+	{
+		free(data);
+		return (NULL);
 	}
 	i = 0;
 	args_index = 0;
+	redir_index = 0;
 	j = 0;
+	redir_count = 0;
 	while (j < data->cmnd_count)
 	{
 		arg_count = 0;
+		redir_index = 0;
 		k = i;
 		while (tokens[k].token_string && tokens[k].token_type != PIPE)
 		{
@@ -56,6 +68,7 @@ t_data	*init_data(t_tokens *tokens)
 			{
 				k++;
 				arg_count++;
+				redir_count++;
 			}
 			else
 				arg_count++;
@@ -76,12 +89,21 @@ t_data	*init_data(t_tokens *tokens)
 			if (tokens[i].token_type == REDIR_INPUT || tokens[i].token_type == REDIR_OUTPUT || tokens[i].token_type == REDIR_APPEND || tokens[i].token_type == REDIR_HERE_DOC)
 			{
 				i++;
+				data[j].redir_count++;
+				data[j].token_count++;
+				data[j].redirs = malloc((redir_count + 1) * sizeof(t_tokens));
+				if (!data[j].redirs)
+					return (NULL);
+				data[j].redirs[redir_index].file = ft_strdup(tokens[i].token_string);
+				data[j].redirs[redir_index].type = tokens[i].token_type;
 				data[j].args[args_index].token_string = ft_strdup(tokens[i].token_string);
 				data[j].args[args_index].token_type = tokens[i].token_type;
 				data[j].args[args_index].builtin_type = tokens[i].builtin_type;
+				redir_index++;
 			}
 			else
-			{	
+			{
+				data[j].token_count++;
 				data[j].args[args_index].token_string = ft_strdup(tokens[i].token_string);
 				data[j].args[args_index].token_type = tokens[i].token_type;
 				data[j].args[args_index].builtin_type = tokens[i].builtin_type;
@@ -89,6 +111,8 @@ t_data	*init_data(t_tokens *tokens)
 			args_index++;
 			i++;
 		}
+		if (data[j].redirs)
+			data[j].redirs[redir_index].file = NULL;
 		data[j].args[args_index].token_string = NULL;
 		if (tokens[i].token_type == PIPE)
 			i++;
