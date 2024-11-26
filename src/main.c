@@ -100,11 +100,18 @@ int	main(int argc, char **argv)
 	t_tokens	*tokens;
 	t_data		*data;
 
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, handle_sigquit);
 	while (1)
 	{
 		input = readline("minishell % ");
+		signal(SIGINT, handle_sigint);
+		signal(SIGQUIT, handle_sigquit);
 		if (!input) // when user exit with Ctrl+D, readline returns NULL
+		{
+			printf("exit\n");
 			break ;
+		}
 		add_history(input);
 		tokens = tokenize_input(input);
 		if (tokens)

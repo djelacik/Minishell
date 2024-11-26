@@ -10,6 +10,7 @@
 # include <readline/history.h> //readline, add_history
 # include <unistd.h> //dup2
 # include <fcntl.h> //open
+# include <signal.h> //signal
 
 #define MALLOC_ERR "malloc error\n"
 #define PIPE_ERR "pipe error\n"
@@ -66,7 +67,7 @@ typedef struct s_data //echo hello | grep "h"
 {
 	t_tokens		*args;			// Taulukko tokeneita
 	int				token_count;	// Tokenien määrä
-	int				cmnd_count;// this has to be removed
+	int				cmnd_count;
 	t_redirect		*redirs;			// Taulukko uudelleenohjauksia
 	int				redir_count;		// Uudelleenohjausten määrä
 }	t_data;
@@ -81,6 +82,9 @@ typedef struct s_cmnds
 	char		**env_cpy;
 	t_env		*env_list;
 } t_cmnds;
+
+/* signals.c */
+void	handle_sigint(int sig);
 
 /* handling_env_var.c */
 char *environment_variable(char *input, int *index);
@@ -112,6 +116,10 @@ t_data	*init_data(t_tokens *tokens);
 /* parsing.c */
 t_tokens	*tokenize_input(char *input);
 char *ft_strndup(const char *src, size_t n);
+
+/* signals.c */
+void	handle_sigint(int sig);
+void	handle_sigquit(int sig);
 
 #endif
 
