@@ -9,8 +9,14 @@
 # define dbg_print(...) ((void)0)
 #endif
 
-struct s_command;
-typedef struct s_command t_command;
+struct s_tokens;
+typedef struct s_tokens t_tokens;
+
+struct s_data;
+typedef struct s_data t_data;
+
+struct s_cmnds;
+typedef struct s_cmnds t_cmnds;
 
 typedef enum e_redir_type
 {
