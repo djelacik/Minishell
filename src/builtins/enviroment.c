@@ -68,7 +68,6 @@ void	single_unset(t_env **head, char *key)
 void	ft_unset(t_env **head, t_data *data)
 {
 	int		i;
-	char	*value;
 
 	if (data->token_count > 2)
 	{
