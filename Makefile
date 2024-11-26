@@ -11,6 +11,7 @@ SOURCES = \
 		src/builtins/exec_builtin.c \
 		src/builtins/enviroment.c \
 		src/builtins/env_utils.c \
+		src/execution/debug.c \
 		src/main.c
 		#src/execution/test_main.c 
 		#src/main.c 
