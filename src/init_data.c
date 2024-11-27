@@ -57,7 +57,7 @@ t_data	*init_data(t_tokens *tokens)
 		k = i;
 		while (tokens[k].token_string && tokens[k].token_type != PIPE)
 		{
-			printf("string: %s\n", tokens[k].token_string);
+			//printf("string: %s\n", tokens[k].token_string);
 			if (tokens[k].token_type == REDIR_INPUT || tokens[k].token_type == REDIR_OUTPUT || tokens[k].token_type == REDIR_APPEND || tokens[k].token_type == REDIR_HERE_DOC)
 			{
 				k++;
@@ -68,8 +68,8 @@ t_data	*init_data(t_tokens *tokens)
 				arg_count++;
 			k++;
 		}
-		printf("arg count: %d\n", arg_count);
-		printf("redir count: %d\n", redir_count);
+		//printf("arg count: %d\n", arg_count);
+		//printf("redir count: %d\n", redir_count);
 		data[j].args = malloc((arg_count + 1) * sizeof(t_tokens));
 		data[j].redirs = malloc((redir_count + 1) * sizeof(t_redirect));
 		if (!data[j].args || !data[j].redirs)
