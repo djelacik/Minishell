@@ -20,7 +20,7 @@ t_data	*init_data(t_tokens *tokens)
 			count++;
 		i++;
 	}
-	data = malloc((count + 1)* sizeof(t_data));
+	data = malloc((count + 1) * sizeof(t_data));
 	if (!data)
 		return (NULL);
 	data->token_count = 0;
@@ -32,34 +32,28 @@ t_data	*init_data(t_tokens *tokens)
 	{
 		if (tokens[i].token_type == REDIR_INPUT || tokens[i].token_type == REDIR_OUTPUT || tokens[i].token_type == REDIR_APPEND || tokens[i].token_type == REDIR_HERE_DOC)
 		{
-			//data->token_count++;
 			i++;
 			redir_count++;
-			//data->token_count++;
-			//i++;
-			//continue ;
 		}
 		if (tokens[i].token_type == PIPE)
 			data->cmnd_count++;
-		/*else
-			data->token_count++;*/
 		i++;
 	}
-	data->redirs = malloc((redir_count + 1) * sizeof(t_redirect));
+	/*data->redirs = malloc((redir_count + 1) * sizeof(t_redirect));
 	if (!data->redirs)
 	{
 		free(data);
 		return (NULL);
-	}
+	}*/
 	i = 0;
-	args_index = 0;
-	redir_index = 0;
+	//args_index = 0;
+	//redir_index = 0;
 	j = 0;
 	redir_count = 0;
 	while (j < data->cmnd_count)
 	{
 		arg_count = 0;
-		redir_index = 0;
+		redir_count = 0;
 		k = i;
 		while (tokens[k].token_string && tokens[k].token_type != PIPE)
 		{
@@ -75,31 +69,36 @@ t_data	*init_data(t_tokens *tokens)
 			k++;
 		}
 		printf("arg count: %d\n", arg_count);
+		printf("redir count: %d\n", redir_count);
 		data[j].args = malloc((arg_count + 1) * sizeof(t_tokens));
-		if (!data[j].args)
+		data[j].redirs = malloc((redir_count + 1) * sizeof(t_redirect));
+		if (!data[j].args || !data[j].redirs)
 		{
 			while (--j >= 0)
+			{
 				free(data[j].args);
+				free(data[j].redirs);
+			}
 			free(data);
 			return (NULL);
 		}
 		args_index = 0;
+		redir_index = 0;
+		data[j].redir_count = 0;
+		data[j].token_count = 0;
 		while (tokens[i].token_string && tokens[i].token_type != PIPE)
 		{
 			if (tokens[i].token_type == REDIR_INPUT || tokens[i].token_type == REDIR_OUTPUT || tokens[i].token_type == REDIR_APPEND || tokens[i].token_type == REDIR_HERE_DOC)
 			{
 				i++;
 				data[j].redir_count++;
-				data[j].token_count++;
-				data[j].redirs = malloc((redir_count + 1) * sizeof(t_tokens));
-				if (!data[j].redirs)
-					return (NULL);
 				data[j].redirs[redir_index].file = ft_strdup(tokens[i].token_string);
 				data[j].redirs[redir_index].type = tokens[i].token_type;
+				redir_index++;
+				data[j].token_count++;
 				data[j].args[args_index].token_string = ft_strdup(tokens[i].token_string);
 				data[j].args[args_index].token_type = tokens[i].token_type;
 				data[j].args[args_index].builtin_type = tokens[i].builtin_type;
-				redir_index++;
 			}
 			else
 			{
@@ -111,8 +110,7 @@ t_data	*init_data(t_tokens *tokens)
 			args_index++;
 			i++;
 		}
-		if (data[j].redirs)
-			data[j].redirs[redir_index].file = NULL;
+		data[j].redirs[redir_index].file = NULL;
 		data[j].args[args_index].token_string = NULL;
 		if (tokens[i].token_type == PIPE)
 			i++;
