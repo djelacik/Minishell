@@ -2,7 +2,8 @@ NAME = minishell
 
 SOURCES = \
 		src/handling_env_var.c \
-		src/handling_quotes.c \
+		src/handling_double_q.c \
+		src/handling_single_q.c \
 		src/handling_pipes.c \
 		src/handling_redir.c \
 		src/init_data.c \
