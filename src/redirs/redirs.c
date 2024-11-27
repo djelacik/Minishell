@@ -41,19 +41,23 @@ void	handle_redirection(t_data *cmnd_data)
 {
 	int		i;
 
+	dbg_print("Handling redirections (redir_count: %d)\n", cmnd_data->redir_count);
 	i = 0;
 	while (i < cmnd_data->redir_count)
 	{
 		if (cmnd_data->redirs[i].type == REDIRECT_INPUT)// this part is for infile
 		{
+			dbg_print("Redirecting input from file: %s\n", cmnd_data->redirs[i].file);
 			handle_input(cmnd_data->redirs[i].file);
 		}
 		else if (cmnd_data->redirs[i].type == REDIRECT_OUTPUT)// this is for outfile
 		{
+			dbg_print("Redirecting output to file: %s\n", cmnd_data->redirs[i].file);
 			handle_output(cmnd_data->redirs[i].file);
 		}
 		else if (cmnd_data->redirs[i].type == REDIRECT_HEREDOC)
 		{
+			dbg_print("Handling heredoc redirection with delimiter: %s\n", cmnd_data->redirs[i].file);
 			handle_heredoc(cmnd_data->redirs[i].file);
 		}
 		i++;

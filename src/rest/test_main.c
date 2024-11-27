@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 18:23:55 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/27 15:36:52 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/27 19:56:48 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,13 @@ int	main(int argc, char **argv, char **env)
 	t_data		*data;
 
 	//temp lines for manual initilazion
-	t_env		*head;
 	ft_bzero(&cmnds, sizeof(t_cmnds));
-	init_list(&head, env);
-	
+	init_list(&cmnds.env_list, env);	
 	// ------------------------------ //
 
 	while (1)
 	{
-		input = readline("minishell % ");
+		input = readline("minishell >>> ");
 		if (!input) // when user exit with Ctrl+D, readline returns NULL
 		{
 			printf("exit\n");
@@ -83,7 +81,8 @@ int	main(int argc, char **argv, char **env)
 			if (data)
 			{
 				cmnds.data = data;
-				print_cmnds(&cmnds);
+				//print_cmnds(&cmnds);
+				cmnds.command_count = cmnds.data->cmnd_count; 
 				start_process(&cmnds);
 				free_data(data);
 			}

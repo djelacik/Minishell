@@ -12,6 +12,7 @@ static void	setup_pids(t_cmnds *cmnds)
 
 static int	fork_process(int i, int fd_in, int pipefd[2], t_cmnds *cmnds)
 {
+	dbg_print("Forking process %d (fd_in: %d, pipe_out: %d)\n", i, fd_in, pipefd[1]);
 	cmnds->pids[i] = fork();
 	if (cmnds->pids[i] < 0)
 	{
@@ -20,6 +21,7 @@ static int	fork_process(int i, int fd_in, int pipefd[2], t_cmnds *cmnds)
 	}
 	if (cmnds->pids[i] == 0)
 	{
+		dbg_print("Child process %d created (PID: %d)\n", i, getpid());
 		child_process(i, fd_in, pipefd, cmnds);
 	}
 	return (0);

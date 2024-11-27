@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:02:00 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/27 13:46:21 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/27 20:28:48 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	exec_echo(t_data *data)
 	int		new_line;
 
 	//token[0] is echo
+	dbg_print("Executing echo command\n");
 	i = 1;
 	new_line = 1;
 	if (data->token_count > 1 && ft_strcmp(data->args[i].token_string, "-n") == 0)
@@ -30,6 +31,7 @@ int	exec_echo(t_data *data)
 		printf("%s", data->args[i].token_string);
 		if (i + 1 < data->token_count) // " " between strings
 			printf(" ");
+		i++;
 	}
 	if (new_line)
 		printf("\n");
@@ -40,9 +42,11 @@ int	exec_pwd(void)
 {
 	char	*current_dir;
 
+	dbg_print("Executing pwd command\n");
 	current_dir = NULL;
 	if (getcwd(current_dir, sizeof(current_dir)) != NULL)
 	{
+		dbg_print("Current directory: %s\n", current_dir);
 		printf("%s\n", current_dir);
 	}
 	else
@@ -58,13 +62,16 @@ void	update_pwd(t_env **head)
 	char	pwd[1024];
 	char	*old_pwd;
 
+	dbg_print("Updating PWD and OLDPWD environment variables\n");
 	old_pwd = ft_getenv("PWD", *head);
 	if (getcwd(pwd, sizeof(pwd)) != NULL)
 	{
 		if (old_pwd != NULL)
 		{
+			dbg_print("Setting OLDPWD: %s\n", old_pwd);
 			ft_setenv("OLDPWD", old_pwd, head);
 		}
+		dbg_print("Setting PWD: %s\n", pwd);
 		ft_setenv("PWD", pwd, head);
 	}
 	else
@@ -77,6 +84,7 @@ void	ft_cd(t_data *data, t_env **head)
 {
 	char	*path;
 
+	dbg_print("Executing cd command\n");
 	if (data->token_count > 1)
 		path = data->args[1].token_string;
 	else
@@ -88,6 +96,7 @@ void	ft_cd(t_data *data, t_env **head)
 			return ;
 		}
 	}
+	dbg_print("Changing directory to: %s\n", path);
 	if (chdir(path) != 0)
 	{
 		perror("cd");
@@ -97,6 +106,7 @@ void	ft_cd(t_data *data, t_env **head)
 
 void	ft_exit(t_data *data)
 {
+	dbg_print("Executing exit command\n");
 	if (data->token_count > 1)
 	{
 		printf("Too many arguments for exit\n");

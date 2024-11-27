@@ -69,7 +69,7 @@ void	ft_unset(t_env **head, t_data *data)
 {
 	int		i;
 
-	if (data->token_count > 2)
+	if (data->token_count < 2)
 	{
 		printf("unset: not enough arguments\n");
 		return ;
