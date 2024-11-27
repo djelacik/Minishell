@@ -7,13 +7,22 @@ SOURCES = \
 		src/handling_redir.c \
 		src/init_data.c \
 		src/parsing.c \
-		src/signals.c \
-		src/builtins/exec_builtin.c \
-		src/builtins/enviroment.c \
 		src/builtins/env_utils.c \
-		src/execution/debug.c \
-		src/main.c
-		#src/execution/test_main.c 
+		src/builtins/env_utils2.c \
+		src/builtins/enviroment.c \
+		src/builtins/exec_builtin.c \
+		src/execution/exec_utils.c \
+		src/execution/exec.c \
+		src/execution/pipes.c \
+		src/execution/setup_start.c \
+		src/redirs/child_process.c \
+		src/redirs/here_doc.c \
+		src/redirs/redirs.c \
+		src/rest/debug.c \
+		src/rest/free.c \
+		src/rest/test_main.c 
+		#src/signals.c
+		#src/main.c
 		#src/main.c 
 
 OBJECTS = $(SOURCES:.c=.o)

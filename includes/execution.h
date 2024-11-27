@@ -38,6 +38,8 @@ int			exec_pwd(void);
 void		update_pwd(t_env **head);
 void		ft_cd(t_data *data, t_env **head);
 void		ft_exit(t_data *data);
+int			is_builtin(char *command);
+void		execute_builtin(t_data *data, t_cmnds *cmnds);
 
 //env func prototypes
 void		init_list(t_env **head, char **envp);
@@ -51,23 +53,35 @@ void		export_print(t_env *head);
 void		single_unset(t_env **head, char *key);
 void		ft_unset(t_env **head, t_data *data);
 void		free_env_list(t_env **head);
+int			get_lst_size(t_env *lst);
 char		*ft_getenv(char *key, t_env *head);
 void		ft_setenv(char *key, char *value, t_env **head);
+void		update_env_cpy(t_cmnds *cmnds);
 
 //pipe func prototypes
 void		setup_pipes(int i, int command_count, int pipefd[2]);
-void		setup_pids(t_cmnds *cmnds);
+//void		setup_pids(t_cmnds *cmnds);
 void		close_unused_pipes(int current, t_cmnds *cmnds);
 
 //process func prototypes
-int			fork_process(int i, int fd_in, int pipefd[2], t_cmnds *cmnds);
+void		start_process(t_cmnds *cmnds);
 void		child_process(int i, int fd_in, int pipe_fd[2], t_cmnds *cmnds);
+//int			execute_process(int i, int fd_in, t_cmnds *cmnds);
+//int			fork_process(int i, int fd_in, int pipefd[2], t_cmnds *cmnds);
+//void		wait_for_children(t_cmnds *cmnds);
 void		execute_command(t_data *data, t_cmnds *cmnds);
-void		wait_for_children(t_cmnds *cmnds);
+void		handle_redirection(t_data *cmnd_data);
 void		handle_heredoc(char *delimiter);
 
 //execution func protoypes
+
 void		*find_path(char *command, t_cmnds *cmnds);
+//char		**tokens_to_argv(t_tokens *tokens, int token_count);
+void		lst_to_arr(t_cmnds *cmnds);
 void		free_array(char **array);
+
+
+void		handle_heredoc(char *delimiter);
+void		handle_redirection(t_data *cmnd_data);
 
 #endif

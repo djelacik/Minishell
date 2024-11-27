@@ -81,7 +81,7 @@ void	free_structs(t_cmnds *cmnds)
 		i++;
 	}
 	free(cmnds->data);
-	free_env_list(cmnds->env_list);
+	free_env_list(&cmnds->env_list);
 	free_array(cmnds->env_cpy);
 	free(cmnds->pids);
 }
