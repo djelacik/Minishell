@@ -6,68 +6,89 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 18:23:55 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/25 18:57:39 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/27 15:36:52 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	print_arr(char **argv)
+static void	free_data(t_data *data)
 {
-	int		i;
+	int	i;
+	int	j;
 
 	i = 0;
-	while (argv[i])
+	if (!data)
+		return ;
+	while (i < data->cmnd_count)
 	{
-		printf("%s\n", argv[i]);
+		if (data[i].args)
+		{
+			j = 0;
+			while (data[i].args[j].token_string)
+			{
+				free(data[i].args[j].token_string);
+				j++;
+			}
+			free(data[i].args);
+		}
 		i++;
 	}
+	free(data);
 }
 
-void	init_data(t_data *data)
+static void	free_tokens(t_tokens *tokens)
 {
-	//allocate memory for t_tokens;
-	//allocate memory for t_redirect;
-	//rest of your functions for saving info
-}
+	int	i;
 
-void	init_structs(t_cmnds *commands, int cmd_count, char **envp)
-{
-	int		i;
-	
-	commands->data = malloc(sizeof(t_data) * cmd_count);
-	if (!commands->data)
-	{
-		perror(MALLOC_ERR);
-		exit(EXIT_FAILURE);
-	}
-	init_list(&commands->env_list, envp);
-	commands->command_count = cmd_count;
 	i = 0;
-	while (i < cmd_count)
+	while(tokens[i].token_string)
 	{
-		init_data(&commands->data[i]);
+		free(tokens[i].token_string);
 		i++;
 	}
-	//rest of your functions
+	free(tokens);
 }
 
-int	main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **env)
 {
-	char		*input;
+	(void)argc;
+	(void)argv;
 	t_cmnds		cmnds;
-	int			cmd_count;
+	char		*input;
+	t_tokens	*tokens;
+	t_data		*data;
+
+	//temp lines for manual initilazion
+	t_env		*head;
+	ft_bzero(&cmnds, sizeof(t_cmnds));
+	init_list(&head, env);
 	
-	cmd_count = calculate_cmd_count();
-	init_structs(&cmnds, cmd_count, envp);
+	// ------------------------------ //
+
 	while (1)
 	{
 		input = readline("minishell % ");
 		if (!input) // when user exit with Ctrl+D, readline returns NULL
+		{
+			printf("exit\n");
 			break ;
+		}
 		add_history(input);
-		save_info(input);//we should save everything trough one function
-		execution(&cmnds);
+		tokens = tokenize_input(input);
+		if (tokens)
+		{
+			//print_tokens(tokens);
+			data = init_data(tokens);
+			if (data)
+			{
+				cmnds.data = data;
+				print_cmnds(&cmnds);
+				start_process(&cmnds);
+				free_data(data);
+			}
+			free_tokens(tokens);
+		}
 		free(input);
 	}
 	return(0);
