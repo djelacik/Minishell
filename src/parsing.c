@@ -240,9 +240,72 @@ t_tokens	*tokenize_input(char *input)
 					free_exist_tokens(tokens, j);
 					return (NULL);
 				}
+				if (input[i] == '<' || input[i] == '>')
+				{
+					if (i > start)
+					{
+						tokens[j].token_string = ft_strndup(&input[start], i - start);
+						tokens[j].token_type = ARGUMENT;
+						tokens[j].builtin_type = BUILTIN_NONE;
+						j++;
+					}
+					if (input[i] == '<' && input[i + 1] == '<')
+					{
+						tokens[j].token_string = ft_strdup("<<");
+						tokens[j].token_type = REDIR_HERE_DOC;
+						i += 2;
+
+					}
+					else if (input[i] == '>' && input[i + 1] == '>')
+					{
+						tokens[j].token_string = ft_strdup(">>");
+						tokens[j].token_type = REDIR_APPEND;
+						i += 2;
+
+					}
+					else if (input[i] == '>')
+					{
+						tokens[j].token_string = ft_strdup(">");
+						tokens[j].token_type = REDIR_OUTPUT;
+						i++;
+
+					}
+					else if (input[i] == '<')
+					{
+						tokens[j].token_string = ft_strdup("<");
+						tokens[j].token_type = REDIR_INPUT;
+						i++;
+					}
+					j++;
+					start = i;
+					continue ;
+
+				}
+				if (input[i] == '|')
+				{
+					if (i > start)
+					{
+						tokens[j].token_string = ft_strndup(&input[start], i - start);
+						tokens[j].token_type = ARGUMENT;
+						tokens[j].builtin_type = BUILTIN_NONE;
+						j++;
+					}
+					if (input[i] == '|')
+					{
+						tokens[j].token_string = ft_strdup("|");
+						tokens[j].token_type = PIPE;
+						i++;
+
+					}
+					j++;
+					start = i;
+					continue ;
+
+				}
 				i++;
 			}
-			tokens[j].token_string = ft_strndup(&input[start], i - start);
+			if (i > start)
+				tokens[j].token_string = ft_strndup(&input[start], i - start);
 		}
 		if (!tokens[j].token_string)
 		{
@@ -254,11 +317,6 @@ t_tokens	*tokenize_input(char *input)
 			free(tokens);
 			return (NULL);
 		}
-		/*if (j == 0)
-		{
-			tokens[j].token_type = COMMAND;
-			tokens[j].builtin_type = builtin_type(tokens[j].token_string);
-		}*/
 		if (j == 0 || ft_strcmp(tokens[j - 1].token_string, "|") == 0)
 		{
 			tokens[j].token_type = COMMAND;
