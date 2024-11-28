@@ -3,9 +3,11 @@
 static void	close_unused_fds(void)
 {
 	int		fd;
+	int		open_max;
 
 	fd = 3;
-	while (fd < OPEN_MAX)
+	open_max = 1024;
+	while (fd < open_max)
 	{
 		close(fd);
 		fd++;
