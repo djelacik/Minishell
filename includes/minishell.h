@@ -18,6 +18,9 @@
 # include <unistd.h> //dup2
 # include <fcntl.h> //open
 # include <signal.h> //signal
+# include <sys/wait.h>
+# include <limits.h>
+
 
 #define MALLOC_ERR "malloc error\n"
 #define PIPE_ERR "pipe error\n"
