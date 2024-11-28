@@ -9,7 +9,7 @@ static void	append_env(char *quoted_input, int *i, char *env_var)
 		quoted_input[(*i)++] = env_var[j++];
 }
 
-static void	extract_double_content(char *input, int *index, char *quoted_input)
+static void	extract_double_content(char *input, int *index, char *quoted_input, t_env **env_list)
 {
 	char	*env_var;
 	int		i;
@@ -19,7 +19,7 @@ static void	extract_double_content(char *input, int *index, char *quoted_input)
 	{
 		if (input[*index] == '$')
 		{
-			env_var = environment_variable(input, index);
+			env_var = environment_variable(input, index, env_list);
 			if (env_var)
 			{
 				append_env(quoted_input, &i, env_var);
@@ -36,18 +36,18 @@ static void	extract_double_content(char *input, int *index, char *quoted_input)
 	quoted_input[i] = '\0';
 }
 
-static char	*extract_double_input(char *input, int *index)
+static char	*extract_double_input(char *input, int *index, t_env **env_list)
 {
 	char	*quoted_input;
 	int		quoted_len;
 
-	quoted_len = calculate_double_len(input, *index, '"');
+	quoted_len = calculate_double_len(input, *index, '"', env_list);
 	quoted_input = malloc((quoted_len + 1) * sizeof(char));
 	if (!quoted_input)
 		return (NULL);
 	if (input[*index] && input[*index] == '"')
 		(*index)++;
-	extract_double_content(input, index, quoted_input);
+	extract_double_content(input, index, quoted_input, env_list);
 	return (quoted_input);
 }
 
@@ -69,7 +69,7 @@ int	calculate_quotes_double(char *input)
 	return (1);
 }
 
-int	calculate_double_len(char *input, int start_index, char quote_type)
+int	calculate_double_len(char *input, int start_index, char quote_type, t_env **env_list)
 {
 	char	*env_var;
 	int		len;
@@ -83,7 +83,7 @@ int	calculate_double_len(char *input, int start_index, char quote_type)
 	{
 		if (input[i] == '$')
 		{
-			env_var = environment_variable(input, &i);
+			env_var = environment_variable(input, &i, env_list);
 			if (env_var)
 			{
 				len += ft_strlen(env_var);
@@ -97,13 +97,13 @@ int	calculate_double_len(char *input, int start_index, char quote_type)
 	return (len);
 }
 
-char	*double_quotes(char *input, int *index)
+char	*double_quotes(char *input, int *index, t_env **env_list)
 {
 	char	*quoted_input;
 	char	*parsed;
 
 	parsed = NULL;
-	quoted_input = extract_double_input(input, index);
+	quoted_input = extract_double_input(input, index, env_list);
 	if (!quoted_input)
 		return (NULL);
 	parsed = ft_strdup(quoted_input);

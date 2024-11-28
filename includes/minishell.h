@@ -93,13 +93,13 @@ typedef struct s_cmnds
 void	handle_sigint(int sig);
 
 /* handling_env_var.c */
-char *environment_variable(char *input, int *index);
+char *environment_variable(char *input, int *index, t_env **env_list);
 
 /* handling_quotes.c */
 int	calculate_single_len(char *input, int start_index, char quote_type);
 char *single_quotes(char *input, int *index);
-int	calculate_double_len(char *input, int start_index, char quote_type);
-char *double_quotes(char *input, int *index);
+int	calculate_double_len(char *input, int start_index, char quote_type, t_env **env_list);
+char *double_quotes(char *input, int *index, t_env **env_list);
 int	calculate_quotes_double(char *input);
 int	calculate_quotes_single(char *input);
 
@@ -117,10 +117,10 @@ int	handle_redir_here_doc(const char *delimiter);
 t_data	*init_data(t_tokens *tokens);
 
 /* main.c */
-//int	main(int argc, char **argv);
+//int	main(int argc, char **argv, char **envp);
 
 /* parsing.c */
-t_tokens	*tokenize_input(char *input);
+t_tokens	*tokenize_input(char *input, t_env **env_list);
 char *ft_strndup(const char *src, size_t n);
 
 /* signals.c */
@@ -128,10 +128,10 @@ void	handle_sigint(int sig);
 void	handle_sigquit(int sig);
 
 /* debug.c */
-void	print_tokens(t_tokens *tokens, int token_count);
-void	print_redirects(t_redirect *redirs, int redir_count);
-void	print_data(t_data *data, int data_count);
-void	print_cmnds(t_cmnds *cmnds);
+//void	print_tokens(t_tokens *tokens, int token_count);
+//void	print_redirects(t_redirect *redirs, int redir_count);
+//void	print_data(t_data *data, int data_count);
+//void	print_cmnds(t_cmnds *cmnds);
 
 #endif
 

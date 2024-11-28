@@ -19,7 +19,7 @@ static t_builtin	builtin_type(char *command)
 	return (BUILTIN_NONE);
 }
 
-static int	count_tokens(char *input)
+static int	count_tokens(char *input, t_env **env_list)
 {
 	char	quote_type;
 	char	*env_var;
@@ -42,7 +42,7 @@ static int	count_tokens(char *input)
 			{
 				if (quote_type == '"' && input[i] == '$')
 				{
-					env_var = environment_variable(input, &i);
+					env_var = environment_variable(input, &i, env_list);
 					if (env_var)
 					{
 						count += ft_strlen(env_var);
@@ -64,7 +64,7 @@ static int	count_tokens(char *input)
 			{
 				if (input[i] == '$')
 				{
-					env_var = environment_variable(input, &i);
+					env_var = environment_variable(input, &i, env_list);
 					if (env_var)
 					{
 						count += ft_strlen(env_var);
@@ -114,7 +114,7 @@ static void	free_exist_tokens(t_tokens *tokens, int	index)
 	free(tokens);
 }
 
-t_tokens	*tokenize_input(char *input)
+t_tokens	*tokenize_input(char *input, t_env **env_list)
 {
 	t_tokens	*tokens;
 	int		token_count;
@@ -123,7 +123,7 @@ t_tokens	*tokenize_input(char *input)
 	int		k;
 	int		start;
 
-	token_count = count_tokens(input);
+	token_count = count_tokens(input, env_list);
 	tokens = malloc((token_count + 1) * sizeof(t_tokens));
 	if (!tokens)
 		return (NULL);
@@ -218,7 +218,7 @@ t_tokens	*tokenize_input(char *input)
 					free_exist_tokens(tokens, j);
 					return (NULL);
 				}
-				tokens[j].token_string = double_quotes(input, &i);
+				tokens[j].token_string = double_quotes(input, &i, env_list);
 				if (tokens[j].token_string == NULL)
 				{
 					printf("syntax error: unexpected EOF while looking for matching `\"'\n");
@@ -228,7 +228,7 @@ t_tokens	*tokenize_input(char *input)
 			}
 		}
 		else if (input[i] == '$')
-			tokens[j].token_string = environment_variable(input, &i);
+			tokens[j].token_string = environment_variable(input, &i, env_list);
 		else
 		{
 			start = i;

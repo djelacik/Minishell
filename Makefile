@@ -21,9 +21,9 @@ SOURCES = \
 		src/redirs/redirs.c \
 		src/rest/debug.c \
 		src/rest/free.c \
-		src/rest/test_main.c 
+		src/main.c \
+		#src/rest/test_main.c 
 		#src/signals.c
-		#src/main.c
 		#src/main.c 
 
 OBJECTS = $(SOURCES:.c=.o)
