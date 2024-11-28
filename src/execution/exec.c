@@ -75,8 +75,10 @@ void	execute_command(t_data *data, t_cmnds *cmnds)
 	char	*cmd_path;
 	char	**argv;
 
+	dbg_print("Executing command: %s\n", data->args[0].token_string);
 	if (is_builtin(data->args[0].token_string))
 	{
+		dbg_print("Executing builtin command: %s\n", data->args[0].token_string);
 		execute_builtin(data, cmnds);
 		exit(EXIT_SUCCESS);
 	}
@@ -87,6 +89,9 @@ void	execute_command(t_data *data, t_cmnds *cmnds)
 		exit(EXIT_FAILURE);
 	}
 	argv = tokens_to_argv(data->args, data->token_count);
+	dbg_print("Command path: %s\n", cmd_path);
+	for (int i = 0; argv[i]; i++)
+		dbg_print("Arg[%d]: %s\n", i, argv[i]);
 	execve(cmd_path, argv, cmnds->env_cpy);
 	perror(EXEC_ERR);
 	free(cmd_path);

@@ -2,6 +2,13 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# define DEBUG_MIRE
+#ifdef DEBUG_MIRE
+# define m_printf(...) printf( __VA_ARGS__)
+#else
+# define m_printf(...) ((void)0)
+#endif
+
 # include "execution.h"
 # include "../libft/libft.h"
 # include <stdio.h> // printf, perror
@@ -19,8 +26,7 @@
 #define EXECVE_ERR "execve error\n"
 #define FORK_ERR "fork error\n"
 #define OPEN_ERR "open error\n"
-
-#define OPEN_MAX 1024
+#define	STRDUP_ERR "strdup error\n"
 
 # define EMPTY 0
 # define COMMAND 1
