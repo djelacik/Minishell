@@ -92,7 +92,7 @@ static void	free_tokens(t_tokens *tokens)
 	free(tokens);
 }
 
-int	main(int argc, char **argv)
+int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
@@ -100,21 +100,24 @@ int	main(int argc, char **argv)
 	char		*input;
 	t_tokens	*tokens;
 	t_data		*data;
+	t_env		*env_list;
 
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, handle_sigquit);
+	env_list = NULL;
+	init_list(&env_list, envp);
+	//signal(SIGINT, handle_sigint);
+	//signal(SIGQUIT, handle_sigquit);
 	while (1)
 	{
 		input = readline("minishell % ");
-		signal(SIGINT, handle_sigint);
-		signal(SIGQUIT, handle_sigquit);
+		//signal(SIGINT, handle_sigint);
+		//signal(SIGQUIT, handle_sigquit);
 		if (!input) // when user exit with Ctrl+D, readline returns NULL
 		{
 			printf("exit\n");
 			break ;
 		}
 		add_history(input);
-		tokens = tokenize_input(input);
+		tokens = tokenize_input(input, &env_list);
 		if (tokens)
 		{
 			//print_tokens(tokens);
@@ -122,7 +125,7 @@ int	main(int argc, char **argv)
 			if (data)
 			{
 				cmnds.data = data;
-				print_cmnds(&cmnds);
+				//print_cmnds(&cmnds);
 				//print_data(data);
 				free_data(data);
 			}
@@ -130,5 +133,6 @@ int	main(int argc, char **argv)
 		}
 		free(input);
 	}
+	free_env_list(&env_list);
 	return(0);
 }
