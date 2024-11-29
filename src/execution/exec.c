@@ -70,18 +70,12 @@ static char	**tokens_to_argv(t_tokens *tokens, int token_count)
 	argv[token_count] = NULL;
 	return (argv);
 }
-void	execute_command(t_data *data, t_cmnds *cmnds)
+void	execute_external(t_data *data, t_cmnds *cmnds)
 {
 	char	*cmd_path;
 	char	**argv;
 
-	dbg_print("Executing command: %s\n", data->args[0].token_string);
-	if (is_builtin(data->args[0].token_string))
-	{
-		dbg_print("Executing builtin command: %s\n", data->args[0].token_string);
-		execute_builtin(data, cmnds);
-		exit(EXIT_SUCCESS);
-	}
+	dbg_print("Executing external command: %s\n", data->args[0].token_string);
 	cmd_path = find_path(data->args[0].token_string, cmnds);
 	if (!cmd_path)
 	{

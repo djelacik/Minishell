@@ -37,7 +37,7 @@ static void handle_output(char *filename)
 }
 
 
-void	handle_redirection(t_data *cmnd_data)
+void	handle_redirections(t_data *cmnd_data)
 {
 	int		i;
 

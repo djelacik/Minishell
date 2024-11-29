@@ -38,12 +38,33 @@ static int	execute_process(int i, int fd_in, t_cmnds *cmnds)
 		exit(EXIT_FAILURE);
 	}
 	if (fd_in != STDIN_FILENO)
-		close(fd_in);
+	{
+		dbg_print("Parent closing fd_in: %d\n", fd_in);
+		//close(fd_in);
+	}
+	if (pipe_fd[1] != -1)
+	{
+		dbg_print("Parent closing pipe_fd[1]: %d\n", pipe_fd[1]);
+		close(pipe_fd[1]);
+	}
 	if (i < cmnds->command_count - 1)
 		return (pipe_fd[0]);
-	return (STDIN_FILENO);
-
+	else
+	{
+		if (fd_in != STDIN_FILENO)
+		{
+			dbg_print("Parent closing fd_in: %d\n", fd_in);
+			close(fd_in);
+		}
+		if (pipe_fd[0] != -1)
+		{
+			dbg_print("Parent closing pipe_fd[0]: %d\n", pipe_fd[0]);
+			close(pipe_fd[0]);
+		}
+		return (STDIN_FILENO);
+	}
 }
+
 
 static void	wait_for_children(t_cmnds *cmnds)
 {
@@ -59,6 +80,44 @@ static void	wait_for_children(t_cmnds *cmnds)
 	//free(cmnds->pids);
 }
 
+static void	execute_in_parent(t_data *data, t_cmnds *cmnds)
+{
+	int		saved_stdin;
+	int		saved_stdout;
+
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	handle_redirections(data);
+	execute_builtin(data, cmnds);
+	dup2(saved_stdin, STDIN_FILENO);
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdin);
+	close(saved_stdout);
+}
+
+
+static int	should_execute_in_parent(t_data *data, int command_count)
+{
+	if (command_count == 1 && is_builtin(data->args[0].token_string))
+		return 1;
+	return 0;
+}
+
+static void	set_is_in_pipe(t_cmnds *cmnds)
+{
+	int		i;
+
+	i = 0;
+	while (i < cmnds->command_count)
+	{
+		if (cmnds->command_count > 1)
+			cmnds->data[i].is_in_pipe = 1;
+		else
+			cmnds->data[i].is_in_pipe = 0;
+		i++;
+	}
+}
+
 void	start_process(t_cmnds *cmnds)
 {
 	int		i;
@@ -66,13 +125,24 @@ void	start_process(t_cmnds *cmnds)
 
 	fd_in = STDIN_FILENO;
 	setup_pids(cmnds);
+	set_is_in_pipe(cmnds);
 	i = 0;
 	while (i < cmnds->command_count)
 	{
-		fd_in = execute_process(i, fd_in, cmnds);
+		if (should_execute_in_parent(&cmnds->data[i], cmnds->command_count))
+		{
+			dbg_print("We are executing in parent\n");
+			execute_in_parent(&cmnds->data[i], cmnds);
+		}
+		else
+		{
+			dbg_print("We are executing in child\n");
+			fd_in = execute_process(i, fd_in, cmnds);
+		}
 		i++;
 	}
 	if (fd_in != STDIN_FILENO)
 		close(fd_in);
 	wait_for_children(cmnds);
 }
+
