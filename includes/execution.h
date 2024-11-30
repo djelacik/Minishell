@@ -69,8 +69,8 @@ void		child_process(int i, int fd_in, int pipe_fd[2], t_cmnds *cmnds);
 //int			execute_process(int i, int fd_in, t_cmnds *cmnds);
 //int			fork_process(int i, int fd_in, int pipefd[2], t_cmnds *cmnds);
 //void		wait_for_children(t_cmnds *cmnds);
-void		execute_command(t_data *data, t_cmnds *cmnds);
-void		handle_redirection(t_data *cmnd_data);
+void		execute_external(t_data *data, t_cmnds *cmnds);
+void		handle_redirections(t_data *cmnd_data);
 void		handle_heredoc(char *delimiter);
 
 //execution func protoypes

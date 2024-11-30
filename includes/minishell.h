@@ -79,6 +79,7 @@ typedef struct s_data //echo hello | grep "h"
 	int				cmnd_count;
 	t_redirect		*redirs;			// Taulukko uudelleenohjauksia
 	int				redir_count;		// Uudelleenohjausten määrä
+	int				is_in_pipe;
 }	t_data;
 
 typedef struct s_cmnds

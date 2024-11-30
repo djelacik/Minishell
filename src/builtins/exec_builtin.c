@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:02:00 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/27 20:28:48 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/11/28 16:33:53 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,9 @@ int	exec_echo(t_data *data)
 
 int	exec_pwd(void)
 {
-	char	*current_dir;
+	char	current_dir[1024];
 
 	dbg_print("Executing pwd command\n");
-	current_dir = NULL;
 	if (getcwd(current_dir, sizeof(current_dir)) != NULL)
 	{
 		dbg_print("Current directory: %s\n", current_dir);
@@ -59,25 +58,25 @@ int	exec_pwd(void)
 
 void	update_pwd(t_env **head)
 {
-	char	pwd[1024];
+	char	*pwd;
 	char	*old_pwd;
 
 	dbg_print("Updating PWD and OLDPWD environment variables\n");
 	old_pwd = ft_getenv("PWD", *head);
-	if (getcwd(pwd, sizeof(pwd)) != NULL)
-	{
-		if (old_pwd != NULL)
-		{
-			dbg_print("Setting OLDPWD: %s\n", old_pwd);
-			ft_setenv("OLDPWD", old_pwd, head);
-		}
-		dbg_print("Setting PWD: %s\n", pwd);
-		ft_setenv("PWD", pwd, head);
-	}
-	else
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
 	{
 		perror("getcwd error");
+		return ;
 	}
+	if (old_pwd != NULL)
+	{
+		dbg_print("Setting OLDPWD: %s\n", old_pwd);
+		ft_setenv("OLDPWD", old_pwd, head);
+	}
+	dbg_print("Setting PWD: %s\n", pwd);
+	ft_setenv("PWD", pwd, head);
+	free(pwd);
 }
 
 void	ft_cd(t_data *data, t_env **head)
@@ -102,6 +101,7 @@ void	ft_cd(t_data *data, t_env **head)
 		perror("cd");
 		return ;
 	}
+	update_pwd(head);
 }
 
 void	ft_exit(t_data *data)
