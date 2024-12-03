@@ -111,6 +111,7 @@ int	main(int argc, char **argv, char **envp)
 	env_list = NULL;
 	ft_bzero(&cmnds, sizeof(t_cmnds));
 	init_list(&env_list, envp);
+	init_list(&cmnds.env_list, envp);
 	while (1)
 	{
 		signal(SIGINT, handle_sigint);
