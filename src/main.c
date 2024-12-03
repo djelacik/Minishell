@@ -94,6 +94,7 @@ static void	free_tokens(t_tokens *tokens)
 
 int	main(int argc, char **argv, char **envp)
 {
+	struct termios	term;
 	(void)argc;
 	(void)argv;
 	t_cmnds		cmnds;
@@ -102,15 +103,19 @@ int	main(int argc, char **argv, char **envp)
 	t_data		*data;
 	t_env		*env_list;
 
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+		exit(EXIT_FAILURE);
+	term.c_lflag &= ~ECHOCTL;
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+		exit(EXIT_FAILURE);
 	env_list = NULL;
+	ft_bzero(&cmnds, sizeof(t_cmnds));
 	init_list(&env_list, envp);
-	//signal(SIGINT, handle_sigint);
-	//signal(SIGQUIT, handle_sigquit);
 	while (1)
 	{
+		signal(SIGINT, handle_sigint);
+		signal(SIGQUIT, SIG_IGN);
 		input = readline("minishell % ");
-		//signal(SIGINT, handle_sigint);
-		//signal(SIGQUIT, handle_sigquit);
 		if (!input) // when user exit with Ctrl+D, readline returns NULL
 		{
 			printf("exit\n");
@@ -127,6 +132,8 @@ int	main(int argc, char **argv, char **envp)
 				cmnds.data = data;
 				print_cmnds(&cmnds);
 				//print_data(data);
+				cmnds.command_count = cmnds.data->cmnd_count;
+				start_process(&cmnds);
 				free_data(data);
 			}
 			free_tokens(tokens);
