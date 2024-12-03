@@ -125,7 +125,7 @@ int	main(int argc, char **argv, char **envp)
 			if (data)
 			{
 				cmnds.data = data;
-				//print_cmnds(&cmnds);
+				print_cmnds(&cmnds);
 				//print_data(data);
 				free_data(data);
 			}
