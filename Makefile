@@ -19,10 +19,10 @@ SOURCES = \
 		src/redirs/child_process.c \
 		src/redirs/here_doc.c \
 		src/redirs/redirs.c \
-		src/rest/debug.c \
 		src/rest/free.c \
 		src/signals.c \
 		src/main.c \
+		src/rest/debug.c \
 		#src/rest/test_main.c 
 		#src/signals.c
 		#src/main.c 

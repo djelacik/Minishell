@@ -114,8 +114,8 @@ int	main(int argc, char **argv, char **envp)
 	init_list(&cmnds.env_list, envp);
 	while (1)
 	{
-		signal(SIGINT, handle_sigint);
-		signal(SIGQUIT, SIG_IGN);
+		//signal(SIGINT, handle_sigint);
+		//signal(SIGQUIT, SIG_IGN);
 		input = readline("minishell % ");
 		if (!input) // when user exit with Ctrl+D, readline returns NULL
 		{

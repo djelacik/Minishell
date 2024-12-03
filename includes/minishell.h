@@ -4,9 +4,9 @@
 
 # define DEBUG_MIRE
 #ifdef DEBUG_MIRE
-# define m_printf(...) printf( __VA_ARGS__)
+# define mprint(...) printf( __VA_ARGS__)
 #else
-# define m_printf(...) ((void)0)
+# define mprint(...) ((void)0)
 #endif
 
 # include "execution.h"
@@ -99,6 +99,7 @@ void	handle_sigint(int sig);
 
 /* handling_env_var.c */
 char *environment_variable(char *input, int *index, t_env **env_list);
+void	append_env(char *quoted_input, int *i, char *env_var);
 
 /* handling_quotes.c */
 int	calculate_single_len(char *input, int start_index, char quote_type);
