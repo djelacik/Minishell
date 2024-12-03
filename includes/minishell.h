@@ -132,10 +132,10 @@ void	handle_sigint(int sig);
 void	handle_sigquit(int sig);
 
 /* debug.c */
-//void	print_tokens(t_tokens *tokens, int token_count);
-//void	print_redirects(t_redirect *redirs, int redir_count);
-//void	print_data(t_data *data, int data_count);
-//void	print_cmnds(t_cmnds *cmnds);
+void	print_tokens(t_tokens *tokens, int token_count);
+void	print_redirects(t_redirect *redirs, int redir_count);
+void	print_data(t_data *data, int data_count);
+void	print_cmnds(t_cmnds *cmnds);
 
 #endif
 

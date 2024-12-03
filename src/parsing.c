@@ -228,7 +228,21 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 			}
 		}
 		else if (input[i] == '$')
+		{
 			tokens[j].token_string = environment_variable(input, &i, env_list);
+			if (input[i] == '=' || input[i] == '.')
+			{
+				char *env_temp = tokens[j].token_string;
+				char *temp;
+				start = i;
+				while (input[i] && input[i] != ' ' && input[i] != '\'' && input[i] != '"')
+					i++;
+				temp = ft_strndup(&input[start], i - start);
+				tokens[j].token_string = ft_strjoin(env_temp, temp);;
+				free(temp);
+				free(env_temp);
+			}
+		}
 		else
 		{
 			start = i;
@@ -251,6 +265,15 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 					}
 					if (input[i] == '<' && input[i + 1] == '<')
 					{
+						if (input[i + 2] == '<' || input[i + 2] == '>' || input[i + 2] == '|')
+						{
+							while (input[i] && (input[i] == '<' || input[i] == '>' || input[i] == '|'))
+								i++;
+							tokens[j].token_string = ft_strndup(&input[i - 1], 1);
+							printf("syntax error near unexpected token `%s'\n", tokens[j].token_string);
+							free_exist_tokens(tokens, j);
+							return (NULL);
+						}
 						tokens[j].token_string = ft_strdup("<<");
 						tokens[j].token_type = REDIR_HERE_DOC;
 						i += 2;
@@ -258,6 +281,15 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 					}
 					else if (input[i] == '>' && input[i + 1] == '>')
 					{
+						if (input[i + 2] == '>' || input[i + 2] == '<' || input[i + 2] == '|')
+						{
+							while (input[i] && (input[i] == '<' || input[i] == '>' || input[i] == '|'))
+								i++;
+							tokens[j].token_string = ft_strndup(&input[i - 1], 1);
+							printf("syntax error near unexpected token `%s'\n", tokens[j].token_string);
+							free_exist_tokens(tokens, j);
+							return (NULL);
+						}
 						tokens[j].token_string = ft_strdup(">>");
 						tokens[j].token_type = REDIR_APPEND;
 						i += 2;

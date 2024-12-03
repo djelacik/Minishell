@@ -12,7 +12,7 @@ static char	*handle_input_redir(char *input, int *index, t_tokens *tokens)
 		return (NULL);
 	if (input[k] == '<' || input[k] == '>' || input[k] == '|')
 	{
-		if (input[k + 1] == '<' || input[k] == '>')
+		if (input[k + 1] == '<' || input[k + 1] == '>')
 		{
 			symbol = ft_strndup(&input[k], 2);
 		}
@@ -41,7 +41,7 @@ static char	*handle_here_doc(char *input, int *index, t_tokens *tokens)
 		return (NULL);
 	if (input[k] == '<' || input[k] == '>' || input[k] == '|')
 	{
-		if (input[k + 1] == '<' || input[k] == '>')
+		if (input[k + 1] == '<' || input[k + 1] == '>')
 		{
 			symbol = ft_strndup(&input[k], 2);
 		}
@@ -70,7 +70,7 @@ static char	*handle_output_redir(char *input, int *index, t_tokens *tokens)
 		return (NULL);
 	if (input[k] == '<' || input[k] == '>' || input[k] == '|')
 	{
-		if (input[k + 1] == '<' || input[k] == '>')
+		if (input[k + 1] == '<' || input[k + 1] == '>')
 		{
 			symbol = ft_strndup(&input[k], 2);
 		}
@@ -99,7 +99,7 @@ static char	*handle_append_redir(char *input, int *index, t_tokens *tokens)
 		return (NULL);
 	if (input[k] == '<' || input[k] == '>' || input[k] == '|')
 	{
-		if (input[k + 1] == '<' || input[k] == '>')
+		if (input[k + 1] == '<' || input[k + 1] == '>')
 		{
 			symbol = ft_strndup(&input[k], 2);
 		}
