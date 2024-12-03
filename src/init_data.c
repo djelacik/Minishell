@@ -61,7 +61,7 @@ t_data	*init_data(t_tokens *tokens)
 			if (tokens[k].token_type == REDIR_INPUT || tokens[k].token_type == REDIR_OUTPUT || tokens[k].token_type == REDIR_APPEND || tokens[k].token_type == REDIR_HERE_DOC)
 			{
 				k++;
-				arg_count++;
+				//arg_count++;
 				redir_count++;
 			}
 			else
@@ -95,10 +95,10 @@ t_data	*init_data(t_tokens *tokens)
 				data[j].redirs[redir_index].file = ft_strdup(tokens[i].token_string);
 				data[j].redirs[redir_index].type = tokens[i].token_type;
 				redir_index++;
-				data[j].token_count++;
-				data[j].args[args_index].token_string = ft_strdup(tokens[i].token_string);
-				data[j].args[args_index].token_type = tokens[i].token_type;
-				data[j].args[args_index].builtin_type = tokens[i].builtin_type;
+				//data[j].token_count++;
+				//data[j].args[args_index].token_string = ft_strdup(tokens[i].token_string);
+				//data[j].args[args_index].token_type = tokens[i].token_type;
+				//data[j].args[args_index].builtin_type = tokens[i].builtin_type;
 			}
 			else
 			{
@@ -106,8 +106,9 @@ t_data	*init_data(t_tokens *tokens)
 				data[j].args[args_index].token_string = ft_strdup(tokens[i].token_string);
 				data[j].args[args_index].token_type = tokens[i].token_type;
 				data[j].args[args_index].builtin_type = tokens[i].builtin_type;
+				args_index++;
 			}
-			args_index++;
+			//args_index++;
 			i++;
 		}
 		data[j].redirs[redir_index].file = NULL;
