@@ -20,6 +20,7 @@
 # include <signal.h> //signal
 # include <sys/wait.h>
 # include <limits.h>
+# include <termios.h>
 
 
 #define MALLOC_ERR "malloc error\n"
