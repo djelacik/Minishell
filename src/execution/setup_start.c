@@ -40,7 +40,7 @@ static int	execute_process(int i, int fd_in, t_cmnds *cmnds)
 	if (fd_in != STDIN_FILENO)
 	{
 		dbg_print("Parent closing fd_in: %d\n", fd_in);
-		//close(fd_in);
+		close(fd_in);
 	}
 	if (pipe_fd[1] != -1)
 	{

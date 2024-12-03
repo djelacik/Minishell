@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 18:23:55 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/27 19:56:48 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/12/03 15:40:22 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	main(int argc, char **argv, char **env)
 			break ;
 		}
 		add_history(input);
-		tokens = tokenize_input(input);
+		tokens = tokenize_input(input, &cmnds.env_list);
 		if (tokens)
 		{
 			//print_tokens(tokens);
@@ -81,8 +81,8 @@ int	main(int argc, char **argv, char **env)
 			if (data)
 			{
 				cmnds.data = data;
-				//print_cmnds(&cmnds);
-				cmnds.command_count = cmnds.data->cmnd_count; 
+				print_cmnds(&cmnds);
+				cmnds.command_count = cmnds.data->cmnd_count;
 				start_process(&cmnds);
 				free_data(data);
 			}
