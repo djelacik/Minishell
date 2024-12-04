@@ -122,6 +122,8 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 	int		j;
 	int		k;
 	int		start;
+	char	*temp;
+	char	*quoted;
 
 	token_count = count_tokens(input, env_list);
 	tokens = malloc((token_count + 1) * sizeof(t_tokens));
@@ -129,6 +131,7 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 		return (NULL);
 	i = 0;
 	j = 0;
+	temp = NULL;
 	while (input[i])
 	{
 		while (input[i] == ' ')
@@ -139,13 +142,6 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 			free_exist_tokens(tokens, j);
 			return (NULL);
 		}
-		/*if ((ft_isalpha(input[0]) == 0 && input[0] != '/' && input[0] != '\'' && input[0] != '"') || ft_isspace(input[0] == 1) || (ft_isalpha(input[i]) == 0 && input[i] != '/' && input[i] != '\'' && input[i] != '"' && j == 0) || ft_isspace(input[i]) == 1)
-		{
-			tokens[j].token_string = ft_strdup(&input[i]);
-			printf("%s: command not found\n", tokens[j].token_string);
-			free_exist_tokens(tokens, j);
-			return (NULL);
-		}*/
 		if (!input[i])
 			break;
 		if (input[0] == '/' && (input[i] == '/' && j == 0))
@@ -200,10 +196,11 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 		}
 		else if (input[i] == '\'' || input[i] == '"')
 		{
+			quoted = NULL;
 			if (input[i] == '\'')
 			{
-				tokens[j].token_string = single_quotes(input, &i);
-				if (tokens[j].token_string == NULL)
+				quoted = single_quotes(input, &i);
+				if (quoted == NULL)
 				{
 					printf("syntax error: unexpected EOF while looking for matching `\''\n");
 					free_exist_tokens(tokens, j);
@@ -218,14 +215,25 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 					free_exist_tokens(tokens, j);
 					return (NULL);
 				}
-				tokens[j].token_string = double_quotes(input, &i, env_list);
-				if (tokens[j].token_string == NULL)
+				while (input[i] && input[i] == '"' && (input[i + 1] == '"' || input[i + 1] != ' '))
+					i++;
+				quoted = double_quotes(input, &i, env_list);
+				if (quoted == NULL)
 				{
 					printf("syntax error: unexpected EOF while looking for matching `\"'\n");
 					free_exist_tokens(tokens, j);
 					return (NULL);
 				}
 			}
+			if (tokens[j].token_string)
+			{
+				temp = tokens[j].token_string;
+				tokens[j].token_string = ft_strjoin(temp, quoted);
+				free(temp);
+				free(quoted);
+			}
+			else
+				tokens[j].token_string = quoted;
 		}
 		else if (input[i] == '$')
 		{
@@ -233,7 +241,6 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 			if (input[i] == '=' || input[i] == '.')
 			{
 				char *env_temp = tokens[j].token_string;
-				char *temp;
 				start = i;
 				while (input[i] && input[i] != ' ' && input[i] != '\'' && input[i] != '"')
 					i++;
@@ -277,7 +284,6 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 						tokens[j].token_string = ft_strdup("<<");
 						tokens[j].token_type = REDIR_HERE_DOC;
 						i += 2;
-
 					}
 					else if (input[i] == '>' && input[i + 1] == '>')
 					{
@@ -293,14 +299,12 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 						tokens[j].token_string = ft_strdup(">>");
 						tokens[j].token_type = REDIR_APPEND;
 						i += 2;
-
 					}
 					else if (input[i] == '>')
 					{
 						tokens[j].token_string = ft_strdup(">");
 						tokens[j].token_type = REDIR_OUTPUT;
 						i++;
-
 					}
 					else if (input[i] == '<')
 					{
@@ -311,7 +315,6 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 					j++;
 					start = i;
 					continue ;
-
 				}
 				if (input[i] == '|')
 				{
@@ -327,17 +330,29 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 						tokens[j].token_string = ft_strdup("|");
 						tokens[j].token_type = PIPE;
 						i++;
-
 					}
 					j++;
 					start = i;
 					continue ;
-
 				}
 				i++;
 			}
 			if (i > start)
-				tokens[j].token_string = ft_strndup(&input[start], i - start);
+			{
+				char *seg = ft_strndup(&input[start], i - start);
+				if (tokens[j].token_string)
+				{
+					temp = tokens[j].token_string;
+					tokens[j].token_string = ft_strjoin(temp, seg);
+					free(temp);
+					free(seg);
+				}
+				else
+				{
+					tokens[j].token_string = seg;
+				}
+				//tokens[j].token_string = ft_strndup(&input[start], i - start);
+			}
 		}
 		if (!tokens[j].token_string)
 		{
@@ -367,7 +382,8 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 			tokens[j].token_type = ARGUMENT;
 			tokens[j].builtin_type = BUILTIN_NONE;
 		}
-		j++;
+		if (input[i] == ' ' || input[i] == '\0')
+			j++;
 	}
 	tokens[j].token_string = NULL;
 	return (tokens);
