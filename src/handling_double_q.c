@@ -1,15 +1,7 @@
 #include "../includes/minishell.h"
 
-static void	append_env(char *quoted_input, int *i, char *env_var)
-{
-	int	j;
-
-	j = 0;
-	while (env_var[j])
-		quoted_input[(*i)++] = env_var[j++];
-}
-
-static void	extract_double_content(char *input, int *index, char *quoted_input, t_env **env_list)
+static void	extract_double_content(char *input, int *index, \
+		char *quoted_input, t_env **env_list)
 {
 	char	*env_var;
 	int		i;
@@ -69,7 +61,8 @@ int	calculate_quotes_double(char *input)
 	return (1);
 }
 
-int	calculate_double_len(char *input, int start_index, char quote_type, t_env **env_list)
+int	calculate_double_len(char *input, int start_index, \
+		char quote_type, t_env **env_list)
 {
 	char	*env_var;
 	int		len;
