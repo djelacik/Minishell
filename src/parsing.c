@@ -128,6 +128,14 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 	if (!tokens)
 		return (NULL);
 	i = 0;
+	while (i < token_count + 1)
+	{
+		tokens[i].token_string = NULL;
+		tokens[i].token_type = 0;
+		tokens[i].builtin_type = BUILTIN_NONE;
+		i++;
+	}
+	i = 0;
 	j = 0;
 	while (input[i])
 	{
@@ -197,14 +205,15 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 			if (input[i] == '\'')
 			{
 				quoted = single_quotes(input, &i);
-				if (quoted == NULL)
+				//tokens[j].token_string = single_quotes(input, &i);
+				if (/*tokens[j].token_string == NULL*/ quoted == NULL)
 				{
 					printf("syntax error: unexpected EOF while looking for matching `\''\n");
 					free_exist_tokens(tokens, j);
 					return (NULL);
 				}
 			}
-			else
+			else if (input[i] == '"')
 			{
 				if (calculate_quotes_double(input) == 0)
 				{
@@ -214,8 +223,9 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 				}
 				while (input[i] && input[i] == '"' && (input[i + 1] == '"' || input[i + 1] != ' '))
 					i++;
+				//tokens[j].token_string = double_quotes(input, &i, env_list);
 				quoted = double_quotes(input, &i, env_list);
-				if (quoted == NULL)
+				if (/*tokens[j].token_string == NULL*/ quoted == NULL)
 				{
 					printf("syntax error: unexpected EOF while looking for matching `\"'\n");
 					free_exist_tokens(tokens, j);
@@ -224,16 +234,13 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 			}
 			if (tokens[j].token_string)
 			{
-				char *tempp = tokens[j].token_string;
-				tokens[j].token_string = ft_strjoin(tempp, quoted);
-				free(tempp);
+				char *a = tokens[j].token_string;
+				tokens[j].token_string = ft_strjoin(a, quoted);
+				free(a);
 				free(quoted);
 			}
 			else
-			{
 				tokens[j].token_string = quoted;
-				//quoted = NULL;
-			}
 
 		}
 		else if (input[i] == '$')
@@ -247,7 +254,7 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 				while (input[i] && input[i] != ' ' && input[i] != '\'' && input[i] != '"')
 					i++;
 				temp = ft_strndup(&input[start], i - start);
-				tokens[j].token_string = ft_strjoin(env_temp, temp);;
+				tokens[j].token_string = ft_strjoin(env_temp, temp);
 				free(temp);
 				free(env_temp);
 			}
@@ -341,18 +348,19 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 			}
 			if (i > start)
 			{
-				char *seg = ft_strndup(&input[start], i - start);
 				if (tokens[j].token_string)
 				{
-					char *tem = tokens[j].token_string;
+					char *seg;
+					char *tem;
+					seg = ft_strndup(&input[start], i - start);
+					tem = tokens[j].token_string;
 					tokens[j].token_string = ft_strjoin(tem, seg);
 					free(tem);
 					free(seg);
 				}
 				else
 				{
-					tokens[j].token_string = seg;
-					//free(seg);
+					tokens[j].token_string = ft_strndup(&input[start], i - start);
 				}
 				//tokens[j].token_string = ft_strndup(&input[start], i - start);
 			}
@@ -387,6 +395,7 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 		}
 		if (input[i] == ' ' || input[i] == '\0')
 			j++;
+		//j++;
 	}
 	tokens[j].token_string = NULL;
 	return (tokens);
