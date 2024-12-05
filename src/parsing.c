@@ -131,8 +131,6 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 	while (i < token_count + 1)
 	{
 		tokens[i].token_string = NULL;
-		tokens[i].token_type = 0;
-		tokens[i].builtin_type = BUILTIN_NONE;
 		i++;
 	}
 	i = 0;
