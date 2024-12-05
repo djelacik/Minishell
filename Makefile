@@ -7,6 +7,7 @@ SOURCES = \
 		src/handling_pipes.c \
 		src/handling_redir.c \
 		src/init_data.c \
+		src/init_data_utils.c \
 		src/parsing.c \
 		src/builtins/env_utils.c \
 		src/builtins/env_utils2.c \

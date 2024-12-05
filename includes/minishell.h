@@ -122,6 +122,11 @@ int	handle_redir_here_doc(const char *delimiter);
 /* init_data.c */
 t_data	*init_data(t_tokens *tokens);
 
+/* init_data_utils.c */
+int	count_commands(t_tokens *tokens);
+int	count_tokens(t_tokens *tokens, int *index);
+int	count_redirs(t_tokens *tokens, int *index);
+
 /* main.c */
 //int	main(int argc, char **argv, char **envp);
 
