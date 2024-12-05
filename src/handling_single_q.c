@@ -75,7 +75,7 @@ char	*single_quotes(char *input, int *index)
 		return (NULL);
 	parsed = ft_strdup(quoted_input);
 	free(quoted_input);
-	while (input[*index] == '\'')
+	if (input[*index] == '\'')
 		(*index)++;
 	return (parsed);
 }
