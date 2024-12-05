@@ -122,8 +122,6 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 	int		j;
 	int		k;
 	int		start;
-	char	*temp;
-	char	*quoted;
 
 	token_count = count_tokens(input, env_list);
 	tokens = malloc((token_count + 1) * sizeof(t_tokens));
@@ -131,7 +129,6 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 		return (NULL);
 	i = 0;
 	j = 0;
-	temp = NULL;
 	while (input[i])
 	{
 		while (input[i] == ' ')
@@ -196,7 +193,7 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 		}
 		else if (input[i] == '\'' || input[i] == '"')
 		{
-			quoted = NULL;
+			char *quoted = NULL;
 			if (input[i] == '\'')
 			{
 				quoted = single_quotes(input, &i);
@@ -227,13 +224,17 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 			}
 			if (tokens[j].token_string)
 			{
-				temp = tokens[j].token_string;
-				tokens[j].token_string = ft_strjoin(temp, quoted);
-				free(temp);
+				char *tempp = tokens[j].token_string;
+				tokens[j].token_string = ft_strjoin(tempp, quoted);
+				free(tempp);
 				free(quoted);
 			}
 			else
+			{
 				tokens[j].token_string = quoted;
+				//quoted = NULL;
+			}
+
 		}
 		else if (input[i] == '$')
 		{
@@ -241,6 +242,7 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 			if (input[i] == '=' || input[i] == '.')
 			{
 				char *env_temp = tokens[j].token_string;
+				char *temp;
 				start = i;
 				while (input[i] && input[i] != ' ' && input[i] != '\'' && input[i] != '"')
 					i++;
@@ -342,14 +344,15 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 				char *seg = ft_strndup(&input[start], i - start);
 				if (tokens[j].token_string)
 				{
-					temp = tokens[j].token_string;
-					tokens[j].token_string = ft_strjoin(temp, seg);
-					free(temp);
+					char *tem = tokens[j].token_string;
+					tokens[j].token_string = ft_strjoin(tem, seg);
+					free(tem);
 					free(seg);
 				}
 				else
 				{
 					tokens[j].token_string = seg;
+					//free(seg);
 				}
 				//tokens[j].token_string = ft_strndup(&input[start], i - start);
 			}
