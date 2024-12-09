@@ -42,6 +42,8 @@
 # define PIPE 7
 # define SPECIAL_SYMB 8
 
+# define CONTINUE_PRO 2
+
 typedef enum e_builtin
 {
 	BUILTIN_NONE,
@@ -60,6 +62,13 @@ typedef struct s_tokens
 	int			token_type;
 	t_builtin	builtin_type; // builtin commands are executed differently, so we use a enum for type.
 }	t_tokens;
+
+typedef struct s_id
+{
+	t_tokens	*tokens;
+	int			*i;
+	int			*j;
+}	t_id;
 
 typedef struct s_redirect {
 	char			*file;
@@ -94,38 +103,49 @@ typedef struct s_cmnds
 	t_env		*env_list;
 } t_cmnds;
 
+/* count_tokens.c */
+int count_quoted_tokens(char *input, int *i, char quote_type, t_env **env_list);
+int	count_unquoted_tokens(char *input, int *i, t_env **env_list);
+int	count_tokens(char *input, t_env **env_list);
+
+/* free_functions.c */
+void	free_exist_tokens(t_tokens *tokens, int index);
+void	free_empty(char *input, t_tokens *tokens, int *j);
+void	free_id_and_tokens(t_id *id, t_tokens *tokens, int j);
+void	free_id(t_id *id);
+
 /* signals.c */
 void	handle_sigint(int sig);
 
 /* handling_env_var.c */
-char *environment_variable(char *input, int *index, t_env **env_list);
+char	*environment_variable(char *input, int *index, t_env **env_list);
 void	append_env(char *quoted_input, int *i, char *env_var);
 
 /* handling_quotes.c */
-int	calculate_single_len(char *input, int start_index, char quote_type);
-char *single_quotes(char *input, int *index);
-int	calculate_double_len(char *input, int start_index, char quote_type, t_env **env_list);
-char *double_quotes(char *input, int *index, t_env **env_list);
-int	calculate_quotes_double(char *input);
-int	calculate_quotes_single(char *input);
+int		calculate_single_len(char *input, int start_index, char quote_type);
+char	*single_quotes(char *input, int *index);
+int		calculate_double_len(char *input, int start_index, char quote_type, t_env **env_list);
+char	*double_quotes(char *input, int *index, t_env **env_list);
+int		calculate_quotes_double(char *input);
+int		calculate_quotes_single(char *input);
 
 /* handling_pipes.c */
 char	*handle_pipes(char *input, int *index, t_tokens *tokens);
 
 /* handling_redir.c */
-char *redir_symb(char *input, int *index, t_tokens *tokens);
-int	handle_redir_input(const char *file);
-int	handle_redir_output(const char *file);
-int	handle_redir_append(const char *file);
-int	handle_redir_here_doc(const char *delimiter);
+char	*redir_symb(char *input, int *index, t_tokens *tokens);
+int		handle_redir_input(const char *file);
+int		handle_redir_output(const char *file);
+int		handle_redir_append(const char *file);
+int		handle_redir_here_doc(const char *delimiter);
 
 /* init_data.c */
 t_data	*init_data(t_tokens *tokens);
 
 /* init_data_utils.c */
-int	count_commands(t_tokens *tokens);
-int	count_args(t_tokens *tokens, int *index);
-int	count_redirs(t_tokens *tokens, int *index);
+int		count_commands(t_tokens *tokens);
+int		count_args(t_tokens *tokens, int *index);
+int		count_redirs(t_tokens *tokens, int *index);
 t_data	*allocate_data(int command_count);
 void	free_data_fail(t_data *data, int count);
 
@@ -134,7 +154,38 @@ void	free_data_fail(t_data *data, int count);
 
 /* parsing.c */
 t_tokens	*tokenize_input(char *input, t_env **env_list);
-char *ft_strndup(const char *src, size_t n);
+
+/* parse_init.c */
+void	init_tokens(t_tokens *tokens, int count);
+int		init_id_and_tokens(t_id *id, t_tokens **tokens, char *input, t_env **env_list);
+
+/* parse_utils.c */
+t_builtin	builtin_type(char *command);
+char		*ft_strndup(const char *src, size_t n);
+
+/* parse_pro.c */
+int	process_start(char *input, t_id *id);
+int	process_redirs(char *input, t_id *id);
+int	process_pipe(char *input, t_id *id);
+int	process_dollar(char *input, t_id *id, t_env **env_list);
+
+/* parse_pro2.c */
+char	*singleq(char *input, int *i);
+char	*doubleq(char *input, int *i, t_env **env_list);
+int		process_quotes(char *input, t_id *id, t_env **env_list);
+
+/* parse_pro3.c */
+int	process_redir_arg(char *input, t_id *id, int start);
+int	process_double_here_doc(char *input, t_id *id);
+int	process_double_append(char *input, t_id *id);
+int	process_output(char *input, t_id *id);
+int	process_input(char *input, t_id *id);
+
+/* parse_pro4.c */
+int	process_rest_redir(char *input, t_id *id, int start);
+int	process_rest_pipe(char *input, t_id *id, int start);
+int	process_rest_args(char *input, t_id *id, int start);
+int	process_rest(char *input, t_id *id);
 
 /* signals.c */
 void	handle_sigint(int sig);
