@@ -1,14 +1,22 @@
 NAME = minishell
 
 SOURCES = \
-		src/handling_env_var.c \
-		src/handling_double_q.c \
-		src/handling_single_q.c \
-		src/handling_pipes.c \
-		src/handling_redir.c \
-		src/init_data.c \
-		src/init_data_utils.c \
-		src/parsing.c \
+		src/parsing/handling_env_var.c \
+		src/parsing/handling_double_q.c \
+		src/parsing/handling_single_q.c \
+		src/parsing/handling_pipes.c \
+		src/parsing/handling_redir.c \
+		src/parsing/count_tokens.c \
+		src/parsing/free_functions.c \
+		src/parsing/init_data.c \
+		src/parsing/init_data_utils.c \
+		src/parsing/parsing.c \
+		src/parsing/parse_init.c \
+		src/parsing/parse_utils.c \
+		src/parsing/parse_pro.c \
+		src/parsing/parse_pro2.c \
+		src/parsing/parse_pro3.c \
+		src/parsing/parse_pro4.c \
 		src/builtins/env_utils.c \
 		src/builtins/env_utils2.c \
 		src/builtins/enviroment.c \
