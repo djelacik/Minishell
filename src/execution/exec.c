@@ -76,7 +76,12 @@ void	execute_external(t_data *data, t_cmnds *cmnds)
 	char	**argv;
 
 	dbg_print("Executing external command: %s\n", data->args[0].token_string);
-	cmd_path = find_path(data->args[0].token_string, cmnds);
+
+	// Tarkista, onko komentona suora polku
+	if (ft_strchr(data->args[0].token_string, '/'))
+		cmd_path = ft_strdup(data->args[0].token_string);
+	else
+		cmd_path = find_path(data->args[0].token_string, cmnds);
 	if (!cmd_path)
 	{
 		fprintf(stderr, "minishell: command not found: %s\n", data->args[0].token_string);
