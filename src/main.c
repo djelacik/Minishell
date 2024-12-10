@@ -112,10 +112,11 @@ int	main(int argc, char **argv, char **envp)
 	ft_bzero(&cmnds, sizeof(t_cmnds));
 	init_list(&env_list, envp);
 	init_list(&cmnds.env_list, envp);
+	g_exit_status = 0;
 	while (1)
 	{
-		//signal(SIGINT, handle_sigint);
-		//signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, handle_sigint);
+		signal(SIGQUIT, handle_sigint);
 		input = readline("minishell % ");
 		if (!input) // when user exit with Ctrl+D, readline returns NULL
 		{

@@ -44,6 +44,8 @@
 
 # define CONTINUE_PRO 2
 
+extern int	g_exit_status;
+
 typedef enum e_builtin
 {
 	BUILTIN_NONE,
