@@ -15,6 +15,12 @@ static char	*extract_env_var(char *input, int *index, int *var_len)
 	int		i;
 
 	*var_len = 0;
+	if (input[*index] == '$' && input[*index + 1] == '?')
+	{
+		(*index) += 2;
+		(*var_len) += 2;
+		return (ft_strdup("?"));
+	}
 	(*index)++;
 	while (input[*index + *var_len] && (ft_isalnum(input[*index + *var_len]) \
 				|| input[*index + *var_len] == '_'))
@@ -44,7 +50,10 @@ char	*environment_variable(char *input, int *index, t_env **env_list)
 	var_name = extract_env_var(input, index, &var_len);
 	if (!var_len)
 		return (NULL);
-	env_var = ft_getenv(var_name, *env_list);
+	if (ft_strcmp(var_name, "?") == 0)
+		env_var = ft_itoa(g_exit_status);
+	else
+		env_var = ft_getenv(var_name, *env_list);
 	free(var_name);
 	if (!env_var)
 		return (ft_strdup(""));
