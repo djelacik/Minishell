@@ -180,8 +180,8 @@ int		process_quotes(char *input, t_id *id, t_env **env_list);
 int	process_redir_arg(char *input, t_id *id, int start);
 int	process_double_here_doc(char *input, t_id *id);
 int	process_double_append(char *input, t_id *id);
-int	process_output(char *input, t_id *id);
-int	process_input(char *input, t_id *id);
+int	process_output(t_id *id);
+int	process_input(t_id *id);
 
 /* parse_pro4.c */
 int	process_rest_redir(char *input, t_id *id, int start);

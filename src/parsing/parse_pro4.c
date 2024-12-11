@@ -11,9 +11,9 @@ int	process_rest_redir(char *input, t_id *id, int start)
 		if (input[*id->i] == '>' && input[*id->i + 1] == '>')
 			return (process_double_append(input, id));
 		if (input[*id->i] == '>')
-			return (process_output(input, id));
+			return (process_output(id));
 		if (input[*id->i] == '<')
-			return (process_input(input, id));
+			return (process_input(id));
 	}
 	return (1);
 }

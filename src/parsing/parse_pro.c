@@ -81,6 +81,14 @@ int	process_dollar(char *input, t_id *id, t_env **env_list)
 	if (input[*id->i] == '$')
 	{
 		id->tokens[*id->j].token_string = environment_variable(input, id->i, env_list);
+		if (id->tokens[*id->j].token_string && id->tokens[*id->j].token_string[0] == '\0')
+		{
+			if (input[*id->i] == '\0' && *id->j == 0)
+			{
+				printf("");
+				return (-1);
+			}
+		}
 		if (input[*id->i] == '=' || input[*id->i] == '.')
 		{
 			env_temp = id->tokens[*id->j].token_string;

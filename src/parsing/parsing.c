@@ -59,7 +59,7 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 		return (NULL);
 	while (input[*id.i])
 	{
-		while (input[*id.i] == ' ')
+		while (input[*id.i] == ' ' || input[*id.i] == '\t')
 			(*id.i)++;
 		if (!input[*id.i])
 			break ;

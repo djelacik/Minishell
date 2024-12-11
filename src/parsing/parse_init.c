@@ -8,6 +8,8 @@ void	init_tokens(t_tokens *tokens, int count)
 	while (i < count)
 	{
 		tokens[i].token_string = NULL;
+		//tokens[i].token_type = 0;
+		//tokens[i].builtin_type = 0;
 		i++;
 	}
 }
