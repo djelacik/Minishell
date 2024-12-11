@@ -79,6 +79,7 @@ void		*find_path(char *command, t_cmnds *cmnds);
 //char		**tokens_to_argv(t_tokens *tokens, int token_count);
 void		lst_to_arr(t_cmnds *cmnds);
 void		free_array(char **array);
+int			error_exit(t_cmnds *cmnds, char *error_msg, int error_code);
 
 
 void		handle_heredoc(char *delimiter);
