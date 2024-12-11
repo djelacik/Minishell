@@ -2,6 +2,8 @@
 
 int	is_builtin(char *command)
 {
+	if (!command)
+		return 0;
 	if (ft_strcmp(command, "echo") == 0)
 		return 1;
 	if (ft_strcmp(command, "cd") == 0)
@@ -28,28 +30,20 @@ void	execute_builtin(t_data *data, t_cmnds *cmnds)
 	else if (ft_strcmp(data->args[0].token_string, "pwd") == 0)
 		exec_pwd();
 	else if (data->args[1].token_string && 
-			(ft_strcmp(data->args[0].token_string, "export") == 0))
-	{
+				(ft_strcmp(data->args[0].token_string, "export") == 0))
 			export_add(&cmnds->env_list, data);
-	}
 	else if (ft_strcmp(data->args[0].token_string, "export") == 0)
-	{
 		export_print(cmnds->env_list);
-	}
-	//update_env_cpy(cmnds);
 	else if (ft_strcmp(data->args[0].token_string, "unset") == 0)
 		ft_unset(&cmnds->env_list, data);
 	else if (ft_strcmp(data->args[0].token_string, "env") == 0)
-	{
-		dbg_print("Head address: %p\n", cmnds->env_list);
 		ft_env(cmnds->env_list);
-	}
 	else if (ft_strcmp(data->args[0].token_string, "exit") == 0)
 		ft_exit(data);
 	else
 	{
-		fprintf(stderr, "minishell: command not found: %s\n", data->args[0].token_string);
-		exit(EXIT_FAILURE);
+		printf("minishell: command not found: %s\n", data->args[0].token_string);
+		error_exit(cmnds, NULL, EXIT_FAILURE);
 	}
 	update_env_cpy(cmnds);
 }

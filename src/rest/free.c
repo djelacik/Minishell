@@ -85,3 +85,11 @@ void	free_structs(t_cmnds *cmnds)
 	free_array(cmnds->env_cpy);
 	free(cmnds->pids);
 }
+
+int	error_exit(t_cmnds *cmnds, char *error_msg, int error_code)
+{
+	free_structs(cmnds);
+	if (error_msg)
+		printf("%s\n", error_msg);
+	exit(error_code);
+}

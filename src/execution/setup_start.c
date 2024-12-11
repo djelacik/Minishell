@@ -69,12 +69,13 @@ static int	execute_process(int i, int fd_in, t_cmnds *cmnds)
 static void	wait_for_children(t_cmnds *cmnds)
 {
 	int		i;
-	int		status;
-
+	//int		status;
+	
+	
 	i = 0;
 	while (i < cmnds->command_count)
 	{
-		waitpid(cmnds->pids[i], &status, 0);
+		waitpid(cmnds->pids[i], &g_exit_status, 0);
 		i++;
 	}
 	//free(cmnds->pids);
@@ -145,4 +146,3 @@ void	start_process(t_cmnds *cmnds)
 		close(fd_in);
 	wait_for_children(cmnds);
 }
-

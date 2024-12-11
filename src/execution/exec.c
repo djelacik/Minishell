@@ -49,10 +49,7 @@ static char	**tokens_to_argv(t_tokens *tokens, int token_count)
 
 	argv = malloc(sizeof(char *) * (token_count + 1));
 	if (!argv)
-	{
-		perror(MALLOC_ERR);
-		exit(EXIT_FAILURE);
-	}
+		return (NULL);
 	i = 0;
 	while (i < token_count)
 	{
@@ -63,7 +60,7 @@ static char	**tokens_to_argv(t_tokens *tokens, int token_count)
 			while (i-- < 0)
 				free(argv[i]);
 			free(argv);
-			exit(EXIT_FAILURE);
+			return (NULL);;
 		}
 		i++;
 	}
@@ -77,17 +74,18 @@ void	execute_external(t_data *data, t_cmnds *cmnds)
 
 	dbg_print("Executing external command: %s\n", data->args[0].token_string);
 
-	// Tarkista, onko komentona suora polku
 	if (ft_strchr(data->args[0].token_string, '/'))
 		cmd_path = ft_strdup(data->args[0].token_string);
 	else
 		cmd_path = find_path(data->args[0].token_string, cmnds);
 	if (!cmd_path)
 	{
-		fprintf(stderr, "minishell: command not found: %s\n", data->args[0].token_string);
-		exit(EXIT_FAILURE);
+		printf("minishell: command not found: %s\n", data->args[0].token_string);
+		error_exit(cmnds, NULL, EXIT_FAILURE);
 	}
 	argv = tokens_to_argv(data->args, data->token_count);
+	if (!argv)
+		error_exit(cmnds, NULL, EXIT_FAILURE);
 	dbg_print("Command path: %s\n", cmd_path);
 	for (int i = 0; argv[i]; i++)
 		dbg_print("Arg[%d]: %s\n", i, argv[i]);
@@ -95,5 +93,5 @@ void	execute_external(t_data *data, t_cmnds *cmnds)
 	perror(EXEC_ERR);
 	free(cmd_path);
 	free_array(argv);
-	exit(EXIT_FAILURE);
+	error_exit(cmnds, NULL, EXIT_FAILURE);
 }

@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:02:00 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/28 16:33:53 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:43:37 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,11 @@ void	ft_cd(t_data *data, t_env **head)
 	char	*path;
 
 	dbg_print("Executing cd command\n");
+	if (data->token_count > 2)
+	{
+		printf("cd: too many arguments\n");
+		return ;
+	}
 	if (data->token_count > 1)
 		path = data->args[1].token_string;
 	else

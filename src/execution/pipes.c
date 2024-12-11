@@ -33,4 +33,3 @@ void	close_all_pipes(t_cmnds *cmnds)
 	}
 	free(cmnds->pipes);
 }
-

@@ -103,16 +103,14 @@ void	export_print(t_env *head)
 	{
 		if (current->value == NULL || current->value[0] == '\0')
 		{
-			dbg_print("Printing key with empty value: %s=''\n", current->key);
-			printf("%s=''\n", current->key);
+			//dbg_print("Printing key with empty value: %s=''\n", current->key);
+			printf("declare -x %s\n", current->key);
 		}
 		else
 		{
-			dbg_print("Printing key-value pair: %s=%s\n", current->key, current->value);
-			printf("%s=%s\n", current->key, current->value);
+			//dbg_print("Printing key-value pair: %s=%s\n", current->key, current->value);
+			printf("declare -x %s=\"%s\"\n", current->key, current->value);
 		}
 		current = current->next;
 	}
 }
-
-
