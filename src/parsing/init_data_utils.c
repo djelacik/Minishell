@@ -1,5 +1,22 @@
 #include "../../includes/minishell.h"
 
+int	allocate_mem(t_data *data, int j, int arg_count, int redir_count)
+{
+	data[j].args = malloc((arg_count + 1) * sizeof(t_tokens));
+	data[j].redirs = malloc((redir_count + 1) * sizeof(t_redirect));
+	if (!data[j].args || !data[j].redirs)
+	{
+		if (data[j].args)
+			free(data[j].args);
+		if (data[j].redirs)
+			free(data[j].redirs);
+		return (0);
+	}
+	data[j].token_count = 0;
+	data[j].redir_count = 0;
+	return (1);
+}
+
 t_data	*allocate_data(int command_count)
 {
 	t_data	*data;
@@ -18,22 +35,6 @@ t_data	*allocate_data(int command_count)
 		i++;
 	}
 	return (data);
-}
-
-void	free_data_fail(t_data *data, int count)
-{
-	int	i;
-
-	i = 0;
-	while (i < count)
-	{
-		if (data[i].args)
-			free(data[i].args);
-		if (data[i].redirs)
-			free(data[i].redirs);
-		i++;
-	}
-	free(data);
 }
 
 int	count_commands(t_tokens *tokens)
@@ -90,4 +91,3 @@ int	count_redirs(t_tokens *tokens, int *index)
 	}
 	return (count);
 }
-

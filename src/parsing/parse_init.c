@@ -8,13 +8,14 @@ void	init_tokens(t_tokens *tokens, int count)
 	while (i < count)
 	{
 		tokens[i].token_string = NULL;
-		//tokens[i].token_type = 0;
-		//tokens[i].builtin_type = 0;
+		tokens[i].token_type = 0;
+		tokens[i].builtin_type = 0;
 		i++;
 	}
 }
 
-int	init_id_and_tokens(t_id *id, t_tokens **tokens, char *input, t_env **env_list)
+int	init_id_and_tokens(t_id *id, t_tokens **tokens, \
+		char *input, t_env **env_list)
 {
 	int	token_count;
 

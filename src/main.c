@@ -74,6 +74,16 @@ static void	free_data(t_data *data)
 			}
 			free(data[i].args);
 		}
+		if (data[i].redirs)
+		{
+			j = 0;
+			while (data[i].redirs[j].file)
+			{
+				free(data[i].redirs[j].file);
+				j++;
+			}
+			free(data[i].redirs);
+		}
 		i++;
 	}
 	free(data);
