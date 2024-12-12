@@ -11,9 +11,9 @@ int	process_rest_redir(char *input, t_id *id, int start)
 		if (input[*id->i] == '>' && input[*id->i + 1] == '>')
 			return (process_double_append(input, id));
 		if (input[*id->i] == '>')
-			return (process_output(input, id));
+			return (process_output(id));
 		if (input[*id->i] == '<')
-			return (process_input(input, id));
+			return (process_input(id));
 	}
 	return (1);
 }
@@ -65,11 +65,15 @@ int	process_rest_args(char *input, t_id *id, int start)
 	return (1);
 }
 
-int	process_rest(char *input, t_id *id)
+int	process_rest(char *input, t_id *id, t_env **env_list)
 {
 	int	start;
 	int	result;
+	char	*temp;
+	char	*env_temp;
 
+	temp = NULL;
+	env_temp = NULL;
 	start = *id->i;
 	while (input[*id->i] && input[*id->i] != ' ' && input[*id->i] != '\'' && input[*id->i] != '"')
 	{
@@ -77,6 +81,25 @@ int	process_rest(char *input, t_id *id)
 		{
 			printf("syntax error near unexpected token `newline'\n");
 			return (-1);
+		}
+		if (input[*id->i] == '$')
+		{
+			if (*id->i > start)
+			{
+				temp = ft_strndup(&input[start], *id->i - start);
+			}
+			start = *id->i;
+			env_temp = environment_variable(input, id->i, env_list);
+			if (temp)
+			{
+				id->tokens[*id->j].token_string = ft_strjoin(temp, env_temp);
+				free(temp);
+			}
+			else
+				id->tokens[*id->j].token_string = ft_strdup(env_temp);
+			free(env_temp);
+			(*id->j)++;
+			return (CONTINUE_PRO);
 		}
 		result = process_rest_redir(input, id, start);
 		if (result == CONTINUE_PRO || result == -1)

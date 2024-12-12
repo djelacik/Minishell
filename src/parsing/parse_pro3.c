@@ -47,7 +47,7 @@ int	process_double_append(char *input, t_id *id)
 	return (CONTINUE_PRO);
 }
 
-int process_output(char *input, t_id *id)
+int process_output(t_id *id)
 {
 	id->tokens[*id->j].token_string = ft_strdup(">");
 	id->tokens[*id->j].token_type = REDIR_OUTPUT;
@@ -56,7 +56,7 @@ int process_output(char *input, t_id *id)
 	return (CONTINUE_PRO);
 }
 
-int	process_input(char *input, t_id *id)
+int	process_input(t_id *id)
 {
 	id->tokens[*id->j].token_string = ft_strdup("<");
 	id->tokens[*id->j].token_type = REDIR_INPUT;

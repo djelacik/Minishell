@@ -43,7 +43,7 @@ static int	process_token(char *input, t_id *id, t_env **env_list)
 		return (-1);
 	if (process_dollar(input, id, env_list) == -1)
 		return (-1);
-	result = process_rest(input, id);
+	result = process_rest(input, id, env_list);
 	if (result == -1 || result == CONTINUE_PRO)
 		return (result);
 	return (0);
@@ -59,7 +59,7 @@ t_tokens	*tokenize_input(char *input, t_env **env_list)
 		return (NULL);
 	while (input[*id.i])
 	{
-		while (input[*id.i] == ' ')
+		while (input[*id.i] == ' ' || input[*id.i] == '\t')
 			(*id.i)++;
 		if (!input[*id.i])
 			break ;

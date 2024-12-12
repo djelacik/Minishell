@@ -42,7 +42,7 @@ LIBFT = ./libft/libft.a
 
 CC = cc
 
-CFLAGS += #-Wall -Wextra -Werror -g
+CFLAGS += -Wall -Wextra -Werror -g
 
 RM = rm -f
 
