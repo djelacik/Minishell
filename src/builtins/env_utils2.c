@@ -17,21 +17,24 @@ static void	copy_env_variables(t_cmnds *cmnds)
 	t_env	*cur;
 	int		i;
 	char	*value;
+	char	*temp;
 
 	cur = cmnds->env_list;
 	i = 0;
 	while (cur)
 	{
-		cmnds->env_cpy[i] = ft_strjoin(cur->key, "=");
-		if (!cmnds->env_cpy[i])
+		temp = ft_strjoin(cur->key, "=");
+		if (!temp)
 			error_exit(cmnds, NULL, EXIT_FAILURE);
 		if (cur->value != NULL)
 			value = cur->value;
 		else
 			value = "";
-		cmnds->env_cpy[i] = ft_strjoin(cmnds->env_cpy[i], value);
+		cmnds->env_cpy[i] = ft_strjoin(temp, value);
+		free(temp);
 		if (!cmnds->env_cpy[i])
 			error_exit(cmnds, NULL, EXIT_FAILURE);
+		
 		cur = cur->next;
 		i++;
 	}
