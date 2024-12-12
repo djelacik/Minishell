@@ -30,6 +30,7 @@ void	export_add(t_env **head, t_data *data)
 		dbg_print("Processing token: %s\n", data->args[i].token_string);
 		key = save_pairs(data->args[i].token_string, &value);
 		dbg_print("Parsed key: %s, value: %s\n", key, value ? value : "NULL");
+		single_unset(head, key);
 		new_node = malloc(sizeof(t_env));
 		if (!new_node)
 			return ;
