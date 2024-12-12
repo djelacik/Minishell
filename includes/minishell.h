@@ -187,7 +187,7 @@ int	process_input(t_id *id);
 int	process_rest_redir(char *input, t_id *id, int start);
 int	process_rest_pipe(char *input, t_id *id, int start);
 int	process_rest_args(char *input, t_id *id, int start);
-int	process_rest(char *input, t_id *id);
+int	process_rest(char *input, t_id *id, t_env **env_list);
 
 /* signals.c */
 void	handle_sigint(int sig);
