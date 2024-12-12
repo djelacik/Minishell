@@ -2,7 +2,7 @@
 
 static void	setup_pids(t_cmnds *cmnds)
 {
-	cmnds->pids = malloc(sizeof(pid_t) * cmnds->command_count);
+	cmnds->pids = ft_calloc(cmnds->command_count, sizeof(pid_t));
 	if (!cmnds->pids)
 		error_exit(cmnds, NULL, EXIT_FAILURE);
 }
@@ -135,5 +135,6 @@ void	start_process(t_cmnds *cmnds)
 	}
 	if (fd_in != STDIN_FILENO)
 		close(fd_in);
-	wait_for_children(cmnds);
+	if (cmnds->pids)
+		wait_for_children(cmnds);
 }

@@ -102,6 +102,7 @@ static void	free_tokens(t_tokens *tokens)
 	free(tokens);
 }
 
+
 int	main(int argc, char **argv, char **envp)
 {
 	struct termios	term;
@@ -142,16 +143,18 @@ int	main(int argc, char **argv, char **envp)
 			if (data)
 			{
 				cmnds.data = data;
-				print_cmnds(&cmnds);
+				//print_cmnds(&cmnds);
 				//print_data(data);
 				cmnds.command_count = cmnds.data->cmnd_count;
 				start_process(&cmnds);
+				free_struct_loop(&cmnds);
 				free_data(data);
 			}
 			free_tokens(tokens);
 		}
 		free(input);
 	}
+	error_exit(&cmnds, NULL, EXIT_SUCCESS);
 	free_env_list(&env_list);
 	return(0);
 }

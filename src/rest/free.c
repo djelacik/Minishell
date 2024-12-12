@@ -35,12 +35,12 @@ void	free_array(char **array)
 }
 
 
-static void	free_tokens(t_tokens *tokens, int token_count)
+static void	free_tokens(t_tokens *tokens)
 {
-	int		i;
+	int	i;
 
 	i = 0;
-	while (i < token_count)
+	while(tokens[i].token_string)
 	{
 		free(tokens[i].token_string);
 		i++;
@@ -54,7 +54,7 @@ static void	free_data(t_data *data)
 
 	if (data->args)
 	{
-		free_tokens(data->args, data->token_count);
+		free_tokens(data->args);
 	}
 	i = 0;
 	if (data->redirs)
@@ -92,4 +92,20 @@ int	error_exit(t_cmnds *cmnds, char *error_msg, int error_code)
 	if (error_msg)
 		printf("%s\n", error_msg);
 	exit(error_code);
+}
+
+void	free_struct_loop(t_cmnds *cmnds)
+{
+	int		i;
+
+	if (!cmnds)
+		return ;
+	i = 0;
+	while (i < cmnds->command_count)
+	{
+		//free_data(&cmnds->data[i]);
+		i++;
+	}
+	//free(cmnds->data);
+	free(cmnds->pids);
 }
