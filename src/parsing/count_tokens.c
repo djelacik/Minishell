@@ -35,7 +35,8 @@ int	count_unquoted_tokens(char *input, int *i, t_env **env_list)
 	int		count;
 
 	count = 0;
-	while (input[*i] && input[*i] != ' ' && input[*i] != '\'' && input[*i] != '"')
+	while (input[*i] && input[*i] != ' ' && \
+			input[*i] != '\'' && input[*i] != '"')
 	{
 		if (input[*i] == '$')
 		{

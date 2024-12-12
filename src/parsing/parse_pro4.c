@@ -24,7 +24,8 @@ int	process_rest_pipe(char *input, t_id *id, int start)
 	{
 		if (*id->i > start)
 		{
-			id->tokens[*id->j].token_string = ft_strndup(&input[start], *id->i - start);
+			id->tokens[*id->j].token_string = \
+						ft_strndup(&input[start], *id->i - start);
 			id->tokens[*id->j].token_type = ARGUMENT;
 			id->tokens[*id->j].builtin_type = BUILTIN_NONE;
 			(*id->j)++;
@@ -60,47 +61,52 @@ int	process_rest_args(char *input, t_id *id, int start)
 			free(seg);
 		}
 		else
-			id->tokens[*id->j].token_string = ft_strndup(&input[start], *id->i - start);
+			id->tokens[*id->j].token_string = \
+						ft_strndup(&input[start], *id->i - start);
 	}
 	return (1);
 }
 
-int	process_rest(char *input, t_id *id, t_env **env_list)
+int	process_rest_dollar(char *input, t_id *id, int start, t_env **env_list)
 {
-	int	start;
-	int	result;
 	char	*temp;
 	char	*env_temp;
 
 	temp = NULL;
 	env_temp = NULL;
+	if (*id->i > start)
+		temp = ft_strndup(&input[start], *id->i - start);
 	start = *id->i;
-	while (input[*id->i] && input[*id->i] != ' ' && input[*id->i] != '\'' && input[*id->i] != '"')
+	env_temp = environment_variable(input, id->i, env_list);
+	if (temp)
 	{
-		if ((input[*id->i] == '<' || input[*id->i] == '>' || input[*id->i] == '|') && (input[*id->i + 1] == '\0'))
+		id->tokens[*id->j].token_string = ft_strjoin(temp, env_temp);
+		free(temp);
+	}
+	else
+		id->tokens[*id->j].token_string = ft_strdup(env_temp);
+	free(env_temp);
+	(*id->j)++;
+	return (CONTINUE_PRO);
+}
+
+int	process_rest(char *input, t_id *id, t_env **env_list)
+{
+	int		start;
+	int		result;
+
+	start = *id->i;
+	while (input[*id->i] && input[*id->i] != ' ' && \
+			input[*id->i] != '\'' && input[*id->i] != '"')
+	{
+		if ((input[*id->i] == '<' || input[*id->i] == '>' || \
+					input[*id->i] == '|') && (input[*id->i + 1] == '\0'))
 		{
 			printf("syntax error near unexpected token `newline'\n");
 			return (-1);
 		}
 		if (input[*id->i] == '$')
-		{
-			if (*id->i > start)
-			{
-				temp = ft_strndup(&input[start], *id->i - start);
-			}
-			start = *id->i;
-			env_temp = environment_variable(input, id->i, env_list);
-			if (temp)
-			{
-				id->tokens[*id->j].token_string = ft_strjoin(temp, env_temp);
-				free(temp);
-			}
-			else
-				id->tokens[*id->j].token_string = ft_strdup(env_temp);
-			free(env_temp);
-			(*id->j)++;
-			return (CONTINUE_PRO);
-		}
+			return (process_rest_dollar(input, id, start, env_list));
 		result = process_rest_redir(input, id, start);
 		if (result == CONTINUE_PRO || result == -1)
 			return (result);

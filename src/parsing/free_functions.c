@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-void	free_exist_tokens(t_tokens *tokens, int	index)
+void	free_exist_tokens(t_tokens *tokens, int index)
 {
 	int	i;
 
@@ -41,4 +41,31 @@ void	free_id(t_id *id)
 		return ;
 	free(id->i);
 	free(id->j);
+}
+
+void	free_data_fail(t_data *data, int count)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < count)
+	{
+		if (data[i].args)
+		{
+			j = 0;
+			while (data[i].args[j].token_string)
+				free(data[i].args[j++].token_string);
+			free(data[i].args);
+		}
+		if (data[i].redirs)
+		{
+			j = 0;
+			while (data[i].redirs[j].file)
+				free(data[i].redirs[j++].file);
+			free(data[i].redirs);
+		}
+		i++;
+	}
+	free(data);
 }

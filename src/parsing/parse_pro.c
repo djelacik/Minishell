@@ -12,9 +12,11 @@ int	process_start(char *input, t_id *id)
 	if (input[0] == '/' && (input[*id->i] == '/' && *id->j == 0))
 	{
 		start = *id->i;
-		while (input[*id->i] && input[*id->i] != ' ' && input[*id->i] != '\'' && input[*id->i] != '"')
+		while (input[*id->i] && input[*id->i] != ' ' && \
+				input[*id->i] != '\'' && input[*id->i] != '"')
 			(*id->i)++;
-		id->tokens[*id->j].token_string = ft_strndup(&input[start], *id->i - start);
+		id->tokens[*id->j].token_string = \
+					ft_strndup(&input[start], *id->i - start);
 		id->tokens[*id->j].token_type = COMMAND;
 		id->tokens[*id->j].builtin_type = BUILTIN_NONE;
 		(*id->j)++;
@@ -27,7 +29,8 @@ int	process_redirs(char *input, t_id *id)
 {
 	if (input[*id->i] == '>' || input[*id->i] == '<')
 	{
-		id->tokens[*id->j].token_string = redir_symb(input, id->i, &id->tokens[*id->j]);
+		id->tokens[*id->j].token_string = \
+					redir_symb(input, id->i, &id->tokens[*id->j]);
 		if (id->tokens[*id->j].token_string == NULL)
 		{
 			printf("syntax error near unexpected token `newline'\n");
@@ -35,7 +38,8 @@ int	process_redirs(char *input, t_id *id)
 		}
 		if (id->tokens[*id->j].token_type == EMPTY)
 		{
-			printf("syntax error near unexpected token `%s'\n", id->tokens[*id->j].token_string);
+			printf("syntax error near unexpected token `%s'\n", \
+					id->tokens[*id->j].token_string);
 			return (-1);
 		}
 		(*id->j)++;
@@ -63,25 +67,42 @@ int	process_pipe(char *input, t_id *id)
 			printf("syntax error near unexpected token `newline'\n");
 			return (-1);
 		}
-		id->tokens[*id->j].token_string = handle_pipes(input, id->i, &id->tokens[*id->j]);
+		id->tokens[*id->j].token_string = \
+					handle_pipes(input, id->i, &id->tokens[*id->j]);
 		(*id->j)++;
 		return (CONTINUE_PRO);
 	}
 	return (1);
 }
 
-int	process_dollar(char *input, t_id *id, t_env **env_list)
+static int	process_dollar_join(char *input, t_id *id, int *i, char *env_temp)
 {
-	char	*env_temp;
 	char	*temp;
 	int		start;
 
-	env_temp = NULL;
+	start = *i;
 	temp = NULL;
+	while (input[*i] && input[*i] != ' ' && \
+			input[*i] != '\'' && input[*i] != '"')
+		(*i)++;
+	temp = ft_strndup(&input[start], *i - start);
+	id->tokens[*id->j].token_string = ft_strjoin(env_temp, temp);
+	free(temp);
+	free(env_temp);
+	return (0);
+}
+
+int	process_dollar(char *input, t_id *id, t_env **env_list)
+{
+	char	*env_temp;
+
+	env_temp = NULL;
 	if (input[*id->i] == '$')
 	{
-		id->tokens[*id->j].token_string = environment_variable(input, id->i, env_list);
-		if (id->tokens[*id->j].token_string && id->tokens[*id->j].token_string[0] == '\0')
+		id->tokens[*id->j].token_string = \
+					environment_variable(input, id->i, env_list);
+		if (id->tokens[*id->j].token_string && \
+				id->tokens[*id->j].token_string[0] == '\0')
 		{
 			if (input[*id->i] == '\0' && *id->j == 0)
 			{
@@ -92,13 +113,7 @@ int	process_dollar(char *input, t_id *id, t_env **env_list)
 		if (input[*id->i] == '=' || input[*id->i] == '.')
 		{
 			env_temp = id->tokens[*id->j].token_string;
-			start = *id->i;
-			while (input[*id->i] && input[*id->i] != ' ' && input[*id->i] != '\'' && input[*id->i] != '"')
-				(*id->i)++;
-			temp = ft_strndup(&input[start], *id->i - start);
-			id->tokens[*id->j].token_string = ft_strjoin(env_temp, temp);
-			free(temp);
-			free(env_temp);
+			process_dollar_join(input, id, id->i, env_temp);
 		}
 	}
 	return (1);
