@@ -4,10 +4,7 @@ static void	setup_pids(t_cmnds *cmnds)
 {
 	cmnds->pids = malloc(sizeof(pid_t) * cmnds->command_count);
 	if (!cmnds->pids)
-	{
-		perror(MALLOC_ERR);
-		exit(EXIT_FAILURE);
-	}
+		error_exit(cmnds, NULL, EXIT_FAILURE);
 }
 
 static int	fork_process(int i, int fd_in, int pipefd[2], t_cmnds *cmnds)
@@ -33,10 +30,7 @@ static int	execute_process(int i, int fd_in, t_cmnds *cmnds)
 
 	setup_pipes(i, cmnds->command_count, pipe_fd);
 	if (fork_process(i, fd_in, pipe_fd, cmnds) == -1)
-	{
-		perror(FORK_ERR);
-		exit(EXIT_FAILURE);
-	}
+		error_exit(cmnds, FORK_ERR, EXIT_FAILURE);
 	if (fd_in != STDIN_FILENO)
 	{
 		dbg_print("Parent closing fd_in: %d\n", fd_in);
@@ -69,16 +63,13 @@ static int	execute_process(int i, int fd_in, t_cmnds *cmnds)
 static void	wait_for_children(t_cmnds *cmnds)
 {
 	int		i;
-	//int		status;
-	
-	
+
 	i = 0;
 	while (i < cmnds->command_count)
 	{
 		waitpid(cmnds->pids[i], &g_exit_status, 0);
 		i++;
 	}
-	//free(cmnds->pids);
 }
 
 static void	execute_in_parent(t_data *data, t_cmnds *cmnds)

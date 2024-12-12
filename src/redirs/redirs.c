@@ -26,12 +26,12 @@ static void handle_output(char *filename, int flags)
 	if (fd == -1)
 	{
 		perror(OPEN_ERR);
-		exit(EXIT_FAILURE);
+		exit(EXIT_FAILURE); // free?
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror(DUP2_ERR);
-		exit(EXIT_FAILURE);
+		exit(EXIT_FAILURE); // free?
 	}
 	close(fd);
 }
