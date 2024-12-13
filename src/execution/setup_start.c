@@ -21,6 +21,7 @@ static int	fork_process(int i, int fd_in, int pipefd[2], t_cmnds *cmnds)
 		dbg_print("Child process %d created (PID: %d)\n", i, getpid());
 		child_process(i, fd_in, pipefd, cmnds);
 	}
+	signal(SIGINT, SIG_IGN);
 	return (0);
 }
 
@@ -29,6 +30,7 @@ static int	execute_process(int i, int fd_in, t_cmnds *cmnds)
 	int		pipe_fd[2];
 
 	setup_pipes(i, cmnds->command_count, pipe_fd);
+	signal(SIGINT, here_doc_sig);
 	if (fork_process(i, fd_in, pipe_fd, cmnds) == -1)
 		error_exit(cmnds, FORK_ERR, EXIT_FAILURE);
 	if (fd_in != STDIN_FILENO)
@@ -87,7 +89,6 @@ static void	wait_for_children(t_cmnds *cmnds)
 		}
 		i++;
 	}
-	
 }
 
 static void	execute_in_parent(t_data *data, t_cmnds *cmnds)

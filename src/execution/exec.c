@@ -33,6 +33,7 @@ void	*find_path(char *command, t_cmnds *cmnds)
 		if (access(full_path, X_OK) == 0)
 		{
 			free_array(paths);
+			g_exit_status = 0;
 			return (full_path);
 		}
 		free(full_path);
@@ -67,6 +68,7 @@ static char	**tokens_to_argv(t_tokens *tokens, int token_count)
 	argv[token_count] = NULL;
 	return (argv);
 }
+
 void	execute_external(t_data *data, t_cmnds *cmnds)
 {
 	char	*cmd_path;
@@ -81,6 +83,7 @@ void	execute_external(t_data *data, t_cmnds *cmnds)
 	if (!cmd_path)
 	{
 		printf("minishell: command not found: %s\n", data->args[0].token_string);
+		g_exit_status = 127;
 		error_exit(cmnds, NULL, EXIT_FAILURE);
 	}
 	argv = tokens_to_argv(data->args, data->token_count);
