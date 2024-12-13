@@ -63,13 +63,31 @@ static int	execute_process(int i, int fd_in, t_cmnds *cmnds)
 static void	wait_for_children(t_cmnds *cmnds)
 {
 	int		i;
+	int	status;
 
 	i = 0;
 	while (i < cmnds->command_count)
 	{
-		waitpid(cmnds->pids[i], &g_exit_status, 0);
+		waitpid(cmnds->pids[i], &status, 0);
+		if (WIFEXITED(status))
+		{
+			g_exit_status = WEXITSTATUS(status);
+			if (g_exit_status == 1)
+				g_exit_status = 127;
+		}
+		else if (WIFSIGNALED(status))
+		{
+			int signal_num = WTERMSIG(status);
+			if (signal_num == SIGINT)
+			{
+				g_exit_status = 130;
+			}
+			else
+				g_exit_status = 0;
+		}
 		i++;
 	}
+	
 }
 
 static void	execute_in_parent(t_data *data, t_cmnds *cmnds)
