@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:19:56 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/10 18:47:41 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/12/13 17:46:07 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ typedef struct s_list
 int			ft_isalpha(int c);
 int			ft_isascii(int c);
 int			ft_isalnum(int c);
-int			str_is_digit(char *str);
+int			ft_isdigit(char *str);
 int			ft_isprint(int c);
 int			ft_isspace(int c);
 

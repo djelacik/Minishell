@@ -39,7 +39,7 @@ void	execute_builtin(t_data *data, t_cmnds *cmnds)
 	else if (ft_strcmp(data->args[0].token_string, "env") == 0)
 		ft_env(cmnds->env_list);
 	else if (ft_strcmp(data->args[0].token_string, "exit") == 0)
-		ft_exit(data);
+		ft_exit(data, cmnds);
 	else
 	{
 		printf("minishell: command not found: %s\n", data->args[0].token_string);

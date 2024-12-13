@@ -84,8 +84,6 @@ static void	wait_for_children(t_cmnds *cmnds)
 			{
 				g_exit_status = 130;
 			}
-			else
-				g_exit_status = 0;
 		}
 		i++;
 	}

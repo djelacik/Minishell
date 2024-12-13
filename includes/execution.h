@@ -37,7 +37,7 @@ int			exec_echo(t_data *data);
 int			exec_pwd(void);
 void		update_pwd(t_env **head);
 void		ft_cd(t_data *data, t_env **head);
-void		ft_exit(t_data *data);
+void		ft_exit(t_data *data, t_cmnds *cmnds);
 int			is_builtin(char *command);
 void		execute_builtin(t_data *data, t_cmnds *cmnds);
 

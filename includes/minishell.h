@@ -95,6 +95,7 @@ typedef struct s_cmnds
 	pid_t		*pids;
 	char		**env_cpy;
 	t_env		*env_list;
+	int			exited;
 }	t_cmnds;
 
 /* count_tokens.c */

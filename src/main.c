@@ -153,8 +153,10 @@ int	main(int argc, char **argv, char **envp)
 			free_tokens(tokens);
 		}
 		free(input);
+		if (cmnds.exited == 1)
+			break;
 	}
-	error_exit(&cmnds, NULL, EXIT_SUCCESS);
+	//error_exit(&cmnds, NULL, EXIT_SUCCESS);
 	free_env_list(&env_list);
-	return(0);
+	return(g_exit_status);
 }
