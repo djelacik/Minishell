@@ -3,8 +3,6 @@
 static void	read_heredoc_input(int pipe_fd[2], char *delimiter)
 {
 	char	*line;
-	//signal(SIGINT, SIG_IGN);
-	signal(SIGINT, here_doc_sig);
 
 	while (1)
 	{

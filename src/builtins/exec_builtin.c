@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:02:00 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/05 15:43:37 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/12/13 13:45:40 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	exec_echo(t_data *data)
 	}
 	if (new_line)
 		printf("\n");
+	g_exit_status = 0;
 	return (EXIT_SUCCESS);
 }
 
@@ -53,6 +54,7 @@ int	exec_pwd(void)
 		perror("getcwd error");
 		return (EXIT_FAILURE);
 	}
+	g_exit_status = 0;
 	return (EXIT_SUCCESS);
 }
 
@@ -107,6 +109,7 @@ void	ft_cd(t_data *data, t_env **head)
 		return ;
 	}
 	update_pwd(head);
+	g_exit_status = 0;
 }
 
 void	ft_exit(t_data *data)
