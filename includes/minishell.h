@@ -1,7 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define DEBUG_MIRE
+//# define DEBUG_MIRE
 #ifdef DEBUG_MIRE
 # define mprint(...) printf( __VA_ARGS__)
 #else
@@ -191,11 +191,14 @@ int			process_rest_dollar(char *input, t_id *id, \
 /* signals.c */
 void		handle_sigint(int sig);
 void		handle_sigquit(int sig);
+void		here_doc_sig(int sig);
 
 /* debug.c */
 void		print_tokens(t_tokens *tokens, int token_count);
 void		print_redirects(t_redirect *redirs, int redir_count);
 void		print_data(t_data *data, int data_count);
-void		cprint_cmnds(t_cmnds *cmnds);
+void		print_cmnds(t_cmnds *cmnds);
+
+void	free_struct_loop(t_cmnds *cmnds);
 
 #endif
