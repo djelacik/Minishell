@@ -3,6 +3,8 @@
 static void	read_heredoc_input(int pipe_fd[2], char *delimiter)
 {
 	char	*line;
+	//signal(SIGINT, SIG_IGN);
+	signal(SIGINT, here_doc_sig);
 
 	while (1)
 	{
@@ -12,6 +14,7 @@ static void	read_heredoc_input(int pipe_fd[2], char *delimiter)
 		if (ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
+			g_exit_status = 0;
 			break;
 		}
 		write(pipe_fd[1], line, ft_strlen(line));
@@ -19,6 +22,7 @@ static void	read_heredoc_input(int pipe_fd[2], char *delimiter)
 		free(line);
 	}
 	close(pipe_fd[1]);
+	signal(SIGINT, SIG_DFL);
 }
 
 static void	setup_heredoc_pipe(int pipe_fd[2])
