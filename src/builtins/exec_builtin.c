@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:02:00 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/13 17:53:31 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/12/14 10:10:41 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,18 +116,22 @@ void	ft_exit(t_data *data, t_cmnds *cmnds)
 {
 	int		exit_num;
 
+	exit_num = 0;
 	dbg_print("Executing exit command\n");
 	if (data->token_count > 2)
 	{
 		printf("Too many arguments for exit\n");
 		return ;
 	}
-	if (ft_isdigit(data->args[1].token_string) == 0)
-	{
-		printf("%s :numeric argument required\n", data->args[1].token_string);
-		return ;
+	if (data->args[1].token_string)
+	{	
+		if (ft_isdigit(data->args[1].token_string) == 0)
+		{
+			printf("%s :numeric argument required\n", data->args[1].token_string);
+			return ;
+		}
+		exit_num = ft_atoi(data->args[1].token_string);
 	}
-	exit_num = ft_atoi(data->args[1].token_string);
 	printf("Exit num is: %d\n", exit_num);
 	g_exit_status = exit_num;
 	cmnds->exited = 1;
