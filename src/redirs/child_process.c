@@ -52,10 +52,14 @@ static void	execute_child_command(int i, t_cmnds *cmnds)
 	{
 		dbg_print("Executing builtin command: %s\n", cmnds->data[i].args[0].token_string);
 		execute_builtin(&cmnds->data[i], cmnds);
+		exit(EXIT_SUCCESS);
 	}
-	execute_external(&cmnds->data[i], cmnds);
-	perror(EXEC_ERR);
-	exit(EXIT_FAILURE);
+	else
+	{
+		execute_external(&cmnds->data[i], cmnds);
+		perror(EXEC_ERR);
+		exit(EXIT_FAILURE);
+	}
 }
 
 void	child_process(int i, int fd_in, int pipe_fd[2], t_cmnds *cmnds)

@@ -73,6 +73,7 @@ static void	free_data(t_data *data)
 				j++;
 			}
 			free(data[i].args);
+			data[i].args = NULL;
 		}
 		if (data[i].redirs)
 		{
@@ -83,6 +84,7 @@ static void	free_data(t_data *data)
 				j++;
 			}
 			free(data[i].redirs);
+			data[i].redirs = NULL;
 		}
 		i++;
 	}
@@ -101,7 +103,7 @@ static void	free_tokens(t_tokens *tokens)
 	}
 	free(tokens);
 }
-
+ 
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -112,19 +114,16 @@ int	main(int argc, char **argv, char **envp)
 	char		*input;
 	t_tokens	*tokens;
 	t_data		*data;
-	t_env		*env_list;
 
 	if (tcgetattr(STDIN_FILENO, &term) == -1)
 		exit(EXIT_FAILURE);
 	term.c_lflag &= ~ECHOCTL;
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
 		exit(EXIT_FAILURE);
-	env_list = NULL;
 	ft_bzero(&cmnds, sizeof(t_cmnds));
-	init_list(&env_list, envp);
 	init_list(&cmnds.env_list, envp);
 	g_exit_status = 0;
-	signal(SIGQUIT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		signal(SIGINT, handle_sigint);
@@ -135,11 +134,12 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		}
 		add_history(input);
-		tokens = tokenize_input(input, &env_list);
+		tokens = tokenize_input(input, &cmnds.env_list);
 		if (tokens)
 		{
 			//print_tokens(tokens);
 			data = init_data(tokens);
+			free_tokens(tokens);
 			if (data)
 			{
 				cmnds.data = data;
@@ -147,16 +147,14 @@ int	main(int argc, char **argv, char **envp)
 				//print_data(data);
 				cmnds.command_count = cmnds.data->cmnd_count;
 				start_process(&cmnds);
-				free_struct_loop(&cmnds);
 				free_data(data);
 			}
-			free_tokens(tokens);
+			free_struct_loop(&cmnds);
 		}
 		free(input);
 		if (cmnds.exited == 1)
 			break;
 	}
-	//error_exit(&cmnds, NULL, EXIT_SUCCESS);
-	free_env_list(&env_list);
+	free_global(&cmnds);
 	return(g_exit_status);
 }
