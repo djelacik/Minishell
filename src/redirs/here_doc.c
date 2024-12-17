@@ -33,7 +33,7 @@ static void	setup_heredoc_pipe(int pipe_fd[2])
 	close(pipe_fd[0]);
 }
 
-void	handle_heredoc(char *delimiter)
+void	handle_heredoc(t_cmnds *cmnds, char *delimiter)
 {
 	int		pipe_fd[2];
 
@@ -42,6 +42,11 @@ void	handle_heredoc(char *delimiter)
 		perror(PIPE_ERR);
 		exit(EXIT_FAILURE);
 	}
+ 	dup2(cmnds->saved_stdin, STDIN_FILENO);
+	dup2(cmnds->saved_stdout, STDOUT_FILENO);
+	close(cmnds->saved_stdin);
+	close(cmnds->saved_stdout);
 	read_heredoc_input(pipe_fd, delimiter);
 	setup_heredoc_pipe(pipe_fd);
+	//error_exit(cmnds, NULL, EXIT_SUCCESS);
 }

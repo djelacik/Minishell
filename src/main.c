@@ -152,8 +152,6 @@ int	main(int argc, char **argv, char **envp)
 			free_struct_loop(&cmnds);
 		}
 		free(input);
-		if (cmnds.exited == 1)
-			break;
 	}
 	free_global(&cmnds);
 	return(g_exit_status);
