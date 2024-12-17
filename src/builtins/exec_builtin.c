@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:02:00 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/14 10:10:41 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/12/17 18:33:47 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,22 +118,27 @@ void	ft_exit(t_data *data, t_cmnds *cmnds)
 
 	exit_num = 0;
 	dbg_print("Executing exit command\n");
-	if (data->token_count > 2)
+	printf("exit\n");
+	if (data->token_count > 2 && ft_isdigit(data->args[1].token_string) == 1)
 	{
-		printf("Too many arguments for exit\n");
+		printf("exit: too many arguments\n");
+		g_exit_status = ft_atoi("1");
 		return ;
 	}
 	if (data->args[1].token_string)
 	{	
 		if (ft_isdigit(data->args[1].token_string) == 0)
 		{
-			printf("%s :numeric argument required\n", data->args[1].token_string);
-			return ;
+			printf("exit: %s: numeric argument required\n", data->args[1].token_string);
+			exit_num = ft_atoi("2");
 		}
-		exit_num = ft_atoi(data->args[1].token_string);
+		else
+		{
+			exit_num = ft_atoi(data->args[1].token_string);
+			exit_num = exit_num % 256;
+		}
 	}
-	printf("Exit num is: %d\n", exit_num);
 	g_exit_status = exit_num;
 	cmnds->exited = 1;
-	//exit (0);
+	error_exit(cmnds, NULL, exit_num);
 }

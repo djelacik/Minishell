@@ -77,7 +77,7 @@ static void	free_data(t_data *data)
 	i = 0;
 	if (data->args)
 	{
-		while (i < data->cmnd_count)
+		while (i < data->token_count)
 		{
 			if (data->args[i].token_string)
 				free(data->args[i].token_string);
@@ -122,11 +122,9 @@ void	free_structs(t_cmnds *cmnds)
 
 void	free_global(t_cmnds *cmnds)
 {
-	int		i;
 
 	if (!cmnds)
 		return ;
-	i = 0;
 	free_env_list(&cmnds->env_list);
 	free_array(cmnds->env_cpy);
 }

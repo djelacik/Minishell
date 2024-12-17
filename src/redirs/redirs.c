@@ -38,7 +38,7 @@ static void handle_output(char *filename, int flags)
 
 
 
-void	handle_redirections(t_data *cmnd_data)
+void	handle_redirections(t_data *cmnd_data, t_cmnds *cmnds)
 {
 	int		i;
 
@@ -64,7 +64,7 @@ void	handle_redirections(t_data *cmnd_data)
 		else if (cmnd_data->redirs[i].type == REDIR_HERE_DOC)
 		{
 			dbg_print("Handling heredoc redirection with delimiter: %s\n", cmnd_data->redirs[i].file);
-			handle_heredoc(cmnd_data->redirs[i].file);
+			handle_heredoc(cmnds, cmnd_data->redirs[i].file);
 		}
 		i++;
 	}
