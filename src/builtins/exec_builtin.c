@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:02:00 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/17 18:33:47 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/12/17 18:48:32 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ void	ft_exit(t_data *data, t_cmnds *cmnds)
 			exit_num = exit_num % 256;
 		}
 	}
-	g_exit_status = exit_num;
-	cmnds->exited = 1;
+	//g_exit_status = exit_num;
 	error_exit(cmnds, NULL, exit_num);
 }
