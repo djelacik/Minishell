@@ -12,6 +12,7 @@ static void	read_heredoc_input(int pipe_fd[2], char *delimiter)
 		if (ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
+			g_exit_status = 0;
 			break;
 		}
 		write(pipe_fd[1], line, ft_strlen(line));
@@ -19,6 +20,7 @@ static void	read_heredoc_input(int pipe_fd[2], char *delimiter)
 		free(line);
 	}
 	close(pipe_fd[1]);
+	signal(SIGINT, SIG_DFL);
 }
 
 static void	setup_heredoc_pipe(int pipe_fd[2])
@@ -31,7 +33,7 @@ static void	setup_heredoc_pipe(int pipe_fd[2])
 	close(pipe_fd[0]);
 }
 
-void	handle_heredoc(char *delimiter)
+void	handle_heredoc(t_cmnds *cmnds, char *delimiter)
 {
 	int		pipe_fd[2];
 
@@ -40,6 +42,11 @@ void	handle_heredoc(char *delimiter)
 		perror(PIPE_ERR);
 		exit(EXIT_FAILURE);
 	}
+ 	dup2(cmnds->saved_stdin, STDIN_FILENO);
+	dup2(cmnds->saved_stdout, STDOUT_FILENO);
+	close(cmnds->saved_stdin);
+	close(cmnds->saved_stdout);
 	read_heredoc_input(pipe_fd, delimiter);
 	setup_heredoc_pipe(pipe_fd);
+	//error_exit(cmnds, NULL, EXIT_SUCCESS);
 }

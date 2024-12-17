@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:02:00 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/05 15:43:37 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/12/17 18:48:32 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	exec_echo(t_data *data)
 	}
 	if (new_line)
 		printf("\n");
+	g_exit_status = 0;
 	return (EXIT_SUCCESS);
 }
 
@@ -53,6 +54,7 @@ int	exec_pwd(void)
 		perror("getcwd error");
 		return (EXIT_FAILURE);
 	}
+	g_exit_status = 0;
 	return (EXIT_SUCCESS);
 }
 
@@ -107,16 +109,35 @@ void	ft_cd(t_data *data, t_env **head)
 		return ;
 	}
 	update_pwd(head);
+	g_exit_status = 0;
 }
 
-void	ft_exit(t_data *data)
+void	ft_exit(t_data *data, t_cmnds *cmnds)
 {
+	int		exit_num;
+
+	exit_num = 0;
 	dbg_print("Executing exit command\n");
-	if (data->token_count > 1)
+	printf("exit\n");
+	if (data->token_count > 2 && ft_isdigit(data->args[1].token_string) == 1)
 	{
-		printf("Too many arguments for exit\n");
+		printf("exit: too many arguments\n");
+		g_exit_status = ft_atoi("1");
 		return ;
 	}
-	printf("exit\n");
-	exit (0);
+	if (data->args[1].token_string)
+	{	
+		if (ft_isdigit(data->args[1].token_string) == 0)
+		{
+			printf("exit: %s: numeric argument required\n", data->args[1].token_string);
+			exit_num = ft_atoi("2");
+		}
+		else
+		{
+			exit_num = ft_atoi(data->args[1].token_string);
+			exit_num = exit_num % 256;
+		}
+	}
+	//g_exit_status = exit_num;
+	error_exit(cmnds, NULL, exit_num);
 }

@@ -44,23 +44,30 @@ static void	setup_input_output(int fd_in, int pipe_fd[2])
 
 static void	execute_child_command(int i, t_cmnds *cmnds)
 {
-	//dbg_print("Child process %d handling redirections\n", i);
-	handle_redirections(&cmnds->data[i]);
+	dbg_print("Child process %d handling redirections\n", i);
+	handle_redirections(&cmnds->data[i], cmnds);
 	dbg_print("Child process %d executing command: %s\n", i, cmnds->data[i].args[0].token_string);
 	close_unused_fds();
 	if (is_builtin(cmnds->data[i].args[0].token_string))
 	{
-		dbg_print("Executing builtin command: %s\n", cmnds->data[i].args[0].token_string);
+		dbg_print("Executing builtin command: %s\n\n", cmnds->data[i].args[0].token_string);
 		execute_builtin(&cmnds->data[i], cmnds);
+		error_exit(cmnds, NULL, EXIT_SUCCESS);
+		exit(EXIT_SUCCESS);
 	}
-	execute_external(&cmnds->data[i], cmnds);
-	perror(EXEC_ERR);
-	exit(EXIT_FAILURE);
+	else
+	{
+		execute_external(&cmnds->data[i], cmnds);
+		perror(EXEC_ERR);
+		exit(EXIT_FAILURE);
+	}
 }
 
 void	child_process(int i, int fd_in, int pipe_fd[2], t_cmnds *cmnds)
 {
 	dbg_print("Child process %d setting up input/output redirections\n", i);
+	cmnds->saved_stdin = dup(STDIN_FILENO);
+	cmnds->saved_stdout = dup(STDOUT_FILENO);
 	setup_input_output(fd_in, pipe_fd);
 	dbg_print("Child process %d starting command execution\n", i);
 	execute_child_command(i, cmnds);

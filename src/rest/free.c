@@ -35,26 +35,27 @@ void	free_array(char **array)
 }
 
 
-static void	free_tokens(t_tokens *tokens, int token_count)
+/* static void	free_tokens(t_tokens *tokens)
 {
-	int		i;
+	int	i;
 
 	i = 0;
-	while (i < token_count)
+	while(tokens[i].token_string)
 	{
 		free(tokens[i].token_string);
 		i++;
 	}
+	tokens = NULL;
 	free(tokens);
 }
-
-static void	free_data(t_data *data)
+ */
+/* static void	free_data(t_data *data)
 {
 	int		i;
 
 	if (data->args)
 	{
-		free_tokens(data->args, data->token_count);
+		//free_tokens(data->args);
 	}
 	i = 0;
 	if (data->redirs)
@@ -67,6 +68,35 @@ static void	free_data(t_data *data)
 		free(data->redirs);
 	}
 }
+ */
+
+static void	free_data(t_data *data)
+{
+	int		i;
+
+	i = 0;
+	if (data->args)
+	{
+		while (i < data->token_count)
+		{
+			if (data->args[i].token_string)
+				free(data->args[i].token_string);
+			i++;
+		}
+		free(data->args);
+	}
+	i = 0;
+	if (data->redirs)
+	{
+		while (i < data->redir_count)
+		{
+			free(data->redirs[i].file);
+			i++;
+		}
+		free(data->redirs);
+	}
+}
+
 
 void	free_structs(t_cmnds *cmnds)
 {
@@ -83,7 +113,20 @@ void	free_structs(t_cmnds *cmnds)
 	free(cmnds->data);
 	free_env_list(&cmnds->env_list);
 	free_array(cmnds->env_cpy);
-	free(cmnds->pids);
+	if (cmnds->pids)
+	{
+		free(cmnds->pids);
+		cmnds->pids = NULL;
+	}
+}
+
+void	free_global(t_cmnds *cmnds)
+{
+
+	if (!cmnds)
+		return ;
+	free_env_list(&cmnds->env_list);
+	free_array(cmnds->env_cpy);
 }
 
 int	error_exit(t_cmnds *cmnds, char *error_msg, int error_code)
@@ -92,4 +135,20 @@ int	error_exit(t_cmnds *cmnds, char *error_msg, int error_code)
 	if (error_msg)
 		printf("%s\n", error_msg);
 	exit(error_code);
+}
+
+void	free_struct_loop(t_cmnds *cmnds)
+{
+	int		i;
+
+	if (!cmnds)
+		return ;
+	i = 0;
+	while (i < cmnds->command_count)
+	{
+		//free_data(&cmnds->data[i]);
+		i++;
+	}
+	//free(cmnds->data);
+	free(cmnds->pids);
 }

@@ -43,7 +43,7 @@ LIBFT = ./libft/libft.a
 
 CC = cc
 
-CFLAGS += -Wall -Wextra -Werror -g
+CFLAGS += -fsanitize=address -g -Wall -Wextra -Werror
 
 RM = rm -f
 
