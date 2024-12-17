@@ -17,6 +17,7 @@ SOURCES = \
 		src/parsing/parse_pro2.c \
 		src/parsing/parse_pro3.c \
 		src/parsing/parse_pro4.c \
+		src/parsing/parse_prod.c \
 		src/builtins/env_utils.c \
 		src/builtins/env_utils2.c \
 		src/builtins/enviroment.c \

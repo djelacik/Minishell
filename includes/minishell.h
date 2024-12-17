@@ -167,6 +167,7 @@ int			process_start(char *input, t_id *id);
 int			process_redirs(char *input, t_id *id);
 int			process_pipe(char *input, t_id *id);
 int			process_dollar(char *input, t_id *id, t_env **env_list);
+int			process_dollar_join(char *input, t_id *id, int *i, char *env_temp);
 
 /* parse_pro2.c */
 char		*singleq(char *input, int *i);
@@ -188,14 +189,27 @@ int			process_rest(char *input, t_id *id, t_env **env_list);
 int			process_rest_dollar(char *input, t_id *id, \
 		int start, t_env **env_list);
 
+/* parse_prod.c */
+void		dollar_last(char *input, t_id *id, int start);
+void		dollar_env(char *input, t_id *id, t_env **env_list);
+void		dollar_remainder(char *input, t_id *id, int start);
+void		dollar_multiple(char *input, t_id *id, int start);
+
+/* parse_pro_extra.c */
+int			process_d(char *input, t_id *id, int start);
+void		process_if_count(char *input, t_id *id, int start, \
+		t_env **env_list);
+int			process_d_count(char *input, t_id *id);
+int			process_end_spes(char *input, t_id *id);
+
 /* signals.c */
 void		handle_sigint(int sig);
 void		handle_sigquit(int sig);
 
 /* debug.c */
-void		print_tokens(t_tokens *tokens, int token_count);
-void		print_redirects(t_redirect *redirs, int redir_count);
-void		print_data(t_data *data, int data_count);
-void		cprint_cmnds(t_cmnds *cmnds);
+//void		print_tokens(t_tokens *tokens, int token_count);
+//void		print_redirects(t_redirect *redirs, int redir_count);
+//void		print_data(t_data *data, int data_count);
+//void		print_cmnds(t_cmnds *cmnds);
 
 #endif

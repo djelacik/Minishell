@@ -75,7 +75,7 @@ int	process_pipe(char *input, t_id *id)
 	return (1);
 }
 
-static int	process_dollar_join(char *input, t_id *id, int *i, char *env_temp)
+int	process_dollar_join(char *input, t_id *id, int *i, char *env_temp)
 {
 	char	*temp;
 	int		start;
@@ -94,27 +94,23 @@ static int	process_dollar_join(char *input, t_id *id, int *i, char *env_temp)
 
 int	process_dollar(char *input, t_id *id, t_env **env_list)
 {
-	char	*env_temp;
+	int		count;
+	int		start;
 
-	env_temp = NULL;
+	count = 0;
 	if (input[*id->i] == '$')
 	{
-		id->tokens[*id->j].token_string = \
+		start = *id->i;
+		count = process_d_count(input, id);
+		if (input[*id->i] == '$' && input[*id->i + 1] == '\0' && *id->j > 0)
+			return (process_d(input, id, start));
+		if (count > 0)
+			process_if_count(input, id, start, env_list);
+		else
+			id->tokens[*id->j].token_string = \
 					environment_variable(input, id->i, env_list);
-		if (id->tokens[*id->j].token_string && \
-				id->tokens[*id->j].token_string[0] == '\0')
-		{
-			if (input[*id->i] == '\0' && *id->j == 0)
-			{
-				printf("");
-				return (-1);
-			}
-		}
-		if (input[*id->i] == '=' || input[*id->i] == '.')
-		{
-			env_temp = id->tokens[*id->j].token_string;
-			process_dollar_join(input, id, id->i, env_temp);
-		}
+		if (process_end_spes(input, id) == -1)
+			return (-1);
 	}
 	return (1);
 }
