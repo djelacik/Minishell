@@ -69,23 +69,25 @@ int	process_rest_args(char *input, t_id *id, int start)
 
 int	process_rest_dollar(char *input, t_id *id, int start, t_env **env_list)
 {
-	char	*temp;
-	char	*env_temp;
+	int	count;
 
-	temp = NULL;
-	env_temp = NULL;
-	if (*id->i > start)
-		temp = ft_strndup(&input[start], *id->i - start);
-	start = *id->i;
-	env_temp = environment_variable(input, id->i, env_list);
-	if (temp)
+	count = 0;
+	if (input[*id->i + 1] == '\0')
 	{
-		id->tokens[*id->j].token_string = ft_strjoin(temp, env_temp);
-		free(temp);
+		dollar_last(input, id, start);
+		return (CONTINUE_PRO);
 	}
-	else
-		id->tokens[*id->j].token_string = ft_strdup(env_temp);
-	free(env_temp);
+	if (*id->i > start)
+		dollar_remainder(input, id, start);
+	start = *id->i;
+	while (input[*id->i] == '$' && input[*id->i + 1] == '$')
+	{
+		(*id->i)++;
+		count++;
+	}
+	if (count > 0)
+		dollar_multiple(input, id, start);
+	dollar_env(input, id, env_list);
 	(*id->j)++;
 	return (CONTINUE_PRO);
 }

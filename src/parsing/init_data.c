@@ -5,7 +5,7 @@ static void	process_redir(t_tokens *tokens, t_data *data, int *index, int j)
 	(*index)++;
 	data[j].redirs[data[j].redir_count].file = \
 						ft_strdup(tokens[*index].token_string);
-	data[j].redirs[data[j].redir_count++].type = tokens[*index].token_type;
+	data[j].redirs[data[j].redir_count++].type = tokens[*index - 1].token_type;
 }
 
 static void	process_args(t_tokens *tokens, t_data *data, int *index, int j)
