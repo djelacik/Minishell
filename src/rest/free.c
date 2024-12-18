@@ -70,7 +70,7 @@ void	free_array(char **array)
 }
  */
 
-static void	free_data(t_data *data)
+static void	free_data_s(t_data *data)
 {
 	int		i;
 
@@ -107,7 +107,7 @@ void	free_structs(t_cmnds *cmnds)
 	i = 0;
 	while (i < cmnds->command_count)
 	{
-		free_data(&cmnds->data[i]);
+		free_data_s(&cmnds->data[i]);
 		i++;
 	}
 	free(cmnds->data);

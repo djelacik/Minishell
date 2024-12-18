@@ -98,7 +98,7 @@ static void	init_terminal_set(void)
 	if (tcgetattr(STDIN_FILENO, &term) == -1)
 		exit(EXIT_FAILURE);
 	term.c_lflag &= ~ECHOCTL;
-	if (tcsetattr(STDIN_FILENO, TCCSANO, &term) == -1)
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
 		exit(EXIT_FAILURE);
 }
 
@@ -109,7 +109,7 @@ static void	init_shell(t_cmnds *cmnds, char **envp)
 	g_exit_status = 0;
 }
 
-static void	process_input(char *input, t_cmnds *cmnds)
+static void	process_input_user(char *input, t_cmnds *cmnds)
 {
 	t_tokens	*tokens;
 	t_data		*data;
@@ -157,7 +157,7 @@ int	main(int argc, char **argv, char **envp)
 		if (!input)
 			break ;
 		add_history(input);
-		process_input(input, &cmnds);
+		process_input_user(input, &cmnds);
 		free(input);
 	}
 	free_global(&cmnds);

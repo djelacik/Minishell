@@ -18,6 +18,7 @@ SOURCES = \
 		src/parsing/parse_pro3.c \
 		src/parsing/parse_pro4.c \
 		src/parsing/parse_prod.c \
+		src/parsing/parse_pro_extra.c \
 		src/builtins/env_utils.c \
 		src/builtins/env_utils2.c \
 		src/builtins/enviroment.c \
@@ -45,7 +46,7 @@ LIBFT = ./libft/libft.a
 
 CC = cc
 
-CFLAGS += -fsanitize=address -g -Wall -Wextra -Werror
+CFLAGS += -g -Wall -Wextra -Werror
 
 RM = rm -f
 

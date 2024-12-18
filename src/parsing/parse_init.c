@@ -20,7 +20,7 @@ int	init_id_and_tokens(t_id *id, t_tokens **tokens, \
 	int	token_count;
 
 	token_count = count_tokens(input, env_list);
-	if (token_count = 0)
+	if (token_count == 0)
 		return (-1);
 	*tokens = malloc((token_count + 1) * sizeof(t_tokens));
 	if (!*tokens)
