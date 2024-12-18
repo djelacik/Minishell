@@ -99,6 +99,8 @@ typedef struct s_cmnds
 	char		**env_cpy;
 	t_env		*env_list;
 	int			exited;
+	int			saved_stdin;
+	int			saved_stdout;
 }	t_cmnds;
 
 /* count_tokens.c */

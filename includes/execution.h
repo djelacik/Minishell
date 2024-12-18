@@ -2,7 +2,7 @@
 #ifndef EXECUTION_H
 # define EXECUTION_H
 
-# define DEBUG
+//# define DEBUG
 #ifdef DEBUG 
 # define dbg_print(...) fprintf(stderr, __VA_ARGS__)
 #else
@@ -70,8 +70,8 @@ void		child_process(int i, int fd_in, int pipe_fd[2], t_cmnds *cmnds);
 //int			fork_process(int i, int fd_in, int pipefd[2], t_cmnds *cmnds);
 //void		wait_for_children(t_cmnds *cmnds);
 void		execute_external(t_data *data, t_cmnds *cmnds);
-void		handle_redirections(t_data *cmnd_data);
-void		handle_heredoc(char *delimiter);
+void		handle_redirections(t_data *cmnd_data, t_cmnds *cmnds);
+void		handle_heredoc(t_cmnds *cmnds, char *delimiter);
 
 //execution func protoypes
 
@@ -81,8 +81,7 @@ void		lst_to_arr(t_cmnds *cmnds);
 void		free_array(char **array);
 int			error_exit(t_cmnds *cmnds, char *error_msg, int error_code);
 
-
-void		handle_heredoc(char *delimiter);
 void		handle_redirection(t_data *cmnd_data);
+
 
 #endif
