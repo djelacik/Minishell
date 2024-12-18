@@ -219,5 +219,7 @@ void		print_data(t_data *data, int data_count);
 void		print_cmnds(t_cmnds *cmnds);
 
 void		free_struct_loop(t_cmnds *cmnds);
+void		free_structs(t_cmnds *cmnds);
+void		free_global(t_cmnds *cmnds);
 
 #endif

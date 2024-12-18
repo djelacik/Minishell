@@ -22,6 +22,7 @@ SOURCES = \
 		src/builtins/env_utils2.c \
 		src/builtins/enviroment.c \
 		src/builtins/exec_builtin.c \
+		src/builtins/export.c \
 		src/execution/exec_utils.c \
 		src/execution/exec.c \
 		src/execution/pipes.c \
