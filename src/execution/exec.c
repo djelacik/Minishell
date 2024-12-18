@@ -24,8 +24,8 @@ void	*find_path(char *command, t_cmnds *cmnds)
 	if (!path_value)
 		return (NULL);
 	paths = ft_split((const char *)path_value, ':');
-	i = 0;
-	while (paths[i])
+	i = -1;
+	while (paths[++i])
 	{
 		full_path = join_cmd_path(paths[i], command);
 		if (!full_path)
@@ -37,7 +37,6 @@ void	*find_path(char *command, t_cmnds *cmnds)
 			return (full_path);
 		}
 		free(full_path);
-		i++;
 	}
 	free_array(paths);
 	return (NULL);
