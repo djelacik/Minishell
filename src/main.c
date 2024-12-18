@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-static void	print_cmnd_args(t_data *data, int index)
+/*static void	print_cmnd_args(t_data *data, int index)
 {
 	int	i;
 
@@ -10,9 +10,9 @@ static void	print_cmnd_args(t_data *data, int index)
 		printf("args[%d]: %s type: %d builtin: %d\n", i, data[index].args[i].token_string, data[index].args[i].token_type, data[index].args[i].builtin_type);
 		i++;
 	}
-}
+}*/
 
-static void	print_tokens(t_tokens *tokens)
+/*static void	print_tokens(t_tokens *tokens)
 {
 	int i;
 
@@ -52,9 +52,9 @@ static void	print_data(t_data *data)
 		i++;
 	}
 
-}
+}*/
 
-static void	free_data(t_data *data)
+/*static void	free_data(t_data *data)
 {
 	int	i;
 	int	j;
@@ -89,23 +89,82 @@ static void	free_data(t_data *data)
 		i++;
 	}
 	free(data);
-}
+}*/
 
-static void	free_tokens(t_tokens *tokens)
+static void	init_terminal_set(void)
 {
-	int	i;
+	struct termios	term;
 
-	i = 0;
-	while(tokens[i].token_string)
-	{
-		free(tokens[i].token_string);
-		i++;
-	}
-	free(tokens);
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+		exit(EXIT_FAILURE);
+	term.c_lflag &= ~ECHOCTL;
+	if (tcsetattr(STDIN_FILENO, TCCSANO, &term) == -1)
+		exit(EXIT_FAILURE);
 }
- 
+
+static void	init_shell(t_cmnds *cmnds, char **envp)
+{
+	ft_bzero(cmnds, sizeof(t_cmnds));
+	init_list(&cmnds->env_list, envp);
+	g_exit_status = 0;
+}
+
+static void	process_input(char *input, t_cmnds *cmnds)
+{
+	t_tokens	*tokens;
+	t_data		*data;
+
+	tokens = tokenize_input(input, &cmnds->env_list);
+	if (tokens)
+	{
+		data = init_data(tokens);
+		free_tokens(tokens);
+		if (data)
+		{
+			cmnds->data = data;
+			cmnds->command_count = cmnds->data->cmnd_count;
+			start_process(cmnds);
+			free_data(data);
+		}
+		free_struct_loop(cmnds);
+	}
+}
+
+static char	*user_input(void)
+{
+	char	*input;
+
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, handle_sigint);
+	input = readline("minishell % ");
+	if (!input)
+		printf("exit\n");
+	return (input);
+}
 
 int	main(int argc, char **argv, char **envp)
+{
+	t_cmnds	cmnds;
+	char	*input;
+
+	(void)argc;
+	(void)argv;
+	init_terminal_set();
+	init_shell(&cmnds, envp);
+	while (1)
+	{
+		input = user_input();
+		if (!input)
+			break ;
+		add_history(input);
+		process_input(input, &cmnds);
+		free(input);
+	}
+	free_global(&cmnds);
+	return (g_exit_status);
+}
+
+/*int	main(int argc, char **argv, char **envp)
 {
 	struct termios	term;
 	(void)argc;
@@ -155,4 +214,4 @@ int	main(int argc, char **argv, char **envp)
 	}
 	free_global(&cmnds);
 	return(g_exit_status);
-}
+}*/
