@@ -30,6 +30,7 @@ SOURCES = \
 		src/redirs/here_doc.c \
 		src/redirs/redirs.c \
 		src/rest/free.c \
+		src/rest/free2.c \
 		src/signals.c \
 		src/main.c \
 		src/rest/debug.c \

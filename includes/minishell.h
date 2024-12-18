@@ -115,9 +115,6 @@ void		free_id_and_tokens(t_id *id, t_tokens *tokens, int j);
 void		free_id(t_id *id);
 void		free_data_fail(t_data *data, int count);
 
-/* signals.c */
-void		handle_sigint(int sig);
-
 /* handling_env_var.c */
 char		*environment_variable(char *input, int *index, t_env **env_list);
 void		append_env(char *quoted_input, int *i, char *env_var);
@@ -208,8 +205,12 @@ int			process_end_spes(char *input, t_id *id);
 
 /* signals.c */
 void		handle_sigint(int sig);
-void		handle_sigquit(int sig);
 void		here_doc_sig(int sig);
+
+/* free2.c */
+void		free_data_helper(t_data *data, int i);
+void		free_data(t_data *data);
+void		free_tokens(t_tokens *tokens);
 
 /* debug.c */
 void		print_tokens(t_tokens *tokens, int token_count);
@@ -217,6 +218,6 @@ void		print_redirects(t_redirect *redirs, int redir_count);
 void		print_data(t_data *data, int data_count);
 void		print_cmnds(t_cmnds *cmnds);
 
-void	free_struct_loop(t_cmnds *cmnds);
+void		free_struct_loop(t_cmnds *cmnds);
 
 #endif

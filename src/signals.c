@@ -12,11 +12,9 @@ void	handle_sigint(int sig)
 		rl_on_new_line();
 		rl_redisplay();
 	}
-	else if (sig == SIGQUIT)
-		g_exit_status = 131;
 }
 
-void here_doc_sig(int sig)
+void	here_doc_sig(int sig)
 {
 	if (sig == SIGINT)
 	{
