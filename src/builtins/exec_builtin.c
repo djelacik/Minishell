@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:02:00 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/17 18:48:32 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/12/19 10:50:16 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,18 @@ int	exec_echo(t_data *data)
 	int		i;
 	int		new_line;
 
-	//token[0] is echo
 	dbg_print("Executing echo command\n");
 	i = 1;
 	new_line = 1;
 	if (data->token_count > 1 && ft_strcmp(data->args[i].token_string, "-n") == 0)
 	{
 		new_line = 0;
-		i++; //skip the "-n"
+		i++;
 	}
 	while (i < data->token_count)
 	{
 		printf("%s", data->args[i].token_string);
-		if (i + 1 < data->token_count) // " " between strings
+		if (i + 1 < data->token_count)
 			printf(" ");
 		i++;
 	}
@@ -89,6 +88,7 @@ void	ft_cd(t_data *data, t_env **head)
 	if (data->token_count > 2)
 	{
 		printf("cd: too many arguments\n");
+		g_exit_status = 1;
 		return ;
 	}
 	if (data->token_count > 1)
@@ -106,6 +106,7 @@ void	ft_cd(t_data *data, t_env **head)
 	if (chdir(path) != 0)
 	{
 		perror("cd");
+		g_exit_status = 1;
 		return ;
 	}
 	update_pwd(head);
@@ -141,3 +142,4 @@ void	ft_exit(t_data *data, t_cmnds *cmnds)
 	//g_exit_status = exit_num;
 	error_exit(cmnds, NULL, exit_num);
 }
+

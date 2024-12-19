@@ -50,7 +50,9 @@ void	free_tokens(t_tokens *tokens)
 	i = 0;
 	while (tokens[i].token_string)
 	{
+		printf("tokens[%d].token_string: %s\n", i, tokens[i].token_string);
 		free(tokens[i].token_string);
+		printf("i is: %d\n", i);
 		i++;
 	}
 	free(tokens);

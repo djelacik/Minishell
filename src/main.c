@@ -123,6 +123,7 @@ static void	process_input_user(char *input, t_cmnds *cmnds)
 		{
 			cmnds->data = data;
 			cmnds->command_count = cmnds->data->cmnd_count;
+			print_cmnds(cmnds);
 			start_process(cmnds);
 			free_data(data);
 		}

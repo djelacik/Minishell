@@ -82,8 +82,8 @@ void	execute_external(t_data *data, t_cmnds *cmnds)
 	if (!cmd_path)
 	{
 		printf("minishell: command not found: %s\n", data->args[0].token_string);
-		g_exit_status = 127;
-		error_exit(cmnds, NULL, EXIT_FAILURE);
+		//g_exit_status = 127;
+		error_exit(cmnds, NULL, 127);
 	}
 	argv = tokens_to_argv(data->args, data->token_count);
 	if (!argv)
