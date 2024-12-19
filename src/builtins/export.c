@@ -69,6 +69,35 @@ void	export_print(t_env *head)
 	}
 }
 
+char	*save_pairs(char *token_string, char **value_p)
+{
+	char	*equal_sign;
+	char	*key;
+
+	key = NULL;
+	equal_sign = ft_strchr(token_string, '=');
+	if (equal_sign)
+	{
+		key = ft_strndup(token_string, equal_sign - token_string);
+		*value_p = ft_strndup(equal_sign + 1, ft_strlen(equal_sign + 1));
+	}
+	else
+	{
+		key = ft_strdup(token_string);
+		*value_p = NULL;
+	}
+	if ((!ft_isalpha(key[0]) && key[0] != '_')
+			|| !ft_isalnum_or_underscore(key))
+	{
+		printf("'%s': not a valid identifier\n", token_string);
+		g_exit_status = 1;
+		free(key);
+		free(*value_p);
+		return (NULL);
+	}
+	return (key);
+}
+
 void	export_add(t_env **head, t_data *data)
 {
 	t_env		*new_node;
@@ -82,6 +111,8 @@ void	export_add(t_env **head, t_data *data)
 	{
 		dbg_print("Processing token: %s\n", data->args[i].token_string);
 		key = save_pairs(data->args[i].token_string, &value);
+		if (!key)
+			return ;
 		dbg_print("Parsed key: %s, value: %s\n", key, value ? value : "NULL");
 		single_unset(head, key);
 		new_node = malloc(sizeof(t_env));

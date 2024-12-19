@@ -64,25 +64,6 @@ void	lst_add_back(t_env **head, t_env *new_node)
 	current->next = new_node;
 }
 
-char	*save_pairs(char *token_string, char **value_p)
-{
-	char	*equal_sign;
-	char	*key;
-
-	key = NULL;
-	equal_sign = ft_strchr(token_string, '=');
-	if (equal_sign)
-	{
-		key = ft_strndup(token_string, equal_sign - token_string);
-		*value_p = ft_strndup(equal_sign + 1, ft_strlen(equal_sign + 1));
-	}
-	else
-	{
-		key = ft_strdup(token_string);
-		*value_p = NULL;
-	}
-	return (key);
-}
 
 int	get_lst_size(t_env *lst)
 {

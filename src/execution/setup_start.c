@@ -81,10 +81,9 @@ static void	wait_for_children(t_cmnds *cmnds)
 			else
 			{
 				g_exit_status = WEXITSTATUS(status);
-				if (g_exit_status == 1)
+/* 				if (g_exit_status == 1)
 					g_exit_status = 127;
-			}
-			
+ */			}
 		}
 		else if (WIFSIGNALED(status))
 		{
@@ -100,17 +99,14 @@ static void	wait_for_children(t_cmnds *cmnds)
 
 static void	execute_in_parent(t_data *data, t_cmnds *cmnds)
 {
-	int		saved_stdin;
-	int		saved_stdout;
-
-	saved_stdin = dup(STDIN_FILENO);
-	saved_stdout = dup(STDOUT_FILENO);
-	handle_redirections(data, cmnds);
+	cmnds->saved_stdin = dup(STDIN_FILENO);
+	cmnds->saved_stdout = dup(STDOUT_FILENO);
+	handle_redirections_parent(data, cmnds);
 	execute_builtin(data, cmnds);
-	dup2(saved_stdin, STDIN_FILENO);
-	dup2(saved_stdout, STDOUT_FILENO);
-	close(saved_stdin);
-	close(saved_stdout);
+ 	dup2(cmnds->saved_stdin, STDIN_FILENO);
+	dup2(cmnds->saved_stdout, STDOUT_FILENO);
+	close(cmnds->saved_stdin);
+	close(cmnds->saved_stdout);
 }
 
 static int	should_execute_in_parent(t_data *data, int command_count)

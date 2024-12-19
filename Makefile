@@ -31,6 +31,7 @@ SOURCES = \
 		src/redirs/child_process.c \
 		src/redirs/here_doc.c \
 		src/redirs/redirs.c \
+		src/redirs/redirs_parent.c \
 		src/rest/free.c \
 		src/rest/free2.c \
 		src/signals.c \
