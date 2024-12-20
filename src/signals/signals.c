@@ -1,27 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handling_pipes.c                                   :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mjaakkol <mjaakkol@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/20 10:02:19 by mjaakkol          #+#    #+#             */
-/*   Updated: 2024/12/20 10:02:40 by mjaakkol         ###   ########.fr       */
+/*   Created: 2024/12/20 10:26:53 by mjaakkol          #+#    #+#             */
+/*   Updated: 2024/12/20 10:28:51 by mjaakkol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*handle_pipes(char *input, int *index, t_tokens *tokens)
-{
-	char	*pipe;
+int	g_exit_status;
 
-	pipe = NULL;
-	if (input[*index] == '|')
+void	handle_sigint(int sig)
+{
+	if (sig == SIGINT)
 	{
-		tokens->token_type = PIPE;
-		pipe = ft_strndup("|", 1);
-		(*index)++;
+		g_exit_status = 130;
+		write(1, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
 	}
-	return (pipe);
+}
+
+void	here_doc_sig(int sig)
+{
+	if (sig == SIGINT)
+	{
+		g_exit_status = 130;
+		exit(130);
+	}
 }

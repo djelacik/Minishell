@@ -34,6 +34,7 @@ SOURCES = \
 		src/redirs/redirs_parent.c \
 		src/rest/free.c \
 		src/rest/free2.c \
+		src/rest/free3.c \
 		src/signals.c \
 		src/main.c \
 		src/rest/debug.c \
