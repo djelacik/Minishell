@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:02:00 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/19 10:50:16 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:08:43 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ int	exec_echo(t_data *data)
 	dbg_print("Executing echo command\n");
 	i = 1;
 	new_line = 1;
-	if (data->token_count > 1 && ft_strcmp(data->args[i].token_string, "-n") == 0)
+	if (data->token_count > 1
+		&& ft_strcmp(data->args[i].token_string, "-n") == 0)
 	{
 		new_line = 0;
 		i++;
@@ -97,10 +98,7 @@ void	ft_cd(t_data *data, t_env **head)
 	{
 		path = ft_getenv("HOME", *head);
 		if (!path)
-		{
-			ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO);
-			return ;
-		}
+			return (ft_putstr_fd("cd: HOME not set\n", STDOUT_FILENO));
 	}
 	dbg_print("Changing directory to: %s\n", path);
 	if (chdir(path) != 0)
@@ -123,15 +121,16 @@ void	ft_exit(t_data *data, t_cmnds *cmnds)
 	if (data->token_count > 2 && ft_isdigit(data->args[1].token_string) == 1)
 	{
 		printf("exit: too many arguments\n");
-		g_exit_status = ft_atoi("1");
+		g_exit_status = 1;
 		return ;
 	}
 	if (data->args[1].token_string)
 	{	
 		if (ft_isdigit(data->args[1].token_string) == 0)
 		{
-			printf("exit: %s: numeric argument required\n", data->args[1].token_string);
-			exit_num = ft_atoi("2");
+			printf("exit: %s: numeric argument required\n",
+				data->args[1].token_string);
+			exit_num = 2;
 		}
 		else
 		{
@@ -139,7 +138,5 @@ void	ft_exit(t_data *data, t_cmnds *cmnds)
 			exit_num = exit_num % 256;
 		}
 	}
-	//g_exit_status = exit_num;
 	error_exit(cmnds, NULL, exit_num);
 }
-

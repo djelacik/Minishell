@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/20 09:57:48 by djelacik          #+#    #+#             */
+/*   Updated: 2024/12/20 09:59:21 by djelacik         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 void	init_list(t_env **head, char **envp)
@@ -27,7 +39,7 @@ void	add_node(t_env **head, const char *key, const char *value)
 {
 	t_env	*current;
 	t_env	*new_node;
-	
+
 	new_node = malloc(sizeof(t_env));
 	if (!new_node)
 		return ;
@@ -63,7 +75,6 @@ void	lst_add_back(t_env **head, t_env *new_node)
 	}
 	current->next = new_node;
 }
-
 
 int	get_lst_size(t_env *lst)
 {
