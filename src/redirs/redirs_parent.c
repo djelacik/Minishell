@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:44:46 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/20 10:46:01 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/12/20 20:46:58 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	handle_output(char *filename, int flags)
 	close(fd);
 }
 
-void	handle_redirections_parent(t_data *cmnd_data, t_cmnds *cmnds)
+void	handle_redirections_parent(t_data *cmnd_data)
 {
 	int		i;
 
@@ -76,7 +76,7 @@ void	handle_redirections_parent(t_data *cmnd_data, t_cmnds *cmnds)
 		else if (cmnd_data->redirs[i].type == REDIR_HERE_DOC)
 		{
 			dbg_print("Handling heredoc redirection with delimiter: %s\n", cmnd_data->redirs[i].file);
-			handle_heredoc(cmnds, cmnd_data->redirs[i].file);
+			handle_heredoc_parent(cmnd_data->redirs[i].file);
 		}
 		i++;
 	}

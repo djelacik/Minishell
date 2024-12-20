@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:25:11 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/20 10:55:24 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/12/20 20:47:29 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	execute_in_parent(t_data *data, t_cmnds *cmnds)
 {
 	cmnds->saved_stdin = dup(STDIN_FILENO);
 	cmnds->saved_stdout = dup(STDOUT_FILENO);
-	handle_redirections_parent(data, cmnds);
+	handle_redirections_parent(data);
 	execute_builtin(data, cmnds);
 	dup2(cmnds->saved_stdin, STDIN_FILENO);
 	dup2(cmnds->saved_stdout, STDOUT_FILENO);
