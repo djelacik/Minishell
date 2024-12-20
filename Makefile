@@ -27,6 +27,7 @@ SOURCES = \
 		src/execution/exec_utils.c \
 		src/execution/exec.c \
 		src/execution/pipes.c \
+		src/execution/fork.c \
 		src/execution/setup_start.c \
 		src/redirs/child_process.c \
 		src/redirs/here_doc.c \
