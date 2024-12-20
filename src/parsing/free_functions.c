@@ -7,7 +7,7 @@ void	free_exist_tokens(t_tokens *tokens, int index)
 	if (!tokens)
 		return ;
 	i = 0;
-	while (i < index)
+	while (i <= index)
 	{
 		free(tokens[i].token_string);
 		i++;
