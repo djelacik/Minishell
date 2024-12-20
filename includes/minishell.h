@@ -41,7 +41,6 @@
 # define REDIR_APPEND 5
 # define REDIR_HERE_DOC 6
 # define PIPE 7
-# define SPECIAL_SYMB 8
 
 # define CONTINUE_PRO 2
 
@@ -208,6 +207,7 @@ int			process_end_spes(char *input, t_id *id);
 /* signals.c */
 void		handle_sigint(int sig);
 void		here_doc_sig(int sig);
+void		wait_for_children(t_cmnds *cmnds);
 
 /* free2.c */
 void		free_data_helper(t_data *data, int i);
