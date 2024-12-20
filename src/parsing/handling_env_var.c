@@ -63,9 +63,8 @@ char	*environment_variable(char *input, int *index, t_env **env_list)
 		return (NULL);
 	if (ft_strcmp(var_name, "?") == 0)
 	{
-		env_var = ft_itoa(g_exit_status);
 		free(var_name);
-		return (ft_strdup(env_var));
+		return (ft_itoa(g_exit_status));
 	}
 	if (ft_strcmp(var_name, "$") == 0)
 	{
