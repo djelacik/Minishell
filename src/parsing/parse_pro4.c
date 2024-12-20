@@ -34,7 +34,6 @@ int	process_rest_pipe(char *input, t_id *id, int start)
 		}
 		if (input[*id->i] == '|')
 		{
-			printf("\ntoken_string here is: %s\n\n", id->tokens[*id->j].token_string);
 			id->tokens[*id->j].token_string = ft_strdup("|");
 			id->tokens[*id->j].token_type = PIPE;
 			(*id->i)++;

@@ -106,7 +106,8 @@ int	process_dollar(char *input, t_id *id, t_env **env_list)
 			return (process_d(input, id, start));
 		if (count > 0)
 			process_if_count(input, id, start, env_list);
-		else {
+		else
+		{
 			free(id->tokens[*id->j].token_string);
 			id->tokens[*id->j].token_string = \
 					environment_variable(input, id->i, env_list);

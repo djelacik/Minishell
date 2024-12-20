@@ -46,13 +46,10 @@ int	process_quotes(char *input, t_id *id, t_env **env_list)
 			r = id->tokens[*id->j].token_string;
 			id->tokens[*id->j].token_string = ft_strjoin(r, quoted);
 			free(r);
-			free(quoted);
 		}
 		else
-		{
 			id->tokens[*id->j].token_string = ft_strdup(quoted);
-			free(quoted);
-		}
+		free(quoted);
 	}
 	return (1);
 }
