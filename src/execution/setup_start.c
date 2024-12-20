@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   setup_start.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/20 10:25:11 by djelacik          #+#    #+#             */
+/*   Updated: 2024/12/20 10:30:34 by djelacik         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static void	setup_pids(t_cmnds *cmnds)
@@ -62,12 +74,11 @@ static int	execute_process(int i, int fd_in, t_cmnds *cmnds)
 	}
 }
 
-
 static void	wait_for_children(t_cmnds *cmnds)
 {
 	int		i;
-	int	status;
-	int	signal_num;
+	int		status;
+	int		signal_num;
 
 	status = 0;
 	i = 0;
@@ -79,19 +90,13 @@ static void	wait_for_children(t_cmnds *cmnds)
 			if (g_exit_status == 1)
 				g_exit_status = 1;
 			else
-			{
 				g_exit_status = WEXITSTATUS(status);
-/* 				if (g_exit_status == 1)
-					g_exit_status = 127;
- */			}
 		}
 		else if (WIFSIGNALED(status))
 		{
 			signal_num = WTERMSIG(status);
 			if (signal_num == SIGINT)
-			{
 				g_exit_status = 130;
-			}
 		}
 		i++;
 	}
@@ -103,7 +108,7 @@ static void	execute_in_parent(t_data *data, t_cmnds *cmnds)
 	cmnds->saved_stdout = dup(STDOUT_FILENO);
 	handle_redirections_parent(data, cmnds);
 	execute_builtin(data, cmnds);
- 	dup2(cmnds->saved_stdin, STDIN_FILENO);
+	dup2(cmnds->saved_stdin, STDIN_FILENO);
 	dup2(cmnds->saved_stdout, STDOUT_FILENO);
 	close(cmnds->saved_stdin);
 	close(cmnds->saved_stdout);
@@ -112,23 +117,8 @@ static void	execute_in_parent(t_data *data, t_cmnds *cmnds)
 static int	should_execute_in_parent(t_data *data, int command_count)
 {
 	if (command_count == 1 && is_builtin(data->args[0].token_string))
-		return 1;
-	return 0;
-}
-
-static void	set_is_in_pipe(t_cmnds *cmnds)
-{
-	int		i;
-
-	i = 0;
-	while (i < cmnds->command_count)
-	{
-		if (cmnds->command_count > 1)
-			cmnds->data[i].is_in_pipe = 1;
-		else
-			cmnds->data[i].is_in_pipe = 0;
-		i++;
-	}
+		return (1);
+	return (0);
 }
 
 void	start_process(t_cmnds *cmnds)
@@ -138,7 +128,6 @@ void	start_process(t_cmnds *cmnds)
 
 	fd_in = STDIN_FILENO;
 	setup_pids(cmnds);
-	set_is_in_pipe(cmnds);
 	i = 0;
 	while (i < cmnds->command_count)
 	{

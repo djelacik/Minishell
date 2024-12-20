@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   child_process.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/20 10:35:53 by djelacik          #+#    #+#             */
+/*   Updated: 2024/12/20 10:37:14 by djelacik         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static void	close_unused_fds(void)
@@ -37,7 +49,7 @@ static void	setup_input_output(int fd_in, int pipe_fd[2])
 			perror(DUP2_ERR);
 			exit(EXIT_FAILURE);
 		}
-		dbg_print("Closing pipe_fd[1]: %d\n", pipe_fd[1]); //err
+		dbg_print("Closing pipe_fd[1]: %d\n", pipe_fd[1]);
 		close(pipe_fd[1]);
 	}
 }
@@ -72,4 +84,3 @@ void	child_process(int i, int fd_in, int pipe_fd[2], t_cmnds *cmnds)
 	dbg_print("Child process %d starting command execution\n", i);
 	execute_child_command(i, cmnds);
 }
-

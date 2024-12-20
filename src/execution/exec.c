@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/20 10:31:23 by djelacik          #+#    #+#             */
+/*   Updated: 2024/12/20 10:33:24 by djelacik         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static char	*join_cmd_path(char *dir, char *cmd)
@@ -60,7 +72,7 @@ static char	**tokens_to_argv(t_tokens *tokens, int token_count)
 			while (i-- < 0)
 				free(argv[i]);
 			free(argv);
-			return (NULL);;
+			return (NULL);
 		}
 		i++;
 	}
@@ -74,7 +86,6 @@ void	execute_external(t_data *data, t_cmnds *cmnds)
 	char	**argv;
 
 	dbg_print("Executing external command: %s\n", data->args[0].token_string);
-
 	if (ft_strchr(data->args[0].token_string, '/'))
 		cmd_path = ft_strdup(data->args[0].token_string);
 	else
@@ -82,7 +93,6 @@ void	execute_external(t_data *data, t_cmnds *cmnds)
 	if (!cmd_path)
 	{
 		printf("minishell: command not found: %s\n", data->args[0].token_string);
-		//g_exit_status = 127;
 		error_exit(cmnds, NULL, 127);
 	}
 	argv = tokens_to_argv(data->args, data->token_count);

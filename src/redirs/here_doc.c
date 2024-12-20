@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/20 10:37:26 by djelacik          #+#    #+#             */
+/*   Updated: 2024/12/20 10:40:56 by djelacik         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static void	read_heredoc_input(int pipe_fd[2], char *delimiter)
@@ -8,12 +20,12 @@ static void	read_heredoc_input(int pipe_fd[2], char *delimiter)
 	{
 		line = readline("> ");
 		if (!line)
-			break;
+			break ;
 		if (ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
 			g_exit_status = 0;
-			break;
+			break ;
 		}
 		write(pipe_fd[1], line, ft_strlen(line));
 		write(pipe_fd[1], "\n", 1);
@@ -42,11 +54,10 @@ void	handle_heredoc(t_cmnds *cmnds, char *delimiter)
 		perror(PIPE_ERR);
 		exit(EXIT_FAILURE);
 	}
- 	dup2(cmnds->saved_stdin, STDIN_FILENO);
+	dup2(cmnds->saved_stdin, STDIN_FILENO);
 	dup2(cmnds->saved_stdout, STDOUT_FILENO);
 	close(cmnds->saved_stdin);
 	close(cmnds->saved_stdout);
 	read_heredoc_input(pipe_fd, delimiter);
 	setup_heredoc_pipe(pipe_fd);
-	//error_exit(cmnds, NULL, EXIT_SUCCESS);
 }

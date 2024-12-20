@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/20 09:59:26 by djelacik          #+#    #+#             */
+/*   Updated: 2024/12/20 10:00:21 by djelacik         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static void	initialize_env_cpy(t_cmnds *cmnds)
 {
-	int size;
+	int	size;
 
 	if (cmnds->env_cpy)
 		free_array(cmnds->env_cpy);
@@ -34,7 +46,6 @@ static void	copy_env_variables(t_cmnds *cmnds)
 		free(temp);
 		if (!cmnds->env_cpy[i])
 			error_exit(cmnds, NULL, EXIT_FAILURE);
-		
 		cur = cur->next;
 		i++;
 	}
@@ -45,7 +56,6 @@ void	update_env_cpy(t_cmnds *cmnds)
 	initialize_env_cpy(cmnds);
 	copy_env_variables(cmnds);
 }
-
 
 char	*ft_getenv(char *key, t_env *head)
 {
