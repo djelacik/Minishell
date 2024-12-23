@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:37:26 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/20 10:40:56 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/12/20 20:45:05 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,19 @@ void	handle_heredoc(t_cmnds *cmnds, char *delimiter)
 	dup2(cmnds->saved_stdout, STDOUT_FILENO);
 	close(cmnds->saved_stdin);
 	close(cmnds->saved_stdout);
+	read_heredoc_input(pipe_fd, delimiter);
+	setup_heredoc_pipe(pipe_fd);
+}
+
+void	handle_heredoc_parent(char *delimiter)
+{
+	int		pipe_fd[2];
+
+	if (pipe(pipe_fd) == -1)
+	{
+		perror(PIPE_ERR);
+		exit(EXIT_FAILURE);
+	}
 	read_heredoc_input(pipe_fd, delimiter);
 	setup_heredoc_pipe(pipe_fd);
 }
