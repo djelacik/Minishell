@@ -6,7 +6,7 @@
 /*   By: mjaakkol <mjaakkol@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:14:13 by mjaakkol          #+#    #+#             */
-/*   Updated: 2024/12/20 10:14:56 by mjaakkol         ###   ########.fr       */
+/*   Updated: 2024/12/23 10:19:32 by mjaakkol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,30 @@
 int	process_d(char *input, t_id *id, int start)
 {
 	char	*env_temp;
+	char	*r;
+	char	*temp;
 
 	env_temp = NULL;
+	r = NULL;
+	temp = NULL;
 	if (*id->i > start)
 	{
+		r = ft_strdup(id->tokens[*id->j].token_string);
 		env_temp = ft_strndup(&input[start], *id->i - start);
-		id->tokens[*id->j].token_string = ft_strjoin(env_temp, "$");
+		temp = ft_strjoin(r, env_temp);
+		free(id->tokens[*id->j].token_string);
+		id->tokens[*id->j].token_string = ft_strjoin(temp, "$");
 		free(env_temp);
+		free(temp);
+		free(r);
 	}
 	else
-		id->tokens[*id->j].token_string = ft_strdup("$");
+	{
+		r = ft_strdup(id->tokens[*id->j].token_string);
+		free(id->tokens[*id->j].token_string);
+		id->tokens[*id->j].token_string = ft_strjoin(r, "$");
+		free(r);
+	}
 	(*id->i)++;
 	return (1);
 }

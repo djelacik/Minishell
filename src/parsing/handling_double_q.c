@@ -96,8 +96,10 @@ int	calculate_double_len(char *input, int start_index, \
 			}
 		}
 		else
+		{
 			len++;
-		i++;
+			i++;
+		}
 	}
 	return (len);
 }
