@@ -36,10 +36,9 @@ SOURCES = \
 		src/rest/free.c \
 		src/rest/free2.c \
 		src/rest/free3.c \
-		src/signals.c \
+		src/signals/signals.c \
 		src/main.c \
-		src/rest/debug.c \
-		#src/rest/test_main.c 
+		src/rest/debug.c 
 		#src/signals.c
 		#src/main.c 
 

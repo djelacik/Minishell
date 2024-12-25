@@ -2,7 +2,7 @@
 #ifndef EXECUTION_H
 # define EXECUTION_H
 
-# define DEBUG
+//# define DEBUG
 #ifdef DEBUG 
 # define dbg_print(...) fprintf(stderr, __VA_ARGS__)
 #else

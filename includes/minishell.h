@@ -4,7 +4,7 @@
 // valgrind -v --suppressions=readline.supp --leak-check=full --show-leak-kinds=all ./minishell
 
 
-# define DEBUG_MIRE
+//# define DEBUG_MIRE
 #ifdef DEBUG_MIRE
 # define mprint(...) printf( __VA_ARGS__)
 #else
