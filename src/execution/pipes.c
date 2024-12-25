@@ -1,28 +1,47 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipes.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/20 10:20:05 by djelacik          #+#    #+#             */
+/*   Updated: 2024/12/20 10:20:06 by djelacik         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-void	create_pipes(t_cmnds *cmnds)
+void	setup_pipes(int i, int command_count, int pipefd[2])
+{
+	if (i < command_count - 1)
+	{
+		if (pipe(pipefd) == -1)
+		{
+			perror(PIPE_ERR);
+			exit(EXIT_FAILURE);
+		}
+		dbg_print("Created pipe (pipefd[0]: %d, pipefd[1]: %d)\n", pipefd[0], pipefd[1]);
+	}
+	else
+	{
+		pipefd[0] = -1;
+		pipefd[1] = -1;
+		dbg_print("No pipe created for last command, set pipefd to [-1, -1]\n");
+	}
+}
+
+void	close_all_pipes(t_cmnds *cmnds)
 {
 	int		i;
 
-	cmnds->pipes = malloc((cmnds->command_count - 1) * sizeof(int *));
-	if (!cmnds->pipes)
-	{
-		//error_func;
-		return ;
-	}
 	i = 0;
-	while (i < cmnds->command_count - 1)
+	while (i < cmnds->pipe_count)
 	{
-		cmnds->pipes[i] = malloc(sizeof(int) * 2);
-		if (!cmnds->pipes[i])
-		{
-			//error_func;
-			return ;
-		}
-		if (pipe(cmnds->pipes[i] < 0))
-		{
-			//error
-			return ;
-		}
+		close(cmnds->pipes[i][0]);
+		close(cmnds->pipes[i][1]);
+		free(cmnds->pipes[i]);
+		i++;
 	}
+	free(cmnds->pipes);
 }

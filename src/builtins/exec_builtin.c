@@ -6,98 +6,137 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 19:02:00 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/13 12:33:52 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:08:43 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	exec_echo(t_command *command)
+int	exec_echo(t_data *data)
 {
 	int		i;
 	int		new_line;
 
-	//token[0] is echo
+	dbg_print("Executing echo command\n");
 	i = 1;
 	new_line = 1;
-	if (command->token_count > 1 && ft_strcmp(command->tokens[i].token_string, "-n") == 0)
+	if (data->token_count > 1
+		&& ft_strcmp(data->args[i].token_string, "-n") == 0)
 	{
 		new_line = 0;
-		i++; //skip the "-n"
+		i++;
 	}
-	while (i < command->token_count)
+	while (i < data->token_count)
 	{
-		printf("%s", command->tokens[i].token_string);
-		if (i + 1 < command->token_count) // " " between strings
+		printf("%s", data->args[i].token_string);
+		if (i + 1 < data->token_count)
 			printf(" ");
+		i++;
 	}
 	if (new_line)
 		printf("\n");
+	g_exit_status = 0;
 	return (EXIT_SUCCESS);
 }
 
 int	exec_pwd(void)
 {
-	const char	*current_d;
-	
-	current_d = getenv("PWD");
-	printf("%s", current_d);
+	char	current_dir[1024];
+
+	dbg_print("Executing pwd command\n");
+	if (getcwd(current_dir, sizeof(current_dir)) != NULL)
+	{
+		dbg_print("Current directory: %s\n", current_dir);
+		printf("%s\n", current_dir);
+	}
+	else
+	{
+		perror("getcwd error");
+		return (EXIT_FAILURE);
+	}
+	g_exit_status = 0;
 	return (EXIT_SUCCESS);
 }
 
-void	update_pwd(void)
+void	update_pwd(t_env **head)
 {
-	char	pwd[PATH_MAX];
+	char	*pwd;
 	char	*old_pwd;
 
-	old_pwd = getenv("PWD");
-	
-	if (getcwd(pwd, sizeof(pwd)) != NULL)
+	dbg_print("Updating PWD and OLDPWD environment variables\n");
+	old_pwd = ft_getenv("PWD", *head);
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
 	{
-		if (old_pwd != NULL)
-		{
-			setenv("OLDPWD", old_pwd, 1); // Update OLDPWD
-		}
-		setenv("PWD", pwd, 1); // Update PWD
+		perror("getcwd error");
+		return ;
 	}
-	else
+	if (old_pwd != NULL)
 	{
-		perror("Error updating pwd\n");
+		dbg_print("Setting OLDPWD: %s\n", old_pwd);
+		ft_setenv("OLDPWD", old_pwd, head);
 	}
+	dbg_print("Setting PWD: %s\n", pwd);
+	ft_setenv("PWD", pwd, head);
+	free(pwd);
 }
 
-// if command->tokens[0].token_string == "cd"
-void	ft_cd(t_command *command)
+void	ft_cd(t_data *data, t_env **head)
 {
 	char	*path;
 
-	// path = /home/projects/minishell
-	if (command->token_count > 1)
-		path = command->tokens[1].token_string;
+	dbg_print("Executing cd command\n");
+	if (data->token_count > 2)
+	{
+		printf("cd: too many arguments\n");
+		g_exit_status = 1;
+		return ;
+	}
+	if (data->token_count > 1)
+		path = data->args[1].token_string;
 	else
 	{
-		path = getenv("HOME");
+		path = ft_getenv("HOME", *head);
 		if (!path)
-		{
-			printf("HOME not set\n");
-			return ;
-		}
+			return (ft_putstr_fd("cd: HOME not set\n", STDOUT_FILENO));
 	}
+	dbg_print("Changing directory to: %s\n", path);
 	if (chdir(path) != 0)
 	{
 		perror("cd");
+		g_exit_status = 1;
 		return ;
 	}
-	update_pwd();
+	update_pwd(head);
+	g_exit_status = 0;
 }
 
-void	ft_exit(t_command *command)
+void	ft_exit(t_data *data, t_cmnds *cmnds)
 {
-	if (command->token_count > 1)
+	int		exit_num;
+
+	exit_num = 0;
+	dbg_print("Executing exit command\n");
+	printf("exit\n");
+	if (data->token_count > 2 && ft_isdigit(data->args[1].token_string) == 1)
 	{
-		printf("Too many arguments for exit\n");
+		printf("exit: too many arguments\n");
+		g_exit_status = 1;
 		return ;
 	}
-	printf("exit\n");
-	exit (0);
+	if (data->args[1].token_string)
+	{	
+		if (ft_isdigit(data->args[1].token_string) == 0)
+		{
+			printf("exit: %s: numeric argument required\n",
+				data->args[1].token_string);
+			exit_num = 2;
+		}
+		else
+		{
+			exit_num = ft_atoi(data->args[1].token_string);
+			exit_num = exit_num % 256;
+		}
+	}
+	error_exit(cmnds, NULL, exit_num);
 }

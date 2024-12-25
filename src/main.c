@@ -1,53 +1,87 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjaakkol <mjaakkol@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/20 10:19:54 by mjaakkol          #+#    #+#             */
+/*   Updated: 2024/12/20 10:26:02 by mjaakkol         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-static void	print_tokens(t_tokens *tokens)
+static void	init_terminal_set(void)
 {
-	int i;
+	struct termios	term;
 
-	i = 0;
-	while (tokens[i].token_string)
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+		exit(EXIT_FAILURE);
+	term.c_lflag &= ~ECHOCTL;
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+		exit(EXIT_FAILURE);
+}
+
+static void	init_shell(t_cmnds *cmnds, char **envp)
+{
+	ft_bzero(cmnds, sizeof(t_cmnds));
+	init_list(&cmnds->env_list, envp);
+	g_exit_status = 0;
+}
+
+static void	process_input_user(char *input, t_cmnds *cmnds)
+{
+	t_tokens	*tokens;
+	t_data		*data;
+
+	tokens = tokenize_input(input, &cmnds->env_list);
+	if (tokens)
 	{
-		printf("%s ", tokens[i].token_string);
-		if (tokens[i].token_type == COMMAND)
-			printf("token type: %d, builtin type: %d\n", tokens[i].token_type, tokens[i].builtin_type);
-		else if (tokens[i].token_type == ARGUMENT)
-			printf("token type: %d, builtin type: %d\n", tokens[i].token_type, tokens[i].builtin_type);
-		else if (tokens[i].token_type == REDIR_INPUT)
-			printf("token type: %d, builtin type: %d\n", tokens[i].token_type, tokens[i].builtin_type);
-		else if (tokens[i].token_type == REDIR_OUTPUT)
-			printf("token type: %d, builtin type: %d\n", tokens[i].token_type, tokens[i].builtin_type);
-		else if (tokens[i].token_type == REDIR_APPEND)
-			printf("token type: %d, builtin type: %d\n", tokens[i].token_type, tokens[i].builtin_type);
-		else if (tokens[i].token_type == REDIR_HERE_DOC)
-			printf("token type: %d, builtin type: %d\n", tokens[i].token_type, tokens[i].builtin_type);
-		i++;
+		data = init_data(tokens);
+		free_tokens(tokens);
+		if (data)
+		{
+			cmnds->data = data;
+			cmnds->command_count = cmnds->data->cmnd_count;
+			print_cmnds(cmnds);
+			start_process(cmnds);
+			free_data(data);
+		}
+		free_struct_loop(cmnds);
 	}
 }
 
-int	main(int argc, char **argv)
+static char	*user_input(void)
 {
+	char	*input;
+
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, handle_sigint);
+	input = readline("minishell % ");
+	if (!input)
+		printf("exit\n");
+	return (input);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_cmnds	cmnds;
+	char	*input;
+
 	(void)argc;
 	(void)argv;
-	char	*input;
-	t_tokens *tokens;
-	int i;
-
+	init_terminal_set();
+	init_shell(&cmnds, envp);
 	while (1)
 	{
-		input = readline("minishell % ");
-		if (!input) // when user exit with Ctrl+D, readline returns NULL
+		input = user_input();
+		if (!input)
 			break ;
 		add_history(input);
-		tokens = tokenize_input(input);
-		i = 0;
-		if (tokens)
-		{
-			print_tokens(tokens);
-			while (tokens[i].token_string)
-				free(tokens[i++].token_string);
-			free(tokens);
-		}
+		process_input_user(input, &cmnds);
 		free(input);
 	}
-	return(0);
+	free_global(&cmnds);
+	return (g_exit_status);
 }

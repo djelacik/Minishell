@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   handling_pipes.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mjaakkol <mjaakkol@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/16 14:39:45 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/13 17:45:45 by djelacik         ###   ########.fr       */
+/*   Created: 2024/12/20 10:02:19 by mjaakkol          #+#    #+#             */
+/*   Updated: 2024/12/20 10:02:40 by mjaakkol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isdigit(char *str)
+#include "../../includes/minishell.h"
+
+char	*handle_pipes(char *input, int *index, t_tokens *tokens)
 {
-	while (*str)
+	char	*pipe;
+
+	pipe = NULL;
+	if (input[*index] == '|')
 	{
-		if (*str == '-' || *str == '+')
-			str++;
-		if (*str < '0' || *str > '9')
-			return (0);
-		str++;
+		tokens->token_type = PIPE;
+		pipe = ft_strndup("|", 1);
+		(*index)++;
 	}
-	return (1);
+	return (pipe);
 }

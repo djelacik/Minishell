@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/20 09:57:48 by djelacik          #+#    #+#             */
+/*   Updated: 2024/12/20 09:59:21 by djelacik         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 void	init_list(t_env **head, char **envp)
@@ -27,7 +39,7 @@ void	add_node(t_env **head, const char *key, const char *value)
 {
 	t_env	*current;
 	t_env	*new_node;
-	
+
 	new_node = malloc(sizeof(t_env));
 	if (!new_node)
 		return ;
@@ -64,39 +76,17 @@ void	lst_add_back(t_env **head, t_env *new_node)
 	current->next = new_node;
 }
 
-char	*save_pairs(char *token_string, char **value_p)
+int	get_lst_size(t_env *lst)
 {
-	char	*equal_sign;
-	char	*key;
+	unsigned int	i;
 
-	key = NULL;
-	equal_sign = ft_strchr(token_string, '=');
-	if (equal_sign)
+	if (!lst)
+		return (0);
+	i = 0;
+	while (lst)
 	{
-		key = ft_strndup(token_string, equal_sign - token_string);
-		*value_p = ft_strndup(equal_sign + 1, ft_strlen(equal_sign + 1));
+		lst = lst->next;
+		i++;
 	}
-	else
-	{
-		key = ft_strdup(token_string);
-		*value_p = NULL;
-	}
-	return (key);
-}
-
-void	free_env_list(t_env **head)
-{
-	t_env	*current;
-	t_env	*next_node;
-	
-	current = *head;
-	while (current)
-	{
-		next_node = current->next;
-		free(current->key);
-		free(current->value);
-		free(current);
-		current = next_node;
-	}
-	*head = NULL;
+	return (i);
 }

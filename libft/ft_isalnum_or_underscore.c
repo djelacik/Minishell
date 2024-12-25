@@ -1,30 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ft_isalnum_or_underscore.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/19 16:07:24 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/12 16:46:20 by djelacik         ###   ########.fr       */
+/*   Created: 2024/12/19 09:37:42 by djelacik          #+#    #+#             */
+/*   Updated: 2024/12/20 10:18:13 by mjaakkol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-char	*ft_strjoin(char const *s1, char const *s2)
+int	ft_isalnum_or_underscore(char *str)
 {
-	char	*buffer;
-	char	*p;
+	int		i;
 
-	buffer = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 1);
-	if (!buffer)
-		return (NULL);
-	p = buffer;
-	while (*s1)
-		*buffer++ = *s1++;
-	while (*s2)
-		*buffer++ = *s2++;
-	*buffer++ = 0;
-	return (p);
+	i = 1;
+	while (str[i])
+	{
+		if ((str[i] < 'A' || str[i] > 'Z') && (str[i] < 'a' || str[i] > 'z')
+			&& (str[i] < '0' || str[i] > '9') && str[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
 }
