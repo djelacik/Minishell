@@ -1,6 +1,9 @@
 # **MINISHELL**
 
 This README provides an overview of the **Minishell** project for 42 School [Hive Helsinki](https://www.hive.fi/en/), detailing its objectives and offering guidance. The goal of the project is to implement a simplified shell (command interpreter) in C, following the 42 Norm and POSIX standards. It should handle typical Unix commands, redirections, and pipe operations.
+
+Here is a short demonstration of the Minishell in action:
+
 ![Minishell](imgs/minishell.gif)
 
 ---
@@ -24,12 +27,12 @@ This README provides an overview of the **Minishell** project for 42 School [Hiv
 ---
 
 ## **Introduction**
-Minishell is a project at 42 School aiming to enhance your understanding of:
+Minishell is a project at Hive Helsinki aiming to enhance your understanding of:
 - Process creation and management (`fork`, `exec`, `wait`).
 - File descriptors and their redirection.
 - Pipes, enabling inter-process communication.
 - Signal handling (`SIGINT`, `SIGQUIT`, etc.).
-- Structural coding and modular design, while adhering to the 42 Norm.
+- Structural coding and modular design.
 
 The general purpose is to provide a simplified shell that allows users to execute commands, leverage built-in commands, and use many Bash-like functionalities.
 
@@ -48,7 +51,7 @@ Minishell can be divided into several major components:
 ---
 
 ## **Installation and Compilation**
-Below is a general example of how to build the project. Your filenames, directories, and `Makefile` may vary in your own implementation.
+Below is a general example of how to build the project.
 
 1. Ensure you have **gcc** or another C compiler installed, as well as **make**.  
 2. Download or clone the project source code.  
@@ -61,7 +64,8 @@ make:
    make
    ```
    This will compile the necessary .c files and produce an executable (e.g., minishell).
-5. Verify there are no compile errors or warnings. Fix any issues if they arise before proceeding.
+
+---
 
 ## **Running the Program**
 Once successfully compiled, launch Minishell by running:
@@ -77,13 +81,16 @@ minishell% cd ..
 minishell% ls -l
 ```
 To exit, use the exit command or press Ctrl-D
+
+---
+
 ## **Minishell Features**
 
 ### **Basic Commands**
 - Minishell searches for the command path in the `$PATH` environment variable, or checks if it is a built-in command.
 - If found, Minishell forks a new process and calls `execve`.
 - If the command is not found, an error message is printed.
-
+  
 ### **Redirections**
 - **`>`** Redirects output to the specified file (overwrites the file).
 - **`>>`** Appends output to the end of the specified file.
@@ -111,7 +118,8 @@ To exit, use the exit command or press Ctrl-D
 ### **Extra Features**
 - **`$?`** – Variable that stores the exit status of the last executed command.
 - **Quote parsing** – Handling strings in single and double quotes.
-- **Escaping** (optional) – Handling backslash escapes (e.g., `\n`).
+
+---
 
 ## **Examples**
 
@@ -148,10 +156,19 @@ minishell% cd ..
 minishell% pwd
 /home/user/projects
 ```
+
+---
+
 ## **Debugging and Error Handling**
-- **Debug prints**: You can optionally compile Minishell in debug mode with defining debug prints in header files to show extra logs (e.g., parser states and token details).
-- **Error messages**: Ensure you detect situations where commands or files do not exist, or if the user provided incomplete arguments (e.g., `cd` with no path). Print clear error messages (e.g., `minishell: command not found: ...`).
-- **Memory leaks**: Verify that your program does not leak memory. Free all allocated resources when the shell exits or after commands finish.
+- **Debug prints**: If you'd like to compile Minishell in debug mode, you can define debug prints in your header files to display additional logs (such as parser states and token details).  
+- **Error messages**: It's crucial to detect cases where commands or files are missing, or the user provided incomplete arguments (for example, `cd` without a path). Make sure you return clear messages (e.g., `minishell: command not found: ...`).  
+- **Memory leaks**: A suppression file (`readline.supp`) is provided so Valgrind ignores any `readline`-specific leaks. This lets you focus on managing your Minishell’s resources. Below is an example command for running Valgrind with the suppression file:
+  ```bash
+  valgrind -v --suppressions=readline.supp --leak-check=full --show-leak-kinds=all ./minishell
+```
+
+---
+
 ## **Conclusion**
 
 The Minishell project turned out to be much larger and more demanding than I initially anticipated. Working with process management, pipes, and redirections gave me a far deeper understanding of how a command-line interpreter operates under the hood. In particular, the multi-stage parsing logic and signal handling required careful planning and intensive testing.
