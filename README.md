@@ -163,7 +163,7 @@ minishell% pwd
 - **Debug prints**: If you'd like to compile Minishell in debug mode, you can define debug prints in your header files to display additional logs (such as parser states and token details).  
 - **Error messages**: It's crucial to detect cases where commands or files are missing, or the user provided incomplete arguments (for example, `cd` without a path). Make sure you return clear messages (e.g., `minishell: command not found: ...`).  
 - **Memory leaks**: A suppression file (`readline.supp`) is provided so Valgrind ignores any `readline`-specific leaks. This lets you focus on managing your Minishell’s resources. Below is an example command for running Valgrind with the suppression file:
-  ```bash
+```bash
   valgrind -v --suppressions=readline.supp --leak-check=full --show-leak-kinds=all ./minishell
 ```
 
